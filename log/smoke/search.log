@@ -1,0 +1,4 @@
+2026-10-06 23:17:44 | INFO    | agent4ts.harness | cache hit p1_dlinear (df90921afe20805b)
+2026-10-06 23:17:45 | INFO    | agent4ts.cli | search physiome_dupont seed=0: rounds=2 incumbent=p0_f0 nmae=0.4213141218107457
+2026-10-06 23:19:23 | INFO    | agent4ts.harness | cache hit p1_dlinear (df90921afe20805b)
+2026-10-06 23:19:23 | INFO    | agent4ts.cli | search physiome_dupont seed=0: rounds=2 incumbent=p0_f0 nmae=0.4213141218107457

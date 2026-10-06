@@ -180,3 +180,18 @@ fault_detection: false
 计划提供 `python -m agent4ts.cli {prepare,benchmark,search,evaluate,predict}`，统一接收 `--config` / `--run-dir`。验收产物是可复跑命令、数据/上游锁文件、结果和动作轨迹；不以“agent 必须胜过 baseline”作为工程验收条件。
 
 本文范围依据项目内《鲁棒时序预测：benchmark、语义子集与 agent 改进任务》《Idea Draft：控制论启发的组合式时序预测函数搜索》及 Raymond 调研；以本次要求更新为 BITS 主底座、vision 首版接入、错误注入识别占位。资源链接只证明来源可追溯，不代表已完成训练复现。
+
+---
+
+## 附录：实现状态（2026-10-06，实现提交时更新）
+
+本仓库已按本文实现最小系统，验收以 `scripts/smoke/run_smoke.sh` 与 `tests/`（12 项通过）为准。与设计的差异如实记录：
+
+- **BITS 运行时未安装**（用户决定保留 `tim` 环境 py3.11/torch2.13，不建 py3.10 环境、不全量下载 BITS-data）。源码快照已下载审计（`/mnt/data/ats_resources/vendor/bits_tmp`，版本 0.2.0rc1）；`load_bits_task` 如实返回 `blocked_resource`。A 类任务走原生 P12 loader（本项目协议，非官方挑战任务）。
+- **P12 Set A 已下载校验**（4000 条记录，sha256 见 resources.lock.json），24h→6h 桶均值协议跑通。
+- **Physiome-ODE 为本地 RK4 复现**（三个指定模型），Zenodo 预制数据未下载，dataset_version 标记自定义版本；母轨迹派生版本不跨 split（有测试）。
+- **Time-IMM EPA-Air** loader 已实现，CSV 需先运行下载脚本；与 BITS EPA-Air 使用独立 dataset_version。
+- **模型池**：LastValue/MeanValue/DLinear/PatchTST 风格/iTransformer 风格可跑（忠实重实现，非作者代码）；TFMixer/KAFNet/APN/ASTGI/TiWeaver/HyperIMTS/tPatchGNN 登记为 `not_vendored`，选择它们会得到带原因和来源链接的结构化拒绝。f0 以 DLinear 顶替 APN 并记录在案。
+- **TSci-adapted 未接通**：上游未 vendored，runner 输出 `status: unavailable` 与接入步骤，不以自写循环冒充。
+- **MIMIC-IV**：`blocked_access`；**RepoHealth**：未审计未注册；**注错识别**：按设计禁用占位。
+- 预算、单字段 JSON 动作、搜索/确认/测试隔离、trace.jsonl、best_pipeline.json 导出、无 LLM 的 predict 入口均已实现并冒烟验证。

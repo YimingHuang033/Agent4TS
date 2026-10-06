@@ -1,0 +1,42 @@
+[
+  {
+    "model": "LastValue",
+    "status": "ok",
+    "wall_s": 0.009,
+    "peak_gpu_mb": 0.0,
+    "nmae": 10.115265514186058,
+    "error": null
+  },
+  {
+    "model": "MeanValue",
+    "status": "ok",
+    "wall_s": 0.009,
+    "peak_gpu_mb": 0.0,
+    "nmae": 0.9606384821735842,
+    "error": null
+  },
+  {
+    "model": "DLinear",
+    "status": "ok",
+    "wall_s": 0.934,
+    "peak_gpu_mb": 0.0,
+    "nmae": 0.4213141218107457,
+    "error": null
+  },
+  {
+    "model": "PatchTST",
+    "status": "ok",
+    "wall_s": 2.719,
+    "peak_gpu_mb": 0.0,
+    "nmae": 0.6264880574096097,
+    "error": null
+  },
+  {
+    "model": "iTransformer",
+    "status": "ok",
+    "wall_s": 0.372,
+    "peak_gpu_mb": 0.0,
+    "nmae": 0.4977851882007791,
+    "error": null
+  }
+]

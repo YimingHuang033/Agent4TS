@@ -1,0 +1,2 @@
+== [2026-10-06 23:22:11] conda run -n tim python /home/tim/Proj/ats/vis/plot_results.py --kind smoke
+4 figures -> /home/tim/Proj/ats/vis/generated/smoke/index.html

@@ -1,0 +1,257 @@
+{
+  "runnable_models": [
+    "DLinear",
+    "LastValue",
+    "MeanValue",
+    "PatchTST",
+    "iTransformer"
+  ],
+  "availability": {
+    "runnable": {
+      "LastValue": {
+        "input_type": "event_mask",
+        "accepts_mask": true,
+        "accepts_dt": true,
+        "options": {},
+        "cost": "none",
+        "role": "sanity baseline (excluded from the 10-model list)"
+      },
+      "MeanValue": {
+        "input_type": "event_mask",
+        "accepts_mask": true,
+        "accepts_dt": false,
+        "options": {},
+        "cost": "none",
+        "role": "sanity baseline"
+      },
+      "DLinear": {
+        "input_type": "regular_grid",
+        "accepts_mask": false,
+        "accepts_dt": false,
+        "options": {
+          "epochs": [
+            100,
+            200
+          ],
+          "kernel": [
+            3,
+            5,
+            7
+          ]
+        },
+        "cost": "low",
+        "role": "engineering stand-in for f0 until APN is vendored"
+      },
+      "PatchTST": {
+        "input_type": "regular_grid",
+        "accepts_mask": false,
+        "accepts_dt": false,
+        "options": {
+          "patch": [
+            2,
+            4,
+            8
+          ],
+          "d_model": [
+            16,
+            32,
+            64
+          ],
+          "n_layers": [
+            1,
+            2
+          ]
+        },
+        "cost": "medium",
+        "role": "PatchTST-style re-implementation"
+      },
+      "iTransformer": {
+        "input_type": "regular_grid",
+        "accepts_mask": false,
+        "accepts_dt": false,
+        "options": {
+          "d_model": [
+            16,
+            32,
+            64
+          ],
+          "n_layers": [
+            1,
+            2
+          ]
+        },
+        "cost": "medium",
+        "role": "iTransformer-style re-implementation"
+      }
+    },
+    "blocked": {
+      "TFMixer": {
+        "model_id": "TFMixer",
+        "status": "not_vendored",
+        "blocked_reason": "author code not present in this environment",
+        "kind": "irregular",
+        "paper": "ICML 2026",
+        "paper_url": "https://github.com/decisionintelligence/TFMixer",
+        "needs_mask_dt": true,
+        "note": "external-model adapter only; not vendored"
+      },
+      "KAFNet": {
+        "model_id": "KAFNet",
+        "status": "not_vendored",
+        "blocked_reason": "author code not present in this environment",
+        "kind": "irregular",
+        "paper": "AAAI 2026",
+        "paper_url": "https://github.com/zhouziyu02/KAFNet",
+        "needs_mask_dt": true,
+        "note": "not vendored; needs author repo"
+      },
+      "APN": {
+        "model_id": "APN",
+        "status": "not_vendored",
+        "blocked_reason": "author code not present in this environment",
+        "kind": "irregular",
+        "paper": "AAAI 2026",
+        "paper_url": "https://github.com/decisionintelligence/APN",
+        "needs_mask_dt": true,
+        "note": "design's default f0; not vendored, DLinear stands in until then"
+      },
+      "ASTGI": {
+        "model_id": "ASTGI",
+        "status": "not_vendored",
+        "blocked_reason": "author code not present in this environment",
+        "kind": "irregular",
+        "paper": "ICLR 2026",
+        "paper_url": "https://github.com/decisionintelligence/ASTGI",
+        "needs_mask_dt": true,
+        "note": "not vendored"
+      },
+      "TiWeaver": {
+        "model_id": "TiWeaver",
+        "status": "not_vendored",
+        "blocked_reason": "author code not present in this environment",
+        "kind": "irregular_async",
+        "paper": "KDD 2026",
+        "paper_url": "https://arxiv.org/abs/2606.03121",
+        "archive": "https://doi.org/10.5281/zenodo.20424563",
+        "needs_mask_dt": true,
+        "note": "code archive via Zenodo; not vendored"
+      },
+      "HyperIMTS": {
+        "model_id": "HyperIMTS",
+        "status": "not_vendored",
+        "blocked_reason": "author code not present in this environment",
+        "kind": "irregular",
+        "paper": "ICML 2025",
+        "paper_url": "https://github.com/Ladbaby/PyOmniTS",
+        "needs_mask_dt": true,
+        "note": "author implementation in PyOmniTS; not vendored"
+      },
+      "tPatchGNN": {
+        "model_id": "tPatchGNN",
+        "status": "not_vendored",
+        "blocked_reason": "author code not present in this environment",
+        "kind": "irregular",
+        "paper": "ICML 2024",
+        "paper_url": "https://github.com/usail-hkust/t-PatchGNN",
+        "needs_mask_dt": true,
+        "note": "not vendored"
+      }
+    }
+  },
+  "tasks": {
+    "p12_native": {
+      "spec": {
+        "backend": "p12",
+        "track": "native_irr",
+        "history_hours": 24.0,
+        "horizon_hours": 6.0,
+        "target_variables": [
+          "HR",
+          "SysABP",
+          "Temp"
+        ],
+        "max_entities": 300
+      },
+      "status": "ok",
+      "n_entities": {
+        "train": 180,
+        "search": 60,
+        "confirm": 30,
+        "test": 30
+      },
+      "n_history_events": 68113,
+      "n_targets": 3955,
+      "variables": [
+        "ALK",
+        "ALT",
+        "AST",
+        "Albumin",
+        "BUN",
+        "Bilirubin",
+        "Ca",
+        "Cholesterol",
+        "Cl",
+        "Creatinine",
+        "DiasABP",
+        "DiasABP.1",
+        "FiO2",
+        "GCS",
+        "Glucose",
+        "HCO3",
+        "HCT",
+        "HR",
+        "Hgb",
+        "INR",
+        "K",
+        "Lactate",
+        "MAP",
+        "Mg",
+        "NIDiasABP",
+        "NIMAP",
+        "NISysABP",
+        "Na",
+        "PT",
+        "PTT",
+        "Platelets",
+        "RespRate",
+        "SaO2",
+        "SpO2",
+        "SysABP",
+        "Temp",
+        "TroponinI",
+        "TroponinT",
+        "Urine",
+        "WBC",
+        "Weight",
+        "pH"
+      ],
+      "card_backend": "p12"
+    },
+    "physiome_dupont": {
+      "spec": {
+        "backend": "physiome",
+        "model_key": "dupont_1991a",
+        "track": "robust_improve",
+        "n_entities": 40,
+        "history_hours": 24.0,
+        "horizon_hours": 6.0,
+        "target_var": "x",
+        "seed": 0
+      },
+      "status": "ok",
+      "n_entities": {
+        "train": 24,
+        "search": 8,
+        "confirm": 4,
+        "test": 4
+      },
+      "n_history_events": 3510,
+      "n_targets": 960,
+      "variables": [
+        "x",
+        "y"
+      ],
+      "card_backend": "physiome"
+    }
+  }
+}

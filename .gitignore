@@ -1,0 +1,41 @@
+# --- Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+build/
+dist/
+.eggs/
+
+# --- editors / OS
+.vscode/
+.idea/
+.DS_Store
+
+# --- resources & data: NEVER commit bulky or licensed assets.
+# All raw data, model weights and vendor code live under /mnt/data/ats_resources
+# (outside the repo). Anything heavy that lands inside the repo stays out of git.
+data/
+weights/
+*.safetensors
+*.ckpt
+*.pt
+*.pth
+*.tar.gz
+*.zip
+
+# --- run outputs: gen_eval / perf / interp results and logs are artifacts,
+# reproducible from configs + scripts. Smoke outputs are kept in git as living
+# proof that the loop runs (small text/png only).
+results/*
+!results/smoke/
+results/smoke/_cache/
+log/*
+!log/smoke/
+vis/generated/*
+!vis/generated/smoke/
+runs/
+
+# --- secrets: keys are only ever read from environment variables
+.env
+*.key
+*_secret*

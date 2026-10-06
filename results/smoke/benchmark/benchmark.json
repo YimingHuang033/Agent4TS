@@ -1,0 +1,276 @@
+{
+  "p12_native": {
+    "LastValue": {
+      "status": "ok",
+      "metrics": {
+        "normalized_mae": 7.9161310130602205,
+        "normalized_mse": 107.23832811283845,
+        "n_valid_targets": 640,
+        "coverage": 0.9922480620155039
+      },
+      "groups": {
+        "all": {
+          "nmae": 7.9161310130602205,
+          "nmse": 107.23832811283845,
+          "n": 640
+        },
+        "long_gap": {
+          "nmae": 14.633209042776388,
+          "nmse": 282.7378863572442,
+          "n": 63
+        },
+        "stale": {
+          "nmae": 20.700340374480454,
+          "nmse": 438.76249106053314,
+          "n": 17
+        },
+        "fresh": {
+          "nmae": 7.5672842086554954,
+          "nmse": 98.1919223823235,
+          "n": 623
+        },
+        "sparse": {
+          "nmae": null,
+          "nmse": null,
+          "n": 0
+        },
+        "dense": {
+          "nmae": 6.039823668934465,
+          "nmse": 58.00418614655955,
+          "n": 562
+        }
+      },
+      "cost": {
+        "wall_s": 0.184
+      },
+      "error": null
+    },
+    "MeanValue": {
+      "status": "ok",
+      "metrics": {
+        "normalized_mae": 0.7190848522069344,
+        "normalized_mse": 0.7662864815798223,
+        "n_valid_targets": 645,
+        "coverage": 1.0
+      },
+      "groups": {
+        "all": {
+          "nmae": 0.7190848522069344,
+          "nmse": 0.7662864815798223,
+          "n": 645
+        },
+        "long_gap": {
+          "nmae": 0.5575365827040886,
+          "nmse": 0.537322844248828,
+          "n": 63
+        },
+        "stale": {
+          "nmae": 0.6540978437593061,
+          "nmse": 1.0213117922776294,
+          "n": 17
+        },
+        "fresh": {
+          "nmae": 0.7208440546649116,
+          "nmse": 0.7593829301755822,
+          "n": 628
+        },
+        "sparse": {
+          "nmae": 0.7359929761239966,
+          "nmse": 0.5792129942772155,
+          "n": 5
+        },
+        "dense": {
+          "nmae": 0.7476710582774517,
+          "nmse": 0.8045454818634172,
+          "n": 562
+        }
+      },
+      "cost": {
+        "wall_s": 0.185
+      },
+      "error": null
+    },
+    "DLinear": {
+      "status": "ok",
+      "metrics": {
+        "normalized_mae": 7.348154216274391,
+        "normalized_mse": 91.30902667327935,
+        "n_valid_targets": 645,
+        "coverage": 1.0
+      },
+      "groups": {
+        "all": {
+          "nmae": 7.348154216274391,
+          "nmse": 91.30902667327935,
+          "n": 645
+        },
+        "long_gap": {
+          "nmae": 14.075776841328338,
+          "nmse": 262.8569421281567,
+          "n": 63
+        },
+        "stale": {
+          "nmae": 20.30603458704827,
+          "nmse": 463.8850194381957,
+          "n": 17
+        },
+        "fresh": {
+          "nmae": 6.997383569294844,
+          "nmse": 81.2233708181781,
+          "n": 628
+        },
+        "sparse": {
+          "nmae": 5.279491866716525,
+          "nmse": 27.910500471382864,
+          "n": 5
+        },
+        "dense": {
+          "nmae": 5.609322452813697,
+          "nmse": 46.095781963292865,
+          "n": 562
+        }
+      },
+      "cost": {
+        "wall_s": 1.202
+      },
+      "error": null
+    }
+  },
+  "physiome_dupont": {
+    "LastValue": {
+      "status": "ok",
+      "metrics": {
+        "normalized_mae": 10.115265514186058,
+        "normalized_mse": 129.50524857038127,
+        "n_valid_targets": 192,
+        "coverage": 1.0
+      },
+      "groups": {
+        "all": {
+          "nmae": 10.115265514186058,
+          "nmse": 129.50524857038127,
+          "n": 192
+        },
+        "long_gap": {
+          "nmae": null,
+          "nmse": null,
+          "n": 0
+        },
+        "stale": {
+          "nmae": null,
+          "nmse": null,
+          "n": 0
+        },
+        "fresh": {
+          "nmae": 10.115265514186058,
+          "nmse": 129.50524857038127,
+          "n": 192
+        },
+        "sparse": {
+          "nmae": null,
+          "nmse": null,
+          "n": 0
+        },
+        "dense": {
+          "nmae": 10.115265514186058,
+          "nmse": 129.50524857038127,
+          "n": 192
+        }
+      },
+      "cost": {
+        "wall_s": 0.008
+      },
+      "error": null
+    },
+    "MeanValue": {
+      "status": "ok",
+      "metrics": {
+        "normalized_mae": 0.9606384821735842,
+        "normalized_mse": 1.0080063567624922,
+        "n_valid_targets": 192,
+        "coverage": 1.0
+      },
+      "groups": {
+        "all": {
+          "nmae": 0.9606384821735842,
+          "nmse": 1.0080063567624922,
+          "n": 192
+        },
+        "long_gap": {
+          "nmae": null,
+          "nmse": null,
+          "n": 0
+        },
+        "stale": {
+          "nmae": null,
+          "nmse": null,
+          "n": 0
+        },
+        "fresh": {
+          "nmae": 0.9606384821735842,
+          "nmse": 1.0080063567624922,
+          "n": 192
+        },
+        "sparse": {
+          "nmae": null,
+          "nmse": null,
+          "n": 0
+        },
+        "dense": {
+          "nmae": 0.9606384821735842,
+          "nmse": 1.0080063567624922,
+          "n": 192
+        }
+      },
+      "cost": {
+        "wall_s": 0.008
+      },
+      "error": null
+    },
+    "DLinear": {
+      "status": "ok",
+      "metrics": {
+        "normalized_mae": 0.4213141218107457,
+        "normalized_mse": 0.3349110379754677,
+        "n_valid_targets": 192,
+        "coverage": 1.0
+      },
+      "groups": {
+        "all": {
+          "nmae": 0.4213141218107457,
+          "nmse": 0.3349110379754677,
+          "n": 192
+        },
+        "long_gap": {
+          "nmae": null,
+          "nmse": null,
+          "n": 0
+        },
+        "stale": {
+          "nmae": null,
+          "nmse": null,
+          "n": 0
+        },
+        "fresh": {
+          "nmae": 0.4213141218107457,
+          "nmse": 0.3349110379754677,
+          "n": 192
+        },
+        "sparse": {
+          "nmae": null,
+          "nmse": null,
+          "n": 0
+        },
+        "dense": {
+          "nmae": 0.4213141218107457,
+          "nmse": 0.3349110379754677,
+          "n": 192
+        }
+      },
+      "cost": {
+        "wall_s": 0.038
+      },
+      "error": null
+    }
+  }
+}

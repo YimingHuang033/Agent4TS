@@ -3,21 +3,75 @@
   "bits": {
     "source_url": "https://anonymous.4open.science/r/BITS-8F2E/",
     "archive_url": "https://anonymous.4open.science/api/repo/BITS-8F2E/zip",
-    "archive_sha256": "bc85ccf82b384d241915d125bc8a58ad14eba9421b984ee2e97ba1add61b734a",
+    "archive_sha256_design_claim": "bc85ccf82b384d241915d125bc8a58ad14eba9421b984ee2e97ba1add61b734a",
+    "archive_sha256_downloaded_2026_10_06": "e42295b6694ed97a32ca5628dbd919ae743a2486533c01d0ab65e44eecdd5f7f",
+    "archive_note": "the anonymous ZIP endpoint is not byte-stable; hashes differ between fetches",
     "archive_size_bytes": 3623591,
     "file_count": 1533,
     "package_version": "0.2.0rc1",
     "license": "MIT (upstream LICENSE; retain component licenses)",
     "python_requires": ">=3.8,<3.11",
     "recommended_python": "3.10",
+    "local_path": "/mnt/data/ats_resources/vendor/bits_tmp",
     "source_verified": true,
-    "training_verified": false
+    "training_verified": false,
+    "runtime_installed": false,
+    "runtime_note": "blocked by decision 2026-10-06: tim env (py3.11/torch2.13) kept; BITS access via blocked_resource"
   },
   "bits_data": {
     "source_url": "https://huggingface.co/datasets/ykj111/BITS-data",
     "revision": "47579a87a8d95306a5ef1d0200334c45ba42be8c",
     "catalog_path_in_bits": "dataset_configs/legacy/catalog.yaml",
     "manifest_path_in_bits": "dataset_configs/legacy/processed-v1-manifest.json",
-    "download_verified": false
+    "download_verified": false,
+    "download_note": "full dataset download deliberately skipped (disk + env constraints)"
+  },
+  "p12": {
+    "source_url": "https://physionet.org/content/challenge-2012/1.0.0/",
+    "set_a_url": "https://physionet.org/files/challenge-2012/1.0.0/set-a.tar.gz",
+    "set_a_sha256": "1a8029516c4d52add88dd8f26fe287af8d2896b74820ecfdcc0362ad2e7eed88",
+    "set_a_size_bytes": 6632372,
+    "set_a_records": 4000,
+    "outcomes_url": "https://physionet.org/files/challenge-2012/1.0.0/Outcomes-a.txt",
+    "local_path": "/mnt/data/ats_resources/data/p12",
+    "download_verified": true,
+    "protocol_note": "our 24h->6h bucketed numeric protocol, NOT the official mortality challenge"
+  },
+  "physiome_ode": {
+    "source_url": "https://github.com/kloetergensc/Physiome-ODE",
+    "zenodo_url": "https://zenodo.org/records/11492058",
+    "download_verified": false,
+    "implementation_note": "local RK4 re-implementation of dupont_1991a / borghans_dupont_goldbeter_1997a / lenbury_pacheenburawana_1991; Zenodo arrays not downloaded; custom version flagged in dataset_version"
+  },
+  "timeimm": {
+    "source_url": "https://github.com/blacksnail789521/Time-IMM",
+    "cities": ["Los_Angeles", "Dallas", "Denver"],
+    "local_path": "/mnt/data/ats_resources/data/timeimm",
+    "download_verified": false,
+    "download_script": "scripts/gen_eval/00_download_resources.sh timeimm"
+  },
+  "mimic_iv": {
+    "source_url": "https://physionet.org/content/mimiciv/3.0/",
+    "status": "blocked_access",
+    "note": "credentialed access required; adapter stub + card template only"
+  },
+  "tsci": {
+    "source_url": "https://github.com/Y-Research-SBU/TimeSeriesScientist",
+    "paper": "https://arxiv.org/abs/2510.01538",
+    "status": "not_vendored",
+    "note": "TSci-adapted baseline reports unavailable instead of imitating upstream"
+  },
+  "llm": {
+    "model": "Qwen3.5-4B",
+    "local_path": "/mnt/data/Qwen3.5-4B",
+    "serving": "vLLM, see scripts/gen_eval/01_serve_llm.sh",
+    "endpoint": "http://127.0.0.1:8848/v1"
+  },
+  "environment": {
+    "conda_env": "tim",
+    "python": "3.11.14",
+    "torch": "2.13.0+cu130",
+    "vllm": "0.30.0",
+    "decision": "2026-10-06: keep tim env untouched; no BITS py3.10 env"
   }
 }

@@ -1,0 +1,2 @@
+2026-10-06 23:20:45 | INFO    | agent4ts.runners | TSci status: unavailable (tsci_dir not set or missing; package 'timeseriesscientist' not importable in this env)
+2026-10-06 23:20:45 | WARNING | agent4ts.runners | TSci not runnable; wrote status.json. See baselines/tsci.py.

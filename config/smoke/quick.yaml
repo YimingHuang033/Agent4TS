@@ -1,0 +1,31 @@
+# Smoke-test config: tiny budgets, one small task, mock or local LLM.
+# Merged on top of config/default.yaml.
+
+tasks:
+  physiome_dupont:
+    backend: physiome
+    model_key: dupont_1991a
+    track: robust_improve
+    n_entities: 40
+    history_hours: 24.0
+    horizon_hours: 6.0
+    target_var: x
+    seed: 0
+  p12_native:
+    backend: p12
+    track: native_irr
+    history_hours: 24.0
+    horizon_hours: 6.0
+    target_variables: [HR, SysABP, Temp]
+    max_entities: 300
+
+budget:
+  trials: 4
+  llm_calls: 8
+  gpu_hours: 0.5
+  patience: 2
+
+seeds: [0]
+
+llm:
+  transport: mock

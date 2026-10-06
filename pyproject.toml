@@ -1,0 +1,16 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "agent4ts"
+version = "0.1.0"
+description = "Agent4TS: single-agent pipeline search for robust irregular time-series forecasting"
+requires-python = ">=3.10"
+dependencies = ["numpy", "pandas", "pyyaml", "matplotlib", "torch", "openai"]
+
+[project.scripts]
+agent4ts = "agent4ts.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]

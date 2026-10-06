@@ -1,0 +1,89 @@
+{
+  "task_id": "physiome_dupont_1991a_robust",
+  "seed": 0,
+  "rounds": 2,
+  "incumbent": {
+    "pipeline_id": "p0_f0",
+    "data_view": {
+      "history_fraction": 1.0,
+      "variable_subset": "all",
+      "grid_width": 1.0,
+      "grid_mode": "events",
+      "fill": "mean",
+      "forward_limit": 0.0,
+      "age_feature": false,
+      "normalize": "zscore"
+    },
+    "model_id": "DLinear",
+    "model_config": {},
+    "seed": 0,
+    "parent_id": null
+  },
+  "archive": [
+    {
+      "pipeline": {
+        "pipeline_id": "p0_f0",
+        "data_view": {
+          "history_fraction": 1.0,
+          "variable_subset": "all",
+          "grid_width": 1.0,
+          "grid_mode": "events",
+          "fill": "mean",
+          "forward_limit": 0.0,
+          "age_feature": false,
+          "normalize": "zscore"
+        },
+        "model_id": "DLinear",
+        "model_config": {},
+        "seed": 0,
+        "parent_id": null
+      },
+      "fingerprint": "df90921afe20805b",
+      "status": "ok",
+      "metrics": {
+        "normalized_mae": 0.4213141218107457,
+        "normalized_mse": 0.3349110379754677,
+        "n_valid_targets": 192,
+        "coverage": 1.0
+      },
+      "error": null,
+      "wall_s": 0.979
+    },
+    {
+      "pipeline": {
+        "pipeline_id": "r2_itransformer",
+        "data_view": {
+          "history_fraction": 1.0,
+          "variable_subset": "all",
+          "grid_width": 1.0,
+          "grid_mode": "events",
+          "fill": "mean",
+          "forward_limit": 0.0,
+          "age_feature": false,
+          "normalize": "zscore"
+        },
+        "model_id": "PatchTST",
+        "model_config": {},
+        "seed": 0,
+        "parent_id": "p0_f0"
+      },
+      "fingerprint": "56c7ca4a16f4db73",
+      "status": "ok",
+      "metrics": {
+        "normalized_mae": 0.6264880574096097,
+        "normalized_mse": 0.5929290104663273,
+        "n_valid_targets": 192,
+        "coverage": 1.0
+      },
+      "error": null,
+      "wall_s": 4.153
+    }
+  ],
+  "incumbent_metric": 0.4213141218107457,
+  "f0_metric": 0.4213141218107457,
+  "used": {
+    "trials": 2,
+    "llm_calls": 0,
+    "gpu_hours": 0.0
+  }
+}

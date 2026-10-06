@@ -1,0 +1,115 @@
+[
+  {
+    "tag": "none",
+    "kind": "baseline",
+    "setting": {},
+    "status": "ok",
+    "normalized_mae": 0.4213141218107457,
+    "n_valid": 192,
+    "error": null
+  },
+  {
+    "tag": "dr020",
+    "kind": "drop_random",
+    "setting": {
+      "kind": "drop_random",
+      "ratio": 0.2,
+      "tag": "dr020"
+    },
+    "status": "ok",
+    "normalized_mae": 0.4541258228129945,
+    "n_valid": 192,
+    "error": null
+  },
+  {
+    "tag": "dr050",
+    "kind": "drop_random",
+    "setting": {
+      "kind": "drop_random",
+      "ratio": 0.5,
+      "tag": "dr050"
+    },
+    "status": "ok",
+    "normalized_mae": 0.34922012371142963,
+    "n_valid": 192,
+    "error": null
+  },
+  {
+    "tag": "ds010",
+    "kind": "drop_span",
+    "setting": {
+      "kind": "drop_span",
+      "fraction": 0.1,
+      "tag": "ds010"
+    },
+    "status": "ok",
+    "normalized_mae": 0.39108918305671797,
+    "n_valid": 192,
+    "error": null
+  },
+  {
+    "tag": "ds030",
+    "kind": "drop_span",
+    "setting": {
+      "kind": "drop_span",
+      "fraction": 0.3,
+      "tag": "ds030"
+    },
+    "status": "ok",
+    "normalized_mae": 0.35726572600909196,
+    "n_valid": 192,
+    "error": null
+  },
+  {
+    "tag": "sv050",
+    "kind": "subsample_vars",
+    "setting": {
+      "kind": "subsample_vars",
+      "keep_fraction": 0.5,
+      "tag": "sv050"
+    },
+    "status": "ok",
+    "normalized_mae": 0.4213141218107457,
+    "n_valid": 192,
+    "error": null
+  },
+  {
+    "tag": "sv025",
+    "kind": "subsample_vars",
+    "setting": {
+      "kind": "subsample_vars",
+      "keep_fraction": 0.25,
+      "tag": "sv025"
+    },
+    "status": "ok",
+    "normalized_mae": 0.4213141218107457,
+    "n_valid": 192,
+    "error": null
+  },
+  {
+    "tag": "no010",
+    "kind": "add_noise",
+    "setting": {
+      "kind": "add_noise",
+      "std_ratio": 0.1,
+      "tag": "no010"
+    },
+    "status": "ok",
+    "normalized_mae": 0.543725911801439,
+    "n_valid": 192,
+    "error": null
+  },
+  {
+    "tag": "no030",
+    "kind": "add_noise",
+    "setting": {
+      "kind": "add_noise",
+      "std_ratio": 0.3,
+      "tag": "no030"
+    },
+    "status": "ok",
+    "normalized_mae": 0.8335724216748229,
+    "n_valid": 192,
+    "error": null
+  }
+]

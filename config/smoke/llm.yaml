@@ -1,0 +1,29 @@
+# LLM smoke config: same tiny task, but the controller talks to the real
+# locally-served Qwen3.5-4B instead of the mock transport.
+
+tasks:
+  physiome_dupont:
+    backend: physiome
+    model_key: dupont_1991a
+    track: robust_improve
+    n_entities: 40
+    history_hours: 24.0
+    horizon_hours: 6.0
+    target_var: x
+    seed: 0
+
+budget:
+  trials: 5
+  llm_calls: 10
+  gpu_hours: 0.5
+  patience: 2
+
+seeds: [0]
+
+llm:
+  transport: openai
+  base_url: http://127.0.0.1:8848/v1
+  model: Qwen3.5-4B
+  temperature: 0.2
+  max_tokens: 1024
+  timeout: 300

@@ -1,0 +1,6 @@
+model,status,wall_s,peak_gpu_mb,nmae,error
+LastValue,ok,0.009,0.0,10.115265514186058,
+MeanValue,ok,0.009,0.0,0.9606384821735842,
+DLinear,ok,0.934,0.0,0.4213141218107457,
+PatchTST,ok,2.719,0.0,0.6264880574096097,
+iTransformer,ok,0.372,0.0,0.4977851882007791,

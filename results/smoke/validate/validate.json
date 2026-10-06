@@ -1,0 +1,76 @@
+{
+  "p12_native": {
+    "status": "ok",
+    "checks": {
+      "no_future_leakage": {
+        "ok": true,
+        "future_events": 0,
+        "future_available": 0
+      },
+      "split_isolation": {
+        "ok": true,
+        "duplicates": [],
+        "n_entities": 300
+      },
+      "padding_invariance": {
+        "ok": true,
+        "masked_entries": 40398,
+        "unique_cells": 40398,
+        "raw_entries": 40512
+      },
+      "unknown_targets_unscored": {
+        "ok": true,
+        "beyond_horizon": 0,
+        "before_cutoff": 0
+      },
+      "grid_maps_to_target": {
+        "ok": true,
+        "n_grid": 6,
+        "min": 0.5,
+        "max": 5.5
+      },
+      "no_label_over_split": {
+        "ok": true,
+        "orphan_target_entities": []
+      }
+    },
+    "failed": []
+  },
+  "physiome_dupont": {
+    "status": "ok",
+    "checks": {
+      "no_future_leakage": {
+        "ok": true,
+        "future_events": 0,
+        "future_available": 0
+      },
+      "split_isolation": {
+        "ok": true,
+        "duplicates": [],
+        "n_entities": 40
+      },
+      "padding_invariance": {
+        "ok": true,
+        "masked_entries": 2142,
+        "unique_cells": 2142,
+        "raw_entries": 2142
+      },
+      "unknown_targets_unscored": {
+        "ok": true,
+        "beyond_horizon": 0,
+        "before_cutoff": 0
+      },
+      "grid_maps_to_target": {
+        "ok": true,
+        "n_grid": 24,
+        "min": 0.25,
+        "max": 6.0
+      },
+      "no_label_over_split": {
+        "ok": true,
+        "orphan_target_entities": []
+      }
+    },
+    "failed": []
+  }
+}

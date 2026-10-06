@@ -1,0 +1,73 @@
+# Agent4TS default configuration.
+# All positions, keys and parameters live here. Override per experiment by
+# putting a sibling YAML in config/<kind>/ and selecting it with --config.
+
+paths:
+  # where bulky, non-committed resources live (models, raw data, vendor source)
+  data_root: /mnt/data/ats_resources
+  p12_root: /mnt/data/ats_resources/data/p12
+  physiome_root: /mnt/data/ats_resources/data/physiome
+  timeimm_root: /mnt/data/ats_resources/data/timeimm
+  mimic_root: /mnt/data/ats_resources/data/mimic
+  bits_src: /mnt/data/ats_resources/vendor/bits_tmp
+  # project-local output roots (relative -> resolved against project root)
+  results_root: results
+  log_root: log
+  vis_root: vis
+  cache_root: results/_cache
+  resource_lock: resources.lock.json
+
+llm:
+  # OpenAI-compatible endpoint. Default target: local vLLM serving Qwen3.5-4B.
+  base_url: http://127.0.0.1:8848/v1
+  base_url_env: ATS_LLM_BASE_URL
+  api_key: EMPTY
+  api_key_env: ATS_LLM_API_KEY
+  model: Qwen3.5-4B
+  temperature: 0.2
+  max_tokens: 2048
+  timeout: 180
+  max_retries: 1          # one format-error retry, counted against budget
+  transport: openai        # openai | mock
+
+resources:
+  qwen_model_dir: /mnt/data/Qwen3.5-4B
+  vllm_host: 127.0.0.1
+  vllm_port: 8848
+  vllm_served_name: Qwen3.5-4B
+  vllm_gpu_memory_utilization: 0.45
+  vllm_max_model_len: 8192
+  vllm_tensor_parallel_size: 1
+  vllm_max_num_seqs: 64
+  hf_endpoint: https://hf-mirror.com
+  git_mirror: https://ghproxy.net/
+  download_manifest: /mnt/data/ats_resources/download_manifest.json
+
+budget:
+  trials: 12          # real trainings incl. f0
+  llm_calls: 24
+  gpu_hours: 2.0
+  patience: 3         # consecutive completed non-improving trials -> stop
+
+seeds: [0, 1, 2]
+
+evaluation:
+  metric_version: v1
+  primary_metric: normalized_mae
+  # split fractions for non-BITS datasets (entity-level)
+  split_ratios: {train: 0.6, search: 0.2, confirm: 0.1, test: 0.1}
+  long_gap_hours: 6.0
+  stale_age_hours: 3.0
+  density_ratio_threshold: 2.0
+  min_valid_targets: 1
+
+fault_detection: false
+
+# Declared resource availability. Nothing here is auto-downloaded; scripts do
+# the downloading, and missing entries surface as blocked_resource.
+resource_status:
+  p12_set_a: available
+  physiome_ode: pending
+  timeimm_epa_air: pending
+  mimic_iv: blocked_access
+  bits_upstream: source_only

@@ -1,0 +1,16 @@
+2026-10-06 23:21:15 | INFO    | agent4ts.degradation | degradation dr020 applied: 3510 -> 2780 events
+2026-10-06 23:21:16 | INFO    | agent4ts.runners | degradation dr020: ok nmae=0.4541258228129945
+2026-10-06 23:21:16 | INFO    | agent4ts.degradation | degradation dr050 applied: 3510 -> 1725 events
+2026-10-06 23:21:16 | INFO    | agent4ts.runners | degradation dr050: ok nmae=0.34922012371142963
+2026-10-06 23:21:16 | INFO    | agent4ts.degradation | degradation ds010 applied: 3510 -> 3205 events
+2026-10-06 23:21:16 | INFO    | agent4ts.runners | degradation ds010: ok nmae=0.39108918305671797
+2026-10-06 23:21:16 | INFO    | agent4ts.degradation | degradation ds030 applied: 3510 -> 2480 events
+2026-10-06 23:21:16 | INFO    | agent4ts.runners | degradation ds030: ok nmae=0.35726572600909196
+2026-10-06 23:21:16 | INFO    | agent4ts.degradation | degradation sv050 applied: 3510 -> 3510 events
+2026-10-06 23:21:16 | INFO    | agent4ts.runners | degradation sv050: ok nmae=0.4213141218107457
+2026-10-06 23:21:16 | INFO    | agent4ts.degradation | degradation sv025 applied: 3510 -> 3510 events
+2026-10-06 23:21:16 | INFO    | agent4ts.runners | degradation sv025: ok nmae=0.4213141218107457
+2026-10-06 23:21:16 | INFO    | agent4ts.degradation | degradation no010 applied: 3510 -> 3510 events
+2026-10-06 23:21:16 | INFO    | agent4ts.runners | degradation no010: ok nmae=0.543725911801439
+2026-10-06 23:21:16 | INFO    | agent4ts.degradation | degradation no030 applied: 3510 -> 3510 events
+2026-10-06 23:21:16 | INFO    | agent4ts.runners | degradation no030: ok nmae=0.8335724216748229

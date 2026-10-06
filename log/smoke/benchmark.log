@@ -1,0 +1,14 @@
+2026-10-06 23:17:39 | INFO    | agent4ts.data.p12 | P12 loaded: 300 entities, 68113 history events, 3955 target buckets, targets=p12_native_irr
+2026-10-06 23:17:39 | INFO    | agent4ts.cli | benchmark p12_native/LastValue: ok nmae=7.9161310130602205
+2026-10-06 23:17:40 | INFO    | agent4ts.cli | benchmark p12_native/MeanValue: ok nmae=0.7190848522069344
+2026-10-06 23:17:41 | INFO    | agent4ts.cli | benchmark p12_native/DLinear: ok nmae=7.348154216274391
+2026-10-06 23:17:41 | INFO    | agent4ts.cli | benchmark physiome_dupont/LastValue: ok nmae=10.115265514186058
+2026-10-06 23:17:41 | INFO    | agent4ts.cli | benchmark physiome_dupont/MeanValue: ok nmae=0.9606384821735842
+2026-10-06 23:17:41 | INFO    | agent4ts.cli | benchmark physiome_dupont/DLinear: ok nmae=0.4213141218107457
+2026-10-06 23:19:17 | INFO    | agent4ts.data.p12 | P12 loaded: 300 entities, 68113 history events, 3955 target buckets, targets=p12_native_irr
+2026-10-06 23:19:18 | INFO    | agent4ts.cli | benchmark p12_native/LastValue: ok nmae=7.9161310130602205
+2026-10-06 23:19:18 | INFO    | agent4ts.cli | benchmark p12_native/MeanValue: ok nmae=0.7190848522069344
+2026-10-06 23:19:19 | INFO    | agent4ts.cli | benchmark p12_native/DLinear: ok nmae=7.348154216274391
+2026-10-06 23:19:19 | INFO    | agent4ts.cli | benchmark physiome_dupont/LastValue: ok nmae=10.115265514186058
+2026-10-06 23:19:19 | INFO    | agent4ts.cli | benchmark physiome_dupont/MeanValue: ok nmae=0.9606384821735842
+2026-10-06 23:19:19 | INFO    | agent4ts.cli | benchmark physiome_dupont/DLinear: ok nmae=0.4213141218107457

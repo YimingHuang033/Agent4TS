@@ -1,0 +1,5 @@
+2026-10-06 23:20:47 | INFO    | agent4ts.runners | perf LastValue: 0.01s peak=0.0MB
+2026-10-06 23:20:47 | INFO    | agent4ts.runners | perf MeanValue: 0.01s peak=0.0MB
+2026-10-06 23:20:48 | INFO    | agent4ts.runners | perf DLinear: 0.93s peak=0.0MB
+2026-10-06 23:20:51 | INFO    | agent4ts.runners | perf PatchTST: 2.72s peak=0.0MB
+2026-10-06 23:20:51 | INFO    | agent4ts.runners | perf iTransformer: 0.37s peak=0.0MB

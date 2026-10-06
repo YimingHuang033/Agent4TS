@@ -1,0 +1,72 @@
+{
+  "physiome_dupont": {
+    "status": "ok",
+    "confirm": [
+      {
+        "pipeline_id": "p0_f0",
+        "status": "ok",
+        "normalized_mae": 0.48015606212341383,
+        "error": null
+      }
+    ],
+    "selected": {
+      "pipeline_id": "p0_f0",
+      "data_view": {
+        "history_fraction": 1.0,
+        "variable_subset": "all",
+        "grid_width": 1.0,
+        "grid_mode": "events",
+        "fill": "mean",
+        "forward_limit": 0.0,
+        "age_feature": false,
+        "normalize": "zscore"
+      },
+      "model_id": "DLinear",
+      "model_config": {},
+      "seed": 0,
+      "parent_id": null
+    },
+    "test": {
+      "status": "ok",
+      "metrics": {
+        "normalized_mae": 0.48015606212341383,
+        "normalized_mse": 0.40849530258405314,
+        "n_valid_targets": 96,
+        "coverage": 1.0
+      },
+      "groups": {
+        "all": {
+          "nmae": 0.48015606212341383,
+          "nmse": 0.40849530258405314,
+          "n": 96
+        },
+        "long_gap": {
+          "nmae": null,
+          "nmse": null,
+          "n": 0
+        },
+        "stale": {
+          "nmae": null,
+          "nmse": null,
+          "n": 0
+        },
+        "fresh": {
+          "nmae": 0.48015606212341383,
+          "nmse": 0.40849530258405314,
+          "n": 96
+        },
+        "sparse": {
+          "nmae": null,
+          "nmse": null,
+          "n": 0
+        },
+        "dense": {
+          "nmae": 0.48015606212341383,
+          "nmse": 0.40849530258405314,
+          "n": 96
+        }
+      },
+      "error": null
+    }
+  }
+}

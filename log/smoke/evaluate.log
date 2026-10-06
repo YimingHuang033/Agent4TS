@@ -1,0 +1,21 @@
+2026-10-06 23:17:47 | ERROR   | agent4ts.cli | fatal: 'dict' object has no attribute 'to_dict'
+Traceback (most recent call last):
+  File "/home/tim/Proj/ats/src/agent4ts/cli.py", line 320, in main
+    return args.func(args)
+           ^^^^^^^^^^^^^^^
+  File "/home/tim/Proj/ats/src/agent4ts/cli.py", line 161, in cmd_evaluate
+    res = search_mod.finalize(bundle, cfg, run_dir / key / f"seed{args.seed}", cands, seed=args.seed)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/tim/Proj/ats/src/agent4ts/search.py", line 208, in finalize
+    fb = h.run_trial(spec, split="confirm")
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/tim/Proj/ats/src/agent4ts/harness.py", line 113, in run_trial
+    fp = spec.fingerprint(self._upstream_hash(), self.bundle.spec.dataset_version,
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/tim/Proj/ats/src/agent4ts/schemas.py", line 195, in fingerprint
+    "data_view": self.data_view.to_dict(),
+                 ^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'dict' object has no attribute 'to_dict'
+
+2026-10-06 23:19:26 | INFO    | agent4ts.harness | cache hit p0_f0 (df90921afe20805b)
+2026-10-06 23:19:26 | INFO    | agent4ts.cli | evaluate physiome_dupont: ok

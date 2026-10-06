@@ -1,0 +1,14 @@
+[
+  {
+    "trace": "/home/tim/Proj/ats/results/smoke/search/physiome_dupont/seed0/trace.jsonl",
+    "n_events": 16,
+    "n_proposals": 4,
+    "n_rejected": 0,
+    "n_accepted": 0,
+    "ops": {
+      "SELECT_MODEL": 2,
+      "SET_TRANSFORM": 2
+    },
+    "figures_seen": 20
+  }
+]

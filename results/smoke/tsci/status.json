@@ -1,0 +1,17 @@
+{
+  "status": "unavailable",
+  "local_dir": null,
+  "importable": false,
+  "adapted_from": "https://github.com/Y-Research-SBU/TimeSeriesScientist",
+  "paper": "https://arxiv.org/abs/2510.01538",
+  "blocked_reason": "tsci_dir not set or missing; package 'timeseriesscientist' not importable in this env",
+  "setup": [
+    "git clone https://github.com/Y-Research-SBU/TimeSeriesScientist <dir>",
+    "install its requirements (separate env recommended; pins differ from `tim`)",
+    "set resources.tsci_dir to <dir> in config"
+  ],
+  "adaptation_notes": [
+    "TSci expects a `date`/`OT` CSV; a bridge must route its candidate training and its internal split/scoring to this project's executor and unified evaluator.",
+    "Must share the same data, semantic card, figures, model pool, LLM and budget as the other baselines."
+  ]
+}

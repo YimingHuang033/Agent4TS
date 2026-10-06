@@ -1,0 +1,9 @@
+2026-10-06 23:16:29 | INFO    | agent4ts.cli | prepare: config=smoke/quick run_dir=/home/tim/Proj/ats/results/smoke/prepare
+2026-10-06 23:16:29 | INFO    | agent4ts.data.p12 | P12 loaded: 300 entities, 68113 history events, 3955 target buckets, targets=p12_native_irr
+2026-10-06 23:16:30 | INFO    | agent4ts.cli | prepare done: 2/2 tasks ok
+2026-10-06 23:17:35 | INFO    | agent4ts.cli | prepare: config=smoke/quick run_dir=/home/tim/Proj/ats/results/smoke/prepare
+2026-10-06 23:17:35 | INFO    | agent4ts.data.p12 | P12 loaded: 300 entities, 68113 history events, 3955 target buckets, targets=p12_native_irr
+2026-10-06 23:17:35 | INFO    | agent4ts.cli | prepare done: 2/2 tasks ok
+2026-10-06 23:19:13 | INFO    | agent4ts.cli | prepare: config=smoke/quick run_dir=/home/tim/Proj/ats/results/smoke/prepare
+2026-10-06 23:19:13 | INFO    | agent4ts.data.p12 | P12 loaded: 300 entities, 68113 history events, 3955 target buckets, targets=p12_native_irr
+2026-10-06 23:19:13 | INFO    | agent4ts.cli | prepare done: 2/2 tasks ok
