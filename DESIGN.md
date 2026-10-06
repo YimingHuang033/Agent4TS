@@ -18,9 +18,23 @@
 
 入口：[论文与协议](https://arxiv.org/abs/2609.33303)、[作者代码入口](https://anonymous.4open.science/r/BITS-8F2E/)。论文列出 11 个数据集：PhysioNet、USHCN、Human Activity、Pamap2、EPA-Air、ClusterTrace、CESNET、APTC、FNSPID、Seabirds、GDELT。先全部登记，分批运行：P12 → USHCN / Human Activity / EPA-Air → 其余。
 
-**接入状态：论文已核对；本次匿名代码入口访问失败，尚未核实下载脚本、模型注册名和依赖。** 工程第一步获取 BITS 快照，在 `resources.lock.json` 记录来源 URL、commit 或压缩包 SHA256、许可、数据下载 URL 与校验值；检查 loader、时间单位、切分和训练入口后再写桥接代码。本文不假定 BITS 存在某个未核实的 Python API，也不编造数据直链。
+**接入状态（已更新）：已从匿名站的 ZIP 入口下载并校验 1,533 个源码文件，版本为 `bits-eval 0.2.0rc1`；未安装训练环境或运行实验。** 页面 URL 不是可直接使用的 Git remote；使用[完整源码 ZIP](https://anonymous.4open.science/api/repo/BITS-8F2E/zip)。下载快照 SHA256 见 `resources.lock.json`。本地源码位于 `/Users/tim/Projects/ATS/vendor/BITS-8F2E`，不把第三方代码整体提交到本仓库。
 
-所有 A 类数据只能经 `BitsBackend` 进入主流程；沿用该快照的官方窗口、变量和切分。下载不可达时返回 `blocked_resource` 并给出原入口，不能静默换成另一套处理数据并标作 BITS。可以先用小型模拟事件调通 harness。上游模型缺失时允许接下面的作者实现，但仍使用同一批冻结的数据与评价目标。
+可复用以下上游安装步骤（在解压后的源码目录执行）：
+
+```bash
+conda create -n BITS python=3.10
+conda activate BITS
+pip install -e .
+bits --version
+bits dataset list
+# 图模型按需安装，需匹配本机 PyTorch/CUDA：
+pip install -e '.[graph]'
+```
+
+数据在 [BITS-data](https://huggingface.co/datasets/ykj111/BITS-data)。上游 `dataset_configs/legacy/catalog.yaml` 已固定下载 revision、文件大小和 SHA256；`bits run` / `bits suite run` 自动下载并校验所需数据，默认缓存 `~/.cache/bits/datasets/`，可用 `BITS_CACHE_DIR` 改位置。catalog 包含 19 个数据条目，正式 `bits-irregular-v1` suite 是 11 数据集 × 3 horizon，共 33 个任务；本项目以 suite 为准，不把额外条目自动纳入主实验。数据文件尚未实际下载验证。
+
+所有 A 类数据通过 `BitsBackend` 接入，沿用快照的窗口、变量和切分。外部模型适配接口已核实为 `build_model(context)` 与 `forward_batch(model, batch, stage)`；仓库包含 `examples/external_models/tfmixer/tfmixer_bits_adapter.py` 示例。自己的 agent 搜索必须隔离 BITS 完整运行流程中的测试评分，逐轮只返回搜索验证反馈，最终才使用测试集。下载失败返回 `blocked_resource`，不静默替换数据。每个数据集还须审计时间语义、切分和原始来源。
 
 ### 2.2 必须登记的语义数据集
 
@@ -42,7 +56,7 @@ Time-IMM 的数值、文本可从[数据仓库](https://github.com/blacksnail789
 
 ## 3. 预测模型与 agent baseline
 
-“传统”在本文指非 agent 数值预测器，包含近期深度时序模型。以下 **10 个**均出现在 BITS 论文的模型列表；优先封装 BITS 实现，作者链接用于资源追溯和缺失实现补接，尚未承诺本地可运行。
+“传统”在本文指非 agent 数值预测器，包含近期深度时序模型。以下 **10 个**均出现在 BITS 论文的模型列表；优先封装 BITS 实现，作者链接用于资源追溯和缺失实现补接，尚未承诺本地可运行。已在快照确认 APN、ASTGI、TiWeaver、tPatchGNN、iTransformer、PatchTST、DLinear 的实现目录；TFMixer 有外部适配示例，KAFNet 与 HyperIMTS 仍需从作者仓库补接，论文列出不等于当前快照已内置。
 
 1. **TFMixer（ICML 2026）**，irr：[作者代码](https://github.com/decisionintelligence/TFMixer)。
 2. **KAFNet（AAAI 2026）**，irr：[作者代码](https://github.com/zhouziyu02/KAFNet)。
@@ -63,7 +77,7 @@ Time-IMM 的数值、文本可从[数据仓库](https://github.com/blacksnail789
 
 ## 4. 最小代码结构与接口
 
-建议 Python 3.11、PyTorch、NumPy/Pandas、Pydantic、Matplotlib、PyYAML；具体版本在验证 BITS 依赖后锁定。TSci 单独环境/进程，避免依赖冲突。训练先支持单 GPU 串行，CPU 只用于轻量 smoke test。
+BITS 执行环境固定 Python 3.10：上游限制 `>=3.8,<3.11`，PyTorch `>=2.4,<2.5`、NumPy 1.24.4、Pandas 1.5.3。controller 可用独立 Python 3.11 环境与 Pydantic，通过 JSON/子进程调用 BITS；TSci 也单独环境，避免依赖冲突。Matplotlib/PyYAML 等遵守上游依赖锁定。训练先支持单 GPU 串行，CPU 只用于轻量 smoke test。
 
 ```text
 configs/                   # 数据任务、模型注册、有限动作空间、预算

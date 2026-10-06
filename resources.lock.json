@@ -1,0 +1,23 @@
+{
+  "checked_at": "2026-10-06",
+  "bits": {
+    "source_url": "https://anonymous.4open.science/r/BITS-8F2E/",
+    "archive_url": "https://anonymous.4open.science/api/repo/BITS-8F2E/zip",
+    "archive_sha256": "bc85ccf82b384d241915d125bc8a58ad14eba9421b984ee2e97ba1add61b734a",
+    "archive_size_bytes": 3623591,
+    "file_count": 1533,
+    "package_version": "0.2.0rc1",
+    "license": "MIT (upstream LICENSE; retain component licenses)",
+    "python_requires": ">=3.8,<3.11",
+    "recommended_python": "3.10",
+    "source_verified": true,
+    "training_verified": false
+  },
+  "bits_data": {
+    "source_url": "https://huggingface.co/datasets/ykj111/BITS-data",
+    "revision": "47579a87a8d95306a5ef1d0200334c45ba42be8c",
+    "catalog_path_in_bits": "dataset_configs/legacy/catalog.yaml",
+    "manifest_path_in_bits": "dataset_configs/legacy/processed-v1-manifest.json",
+    "download_verified": false
+  }
+}
