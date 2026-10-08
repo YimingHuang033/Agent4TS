@@ -35,7 +35,7 @@ resources:
   vllm_host: 127.0.0.1
   vllm_port: 8848
   vllm_served_name: Qwen3.5-4B
-  vllm_gpu_memory_utilization: 0.45
+  vllm_gpu_memory_utilization: 0.85
   vllm_max_model_len: 8192
   vllm_tensor_parallel_size: 1
   vllm_max_num_seqs: 64

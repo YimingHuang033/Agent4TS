@@ -20,18 +20,32 @@ from .schemas import Action, Observation
 log = get_logger("controller")
 
 SYSTEM_PROMPT = """You are an agent that improves an irregular time-series forecasting pipeline.
-You see numeric statistics, a semantic data card, and real PNG plots of the history.
-Reply with ONE JSON object only, no prose. Schema:
-{"op": one of %s,
- "field": <pipeline field or null>,
- "value": <new value>,
- "parent_id": <current pipeline id or null>,
- "evidence_refs": [<short strings>],
- "expected_effect": "<one sentence>"}
-Change exactly one field. Valid data_view fields: %s.
-Valid models: %s. If nothing is worth changing, use {"op":"STOP"}.
-Preferences: when the plots show long gaps or stale observations, prefer a
-short history_fraction, ffill with a forward_limit, or a model that accepts dt."""
+You see numeric statistics, a semantic data card, and (when enabled) real PNG plots of the history.
+Reply with ONE JSON object and nothing else. No prose, no markdown, no explanation.
+
+Allowed ops: %s
+Allowed data_view fields (use as "field"): %s
+Allowed models (use as "value" when op is SELECT_MODEL): %s
+
+Schema:
+{"op": "<one of the allowed ops>", "field": "<a data_view field, or null>",
+ "value": <new value>, "parent_id": null, "evidence_refs": [],
+ "expected_effect": "<one short sentence>"}
+
+Rules:
+- Change exactly ONE field per reply.
+- For SELECT_MODEL put the model id in "value" and set "field": null.
+- For SET_TRANSFORM put a data_view field name in "field" and the new value in "value".
+- Never invent field names like "statistics.n_events" or "model"; only use the
+  allowed ops, fields and models listed above.
+- If nothing is worth changing, reply {"op": "STOP"}.
+
+Example valid reply:
+{"op": "SET_TRANSFORM", "field": "history_fraction", "value": 0.5, "parent_id": null,
+ "evidence_refs": ["plots show a long gap"], "expected_effect": "focus on recent regime"}
+
+When the plots or statistics show long gaps or stale observations, prefer a short
+history_fraction, ffill with a forward_limit, or a model that accepts dt."""
 
 
 class Controller:
@@ -62,15 +76,18 @@ class Controller:
         }, indent=2, default=str)
 
         content: list[dict[str, Any]] = [{"type": "text", "text": text}]
-        for fig in obs.plot_paths:
-            if isinstance(fig, dict) and "path" in fig:
-                try:
-                    b64 = base64.b64encode(load_png_bytes(fig)).decode()
-                except Exception as exc:
-                    log.warning("could not read figure %s: %s", fig.get("path"), exc)
-                    continue
-                content.append({"type": "image_url",
-                                "image_url": {"url": f"data:image/png;base64,{b64}"}})
+        # a text-only model (e.g. Qwen2.5-0.5B used while the GPUs are busy) runs
+        # as the documented no_vision mode rather than being sent images it can't read
+        if self.llm.get("supports_vision", True):
+            for fig in obs.plot_paths:
+                if isinstance(fig, dict) and "path" in fig:
+                    try:
+                        b64 = base64.b64encode(load_png_bytes(fig)).decode()
+                    except Exception as exc:
+                        log.warning("could not read figure %s: %s", fig.get("path"), exc)
+                        continue
+                    content.append({"type": "image_url",
+                                    "image_url": {"url": f"data:image/png;base64,{b64}"}})
         return [{"role": "system", "content": system},
                 {"role": "user", "content": content}]
 
