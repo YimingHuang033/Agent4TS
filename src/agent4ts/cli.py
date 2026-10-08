@@ -211,11 +211,15 @@ def cmd_predict(args: argparse.Namespace) -> int:
     bundle = _load_bundle(cfg, key)
     norm = Normalizer.from_dict(payload["normalizer"])
     from .models.registry import make as make_model
-    train = build_labeled_windows(bundle, spec.data_view, "train", norm)
-    test = build_labeled_windows(bundle, spec.data_view, "test", norm)
+    win_norm = norm.with_mode(spec.data_view.normalize)
+    train = build_labeled_windows(bundle, spec.data_view, "train", win_norm)
+    test = build_labeled_windows(bundle, spec.data_view, "test", win_norm)
     import numpy as np
     grid = np.unique(np.concatenate([lw.query_times for lw in test]))
     model = make_model(spec.model_id, {**spec.model_config, "seed": spec.seed}, cfg.get("resources"))
+    model._view = spec.data_view
+    model._norm = win_norm
+    model.in_grid = None
     model.fit(train, bundle, grid, np.arange(len(bundle.variable_names)))
     preds = [model.predict(lw) for lw in test]
     out_dir = Path(args.run_dir) if args.run_dir else cfgmod.experiment_dir(cfg, args.kind) / "predict"

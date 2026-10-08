@@ -58,7 +58,10 @@ class Harness:
     def windows(self, split: str, view: DataView):
         key = (split, json.dumps(view.to_dict(), sort_keys=True))
         if key not in self._windows:
-            self._windows[key] = build_labeled_windows(self.bundle, view, split, self.norm)
+            # window values follow the view's normalize choice; scoring always
+            # uses the train-fitted zscore stats in self.norm
+            self._windows[key] = build_labeled_windows(self.bundle, view, split,
+                                                       self.norm.with_mode(view.normalize))
         return self._windows[key]
 
     def default_view(self) -> DataView:
@@ -142,8 +145,10 @@ class Harness:
                                self.cfg.get("resources"))
             grid = np.unique(np.concatenate([lw.query_times for lw in evalset]))
             var_ids = np.arange(len(self.bundle.variable_names))
-            # give the model the view so its lookback grid matches this data_view
+            # give the model the view so its lookback grid matches this data_view,
+            # and the window normalizer so value-copy models can return original units
             model._view = view
+            model._norm = self.norm.with_mode(view.normalize)
             model.in_grid = None
             model.fit(train, self.bundle, grid, var_ids)
             preds = [model.predict(lw) for lw in evalset]

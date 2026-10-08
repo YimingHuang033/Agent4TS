@@ -1,6 +1,6 @@
 {
   "best_pipeline": {
-    "pipeline_id": "bench_LastValue",
+    "pipeline_id": "bench_PatchTST",
     "data_view": {
       "history_fraction": 1.0,
       "variable_subset": "all",
@@ -11,7 +11,7 @@
       "age_feature": false,
       "normalize": "zscore"
     },
-    "model_id": "LastValue",
+    "model_id": "PatchTST",
     "model_config": {},
     "seed": 0,
     "parent_id": null

@@ -195,3 +195,13 @@ fault_detection: false
 - **TSci-adapted 未接通**：上游未 vendored，runner 输出 `status: unavailable` 与接入步骤，不以自写循环冒充。
 - **MIMIC-IV**：`blocked_access`；**RepoHealth**：未审计未注册；**注错识别**：按设计禁用占位。
 - 预算、单字段 JSON 动作、搜索/确认/测试隔离、trace.jsonl、best_pipeline.json 导出、无 LLM 的 predict 入口均已实现并冒烟验证。
+
+### 附录补充（2026-10-08）
+
+- 新增 `AGENTS.md`：环境、GPU 纪律（调试/测试/可视化为 CPU-only，GPU 只留给显式启动的 vLLM 与正式训练）、配置与脚本规约、诚实性红线与完成定义。
+- 修正评分单位 bug：窗口值按 `DataView.normalize` 归一化，LastValue 之前把归一化值当原单位返回（P12 nmae 虚高至 7.9）。现在值拷贝模型用 `_norm.inverse` 还原到原单位；`cli predict` 同样接线。
+- `DataView.normalize` 之前被 harness 忽略，`SET_TRANSFORM normalize` 是空动作；现按视图选择归一化模式建窗，打分始终用训练侧 z-score 统计。
+- 网格模型（DLinear/PatchTST/iTransformer）目标侧改用逐变量 target 统计，修复多变量原单位目标下共享输出偏置导致无法区分变量的问题（P12 DLinear nmae 7.35 → 0.38，已优于 MeanValue）。
+- `scripts/gen_eval/*.sh` 不再硬编码 `ATS_KIND=gen_eval`，改为 `${ATS_KIND:-gen_eval}`，便于复用 smoke 配置刷新冒烟产物。
+- 测试增至 13 项（新增 LastValue 原单位回归），`scripts/smoke/run_smoke.sh` 与已提交的 `results/smoke` 产物已按新行为重新生成。
+

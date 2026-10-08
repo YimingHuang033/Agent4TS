@@ -4,7 +4,7 @@
     "kind": "baseline",
     "setting": {},
     "status": "ok",
-    "normalized_mae": 0.4213141218107457,
+    "normalized_mae": 0.039943117767299224,
     "n_valid": 192,
     "error": null
   },
@@ -17,7 +17,7 @@
       "tag": "dr020"
     },
     "status": "ok",
-    "normalized_mae": 0.4541258228129945,
+    "normalized_mae": 0.049256439264770725,
     "n_valid": 192,
     "error": null
   },
@@ -30,7 +30,7 @@
       "tag": "dr050"
     },
     "status": "ok",
-    "normalized_mae": 0.34922012371142963,
+    "normalized_mae": 0.05682143111900017,
     "n_valid": 192,
     "error": null
   },
@@ -43,7 +43,7 @@
       "tag": "ds010"
     },
     "status": "ok",
-    "normalized_mae": 0.39108918305671797,
+    "normalized_mae": 0.04014136581784387,
     "n_valid": 192,
     "error": null
   },
@@ -56,7 +56,7 @@
       "tag": "ds030"
     },
     "status": "ok",
-    "normalized_mae": 0.35726572600909196,
+    "normalized_mae": 0.04053412243929944,
     "n_valid": 192,
     "error": null
   },
@@ -69,7 +69,7 @@
       "tag": "sv050"
     },
     "status": "ok",
-    "normalized_mae": 0.4213141218107457,
+    "normalized_mae": 0.039943117767299224,
     "n_valid": 192,
     "error": null
   },
@@ -82,7 +82,7 @@
       "tag": "sv025"
     },
     "status": "ok",
-    "normalized_mae": 0.4213141218107457,
+    "normalized_mae": 0.039943117767299224,
     "n_valid": 192,
     "error": null
   },
@@ -95,7 +95,7 @@
       "tag": "no010"
     },
     "status": "ok",
-    "normalized_mae": 0.543725911801439,
+    "normalized_mae": 0.05648773935602117,
     "n_valid": 192,
     "error": null
   },
@@ -108,7 +108,7 @@
       "tag": "no030"
     },
     "status": "ok",
-    "normalized_mae": 0.8335724216748229,
+    "normalized_mae": 0.0982494186387635,
     "n_valid": 192,
     "error": null
   }

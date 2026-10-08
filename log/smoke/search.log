@@ -2,3 +2,12 @@
 2026-10-06 23:17:45 | INFO    | agent4ts.cli | search physiome_dupont seed=0: rounds=2 incumbent=p0_f0 nmae=0.4213141218107457
 2026-10-06 23:19:23 | INFO    | agent4ts.harness | cache hit p1_dlinear (df90921afe20805b)
 2026-10-06 23:19:23 | INFO    | agent4ts.cli | search physiome_dupont seed=0: rounds=2 incumbent=p0_f0 nmae=0.4213141218107457
+2026-10-07 03:38:45 | INFO    | agent4ts.search | round 1 rejected: [{'check': 'op_whitelisted', 'ok': True, 'msg': "op=SET_MODEL_OPTION allowed=['SELECT_DATA', 'SET_TRANSFORM', 'SELECT_MODEL', 'SET_MODEL_OPTION', 'INSPECT', 'STOP']"}, {'check': 'option_registered', 'ok': False, 'msg': 'field=model'}]
+2026-10-07 03:38:45 | INFO    | agent4ts.search | round 2 rejected: [{'check': 'op_whitelisted', 'ok': True, 'msg': "op=SELECT_DATA allowed=['SELECT_DATA', 'SET_TRANSFORM', 'SELECT_MODEL', 'SET_MODEL_OPTION', 'INSPECT', 'STOP']"}, {'check': 'data_field', 'ok': False, 'msg': 'field=statistics.n_events'}]
+2026-10-07 03:38:45 | INFO    | agent4ts.cli | search physiome_dupont seed=0: rounds=2 incumbent=p0_f0 nmae=0.4213141218107457
+2026-10-07 05:41:06 | INFO    | agent4ts.harness | cache hit p2_dlinear (9e1a10e7816e9a78)
+2026-10-07 05:41:06 | INFO    | agent4ts.cli | search physiome_dupont seed=0: rounds=2 incumbent=p0_f0 nmae=0.4213141218107457
+2026-10-08 20:12:05 | INFO    | agent4ts.harness | cache hit p1_dlinear (3625835efca8142a)
+2026-10-08 20:12:06 | INFO    | agent4ts.cli | search physiome_dupont seed=0: rounds=2 incumbent=p0_f0 nmae=0.4213141218107457
+2026-10-08 20:23:51 | INFO    | agent4ts.harness | cache hit p1_dlinear (3625835efca8142a)
+2026-10-08 20:23:52 | INFO    | agent4ts.cli | search physiome_dupont seed=0: rounds=2 incumbent=p0_f0 nmae=0.039943117767299224

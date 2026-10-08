@@ -14,3 +14,44 @@
 2026-10-06 23:21:16 | INFO    | agent4ts.runners | degradation no010: ok nmae=0.543725911801439
 2026-10-06 23:21:16 | INFO    | agent4ts.degradation | degradation no030 applied: 3510 -> 3510 events
 2026-10-06 23:21:16 | INFO    | agent4ts.runners | degradation no030: ok nmae=0.8335724216748229
+== [2026-10-08 20:33:33] conda run -n tim python -m agent4ts.baselines.run_degradation --config smoke/quick --kind smoke --task physiome_dupont
+2026-10-08 20:33:36 | INFO    | agent4ts.degradation | degradation dr020 applied: 3510 -> 2780 events
+2026-10-08 20:33:36 | INFO    | agent4ts.degradation | degradation dr020 applied: 3510 -> 2780 events
+/home/tim/Proj/ats/src/agent4ts/models/runners.py:76: RuntimeWarning: Mean of empty slice
+  mean = np.nanmean(X, axis=(0, 2), keepdims=True)
+/home/tim/miniconda3/envs/tim/lib/python3.11/site-packages/numpy/lib/_nanfunctions_impl.py:2019: RuntimeWarning: Degrees of freedom <= 0 for slice.
+  var = nanvar(a, axis=axis, dtype=dtype, out=out, ddof=ddof,
+2026-10-08 20:33:36 | INFO    | agent4ts.runners | degradation dr020: ok nmae=0.049256439264770725
+2026-10-08 20:33:36 | INFO    | agent4ts.runners | degradation dr020: ok nmae=0.049256439264770725
+2026-10-08 20:33:36 | INFO    | agent4ts.degradation | degradation dr050 applied: 3510 -> 1725 events
+2026-10-08 20:33:36 | INFO    | agent4ts.degradation | degradation dr050 applied: 3510 -> 1725 events
+/home/tim/Proj/ats/src/agent4ts/models/runners.py:76: RuntimeWarning: Mean of empty slice
+  mean = np.nanmean(X, axis=(0, 2), keepdims=True)
+/home/tim/miniconda3/envs/tim/lib/python3.11/site-packages/numpy/lib/_nanfunctions_impl.py:2019: RuntimeWarning: Degrees of freedom <= 0 for slice.
+  var = nanvar(a, axis=axis, dtype=dtype, out=out, ddof=ddof,
+2026-10-08 20:33:37 | INFO    | agent4ts.runners | degradation dr050: ok nmae=0.05682143111900017
+2026-10-08 20:33:37 | INFO    | agent4ts.runners | degradation dr050: ok nmae=0.05682143111900017
+2026-10-08 20:33:37 | INFO    | agent4ts.degradation | degradation ds010 applied: 3510 -> 3205 events
+2026-10-08 20:33:37 | INFO    | agent4ts.degradation | degradation ds010 applied: 3510 -> 3205 events
+2026-10-08 20:33:37 | INFO    | agent4ts.runners | degradation ds010: ok nmae=0.04014136581784387
+2026-10-08 20:33:37 | INFO    | agent4ts.runners | degradation ds010: ok nmae=0.04014136581784387
+2026-10-08 20:33:37 | INFO    | agent4ts.degradation | degradation ds030 applied: 3510 -> 2480 events
+2026-10-08 20:33:37 | INFO    | agent4ts.degradation | degradation ds030 applied: 3510 -> 2480 events
+2026-10-08 20:33:37 | INFO    | agent4ts.runners | degradation ds030: ok nmae=0.04053412243929944
+2026-10-08 20:33:37 | INFO    | agent4ts.runners | degradation ds030: ok nmae=0.04053412243929944
+2026-10-08 20:33:37 | INFO    | agent4ts.degradation | degradation sv050 applied: 3510 -> 3510 events
+2026-10-08 20:33:37 | INFO    | agent4ts.degradation | degradation sv050 applied: 3510 -> 3510 events
+2026-10-08 20:33:37 | INFO    | agent4ts.runners | degradation sv050: ok nmae=0.039943117767299224
+2026-10-08 20:33:37 | INFO    | agent4ts.runners | degradation sv050: ok nmae=0.039943117767299224
+2026-10-08 20:33:37 | INFO    | agent4ts.degradation | degradation sv025 applied: 3510 -> 3510 events
+2026-10-08 20:33:37 | INFO    | agent4ts.degradation | degradation sv025 applied: 3510 -> 3510 events
+2026-10-08 20:33:37 | INFO    | agent4ts.runners | degradation sv025: ok nmae=0.039943117767299224
+2026-10-08 20:33:37 | INFO    | agent4ts.runners | degradation sv025: ok nmae=0.039943117767299224
+2026-10-08 20:33:37 | INFO    | agent4ts.degradation | degradation no010 applied: 3510 -> 3510 events
+2026-10-08 20:33:37 | INFO    | agent4ts.degradation | degradation no010 applied: 3510 -> 3510 events
+2026-10-08 20:33:37 | INFO    | agent4ts.runners | degradation no010: ok nmae=0.05648773935602117
+2026-10-08 20:33:37 | INFO    | agent4ts.runners | degradation no010: ok nmae=0.05648773935602117
+2026-10-08 20:33:37 | INFO    | agent4ts.degradation | degradation no030 applied: 3510 -> 3510 events
+2026-10-08 20:33:37 | INFO    | agent4ts.degradation | degradation no030 applied: 3510 -> 3510 events
+2026-10-08 20:33:37 | INFO    | agent4ts.runners | degradation no030: ok nmae=0.0982494186387635
+2026-10-08 20:33:37 | INFO    | agent4ts.runners | degradation no030: ok nmae=0.0982494186387635

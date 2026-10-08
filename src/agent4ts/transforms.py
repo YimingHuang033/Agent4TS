@@ -80,6 +80,11 @@ class Normalizer:
             return value * (hi - lo) + lo
         return value * self.std.get(vid, 1.0) + self.mean.get(vid, 0.0)
 
+    def with_mode(self, mode: str) -> "Normalizer":
+        nz = Normalizer(mode)
+        nz.mean, nz.std, nz.lo, nz.hi = self.mean, self.std, self.lo, self.hi
+        return nz
+
     def to_dict(self) -> dict[str, Any]:
         return {"mode": self.mode, "mean": self.mean, "std": self.std,
                 "lo": self.lo, "hi": self.hi}

@@ -23,7 +23,8 @@ class _GridModel:
 
     def _prepare(self, train, bundle, grid, in_grid):
         from .runners import (resample_series, lookback_grid, fit_stats,
-                              _build_target_tensor, normalize_targets)
+                              fit_target_stats, _build_target_tensor,
+                              normalize_targets)
         self.grid = grid
         self.n_vars = len(bundle.variable_names)
         view = getattr(self, "_view", None)
@@ -35,9 +36,10 @@ class _GridModel:
         self.in_grid = in_grid
         X = np.stack([resample_series(lw, self.n_vars, in_grid) for lw in train])
         Y, valid = _build_target_tensor(train, bundle, grid)
-        self.mean, self.std = fit_stats(X)
-        Xn = (np.where(np.isnan(X), self.mean, X) - self.mean) / self.std
-        Yn = normalize_targets(Y, valid, self.mean, self.std)
+        self.x_mean, self.x_std = fit_stats(X)
+        self.y_mean, self.y_std = fit_target_stats(Y, valid)
+        Xn = (np.where(np.isnan(X), self.x_mean, X) - self.x_mean) / self.x_std
+        Yn = normalize_targets(Y, valid, self.y_mean, self.y_std)
         return Xn, Yn, valid
 
     def _predict_grid(self, lw):
@@ -45,10 +47,10 @@ class _GridModel:
         from .runners import resample_series
         from .base import _nearest_grid_index
         series = resample_series(lw, self.n_vars, self.in_grid)
-        Xn = (np.where(np.isnan(series), self.mean[0], series) - self.mean[0]) / self.std[0]
+        Xn = (np.where(np.isnan(series), self.x_mean[0], series) - self.x_mean[0]) / self.x_std[0]
         with torch.no_grad():
             pred_n = self._forward(torch.tensor(Xn[None], dtype=torch.float32))[0].numpy()
-        pred = pred_n * self.std[0] + self.mean[0]
+        pred = pred_n * self.y_std[0] + self.y_mean[0]
         gi = _nearest_grid_index(self.grid, lw.query_times)
         return np.array([pred[int(lw.query_var_ids[q]), gi[q]]
                          if int(lw.query_var_ids[q]) < self.n_vars else np.nan

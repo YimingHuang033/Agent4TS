@@ -107,6 +107,30 @@ def test_heavy_models_not_faked():
             make(mid, {})
 
 
+def test_lastvalue_predicts_original_units(bundle):
+    """Window x is normalized by the view; LastValue must return raw units."""
+    from agent4ts.models.runners import LastValue
+    norm = Normalizer.fit(bundle.history, bundle.entities_for("train"))
+    ev = build_labeled_windows(bundle, DataView(), "search", norm)
+    m = LastValue()
+    m._norm = norm
+    m.fit([], bundle, np.array([0.0]), None)
+    lw = ev[0]
+    preds = m.predict(lw)
+    sub = bundle.history.subset(bundle.history.entity_id == lw.window.entity_id)
+    checked = 0
+    for q in range(len(lw.query_times)):
+        vid = int(lw.query_var_ids[q])
+        mvar = sub.variable_id == vid
+        if not mvar.any() or not np.isfinite(preds[q]):
+            continue
+        order = np.argsort(sub.event_time[mvar])
+        last_raw = sub.value[mvar][order][-1]
+        assert abs(preds[q] - last_raw) < 1e-6
+        checked += 1
+    assert checked > 0
+
+
 def test_closed_loop_smoke(tmp_path, bundle, cfg):
     """One search run: proposals land, feedback flows, trace is replayable."""
     from agent4ts.search import run_search

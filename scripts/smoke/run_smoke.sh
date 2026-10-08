@@ -2,6 +2,8 @@
 # Smoke test: mock LLM, tiny budget, no GPU-heavy models. Proves the whole loop
 # (load -> validate -> trial -> feedback -> archive -> export) runs end to end.
 set -euo pipefail
+# debugging/smoke never occupies a GPU; vLLM serving is a separate, explicit step
+export CUDA_VISIBLE_DEVICES=""
 export ATS_KIND=smoke
 export ATS_CONFIG=smoke/quick
 export ATS_LOG_NAME=smoke_test

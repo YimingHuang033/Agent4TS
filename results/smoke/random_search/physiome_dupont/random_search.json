@@ -38,16 +38,16 @@
         "seed": 0,
         "parent_id": null
       },
-      "fingerprint": "df90921afe20805b",
+      "fingerprint": "3625835efca8142a",
       "status": "ok",
       "metrics": {
-        "normalized_mae": 0.4213141218107457,
-        "normalized_mse": 0.3349110379754677,
+        "normalized_mae": 0.039943117767299224,
+        "normalized_mse": 0.002484763159018425,
         "n_valid_targets": 192,
         "coverage": 1.0
       },
       "error": null,
-      "wall_s": 0.979
+      "wall_s": 0.742
     },
     {
       "pipeline": {
@@ -67,20 +67,20 @@
         "seed": 0,
         "parent_id": "p0_f0"
       },
-      "fingerprint": "56c7ca4a16f4db73",
+      "fingerprint": "e47d976e515ed970",
       "status": "ok",
       "metrics": {
-        "normalized_mae": 0.6264880574096097,
-        "normalized_mse": 0.5929290104663273,
+        "normalized_mae": 0.09644783667740837,
+        "normalized_mse": 0.014351753438625903,
         "n_valid_targets": 192,
         "coverage": 1.0
       },
       "error": null,
-      "wall_s": 4.153
+      "wall_s": 176.775
     }
   ],
-  "incumbent_metric": 0.4213141218107457,
-  "f0_metric": 0.4213141218107457,
+  "incumbent_metric": 0.039943117767299224,
+  "f0_metric": 0.039943117767299224,
   "used": {
     "trials": 2,
     "llm_calls": 0,

@@ -1,2 +1,15 @@
 2026-10-06 23:20:37 | INFO    | agent4ts.harness | cache hit r1_transform (df90921afe20805b)
 2026-10-06 23:20:41 | INFO    | agent4ts.runners | random search physiome_dupont: incumbent nmae=0.4213141218107457 f0=0.4213141218107457
+== [2026-10-08 20:30:32] conda run -n tim python -m agent4ts.baselines.run_random --config smoke/quick --kind smoke --tasks physiome_dupont
+/home/tim/Proj/ats/src/agent4ts/models/runners.py:76: RuntimeWarning: Mean of empty slice
+  mean = np.nanmean(X, axis=(0, 2), keepdims=True)
+/home/tim/miniconda3/envs/tim/lib/python3.11/site-packages/numpy/lib/_nanfunctions_impl.py:2019: RuntimeWarning: Degrees of freedom <= 0 for slice.
+  var = nanvar(a, axis=axis, dtype=dtype, out=out, ddof=ddof,
+2026-10-08 20:30:35 | INFO    | agent4ts.harness | cache hit r1_transform (3625835efca8142a)
+2026-10-08 20:30:35 | INFO    | agent4ts.harness | cache hit r1_transform (3625835efca8142a)
+/home/tim/Proj/ats/src/agent4ts/models/runners.py:76: RuntimeWarning: Mean of empty slice
+  mean = np.nanmean(X, axis=(0, 2), keepdims=True)
+/home/tim/miniconda3/envs/tim/lib/python3.11/site-packages/numpy/lib/_nanfunctions_impl.py:2019: RuntimeWarning: Degrees of freedom <= 0 for slice.
+  var = nanvar(a, axis=axis, dtype=dtype, out=out, ddof=ddof,
+2026-10-08 20:33:32 | INFO    | agent4ts.runners | random search physiome_dupont: incumbent nmae=0.039943117767299224 f0=0.039943117767299224
+2026-10-08 20:33:32 | INFO    | agent4ts.runners | random search physiome_dupont: incumbent nmae=0.039943117767299224 f0=0.039943117767299224

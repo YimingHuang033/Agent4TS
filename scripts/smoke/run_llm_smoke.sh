@@ -2,6 +2,8 @@
 # Real-LLM smoke: run one search round against the locally served Qwen3.5-4B.
 # Requires scripts/gen_eval/01_serve_llm.sh to be running (127.0.0.1:8848).
 set -euo pipefail
+# the client side runs CPU-only; only the separately launched vLLM server uses GPU
+export CUDA_VISIBLE_DEVICES=""
 export ATS_KIND=smoke
 export ATS_CONFIG=smoke/llm
 export ATS_LOG_NAME=llm_smoke

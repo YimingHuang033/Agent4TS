@@ -81,6 +81,14 @@ def fit_stats(X: np.ndarray) -> tuple[np.ndarray, np.ndarray]:
     return mean, std
 
 
+def fit_target_stats(Y: np.ndarray, valid: np.ndarray) -> tuple[np.ndarray, np.ndarray]:
+    """Per-variable mean/std over valid targets only, so each variable gets its
+    own affine scale back at prediction time (a shared head cannot otherwise
+    produce different offsets for HR vs Temp)."""
+    masked = np.where(valid, Y, np.nan)
+    return fit_stats(masked)
+
+
 def normalize_targets(Y, valid, mean, std):
     """(Y - mean)/std with invalid entries zeroed so they cannot poison the loss."""
     Yn = (np.where(valid, Y, 0.0) - mean) / std
@@ -100,14 +108,19 @@ class LastValue(Forecaster):
 
     def predict(self, lw: LabeledWindow) -> np.ndarray:
         pos = _var_position(lw.window.variable_ids)
+        norm = getattr(self, "_norm", None)
         preds = np.full(len(lw.query_times), np.nan)
         for q in range(len(lw.query_times)):
-            vi = pos.get(int(lw.query_var_ids[q]))
+            vid = int(lw.query_var_ids[q])
+            vi = pos.get(vid)
             if vi is None:
                 continue
             real = lw.window.mask[vi].astype(bool)
             if real.any():
-                preds[q] = lw.window.x[vi][real][-1]
+                val = lw.window.x[vi][real][-1]
+                # window values are normalized by the view; truth is in original
+                # units, so map the copied value back before returning it
+                preds[q] = norm.inverse(vid, val) if norm is not None else val
         return preds
 
     def fit_meta(self) -> dict:
@@ -170,9 +183,10 @@ class DLinear(Forecaster):
         X = self._inputs(train, bundle, self.in_grid, view)
         Y, valid = _build_target_tensor(train, bundle, grid)
 
-        self.mean, self.std = fit_stats(X)
-        Xn = (np.where(np.isnan(X), self.mean, X) - self.mean) / self.std
-        Yn = normalize_targets(Y, valid, self.mean, self.std)
+        self.x_mean, self.x_std = fit_stats(X)
+        self.y_mean, self.y_std = fit_target_stats(Y, valid)
+        Xn = (np.where(np.isnan(X), self.x_mean, X) - self.x_mean) / self.x_std
+        Yn = normalize_targets(Y, valid, self.y_mean, self.y_std)
 
         T, H = Xn.shape[-1], Yn.shape[-1]
         xt = torch.tensor(Xn, dtype=torch.float32)
@@ -192,10 +206,10 @@ class DLinear(Forecaster):
     def predict(self, lw: LabeledWindow) -> np.ndarray:
         import torch
         series = resample_series(lw, self.n_vars, self.in_grid)
-        Xn = (np.where(np.isnan(series), self.mean[0], series) - self.mean[0]) / self.std[0]
+        Xn = (np.where(np.isnan(series), self.x_mean[0], series) - self.x_mean[0]) / self.x_std[0]
         with torch.no_grad():
             pred_n = self.lin(torch.tensor(Xn[None], dtype=torch.float32))[0].numpy()
-        pred = pred_n * self.std[0] + self.mean[0]
+        pred = pred_n * self.y_std[0] + self.y_mean[0]
         gi = _nearest_grid_index(self.grid, lw.query_times)
         return np.array([pred[int(lw.query_var_ids[q]), gi[q]]
                          if int(lw.query_var_ids[q]) < self.n_vars else np.nan

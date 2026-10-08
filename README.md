@@ -70,6 +70,11 @@ Everything runs in the `tim` conda env (Python 3.11, torch 2.13). The CLI is
 `python -m agent4ts.cli {prepare,benchmark,search,evaluate,predict,validate}`
 with `--config <stem>` / `--run-dir` / `--kind`.
 
+Working rules for contributors/agents (env, GPU discipline, honesty rules,
+definition of done) live in [AGENTS.md](AGENTS.md). In short: debugging, tests,
+smoke and visualization are CPU-only (`CUDA_VISIBLE_DEVICES=""`); GPUs are
+reserved for the explicitly launched vLLM server and real `gen_eval` training.
+
 ## Honest implementation status
 
 Working end to end (verified by `scripts/smoke/run_smoke.sh`):

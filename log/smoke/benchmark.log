@@ -12,3 +12,134 @@
 2026-10-06 23:19:19 | INFO    | agent4ts.cli | benchmark physiome_dupont/LastValue: ok nmae=10.115265514186058
 2026-10-06 23:19:19 | INFO    | agent4ts.cli | benchmark physiome_dupont/MeanValue: ok nmae=0.9606384821735842
 2026-10-06 23:19:19 | INFO    | agent4ts.cli | benchmark physiome_dupont/DLinear: ok nmae=0.4213141218107457
+2026-10-08 20:11:56 | INFO    | agent4ts.data.p12 | P12 loaded: 300 entities, 68113 history events, 3955 target buckets, targets=p12_native_irr
+2026-10-08 20:11:56 | INFO    | agent4ts.cli | benchmark p12_native/LastValue: ok nmae=7.9161310130602205
+2026-10-08 20:11:56 | INFO    | agent4ts.cli | benchmark p12_native/MeanValue: ok nmae=0.7190848522069344
+2026-10-08 20:12:00 | INFO    | agent4ts.cli | benchmark p12_native/DLinear: ok nmae=7.348154216274391
+2026-10-08 20:12:00 | INFO    | agent4ts.cli | benchmark physiome_dupont/LastValue: ok nmae=10.115265514186058
+2026-10-08 20:12:00 | INFO    | agent4ts.cli | benchmark physiome_dupont/MeanValue: ok nmae=0.9606384821735842
+2026-10-08 20:12:00 | INFO    | agent4ts.cli | benchmark physiome_dupont/DLinear: ok nmae=0.4213141218107457
+2026-10-08 20:23:17 | INFO    | agent4ts.data.p12 | P12 loaded: 300 entities, 68113 history events, 3955 target buckets, targets=p12_native_irr
+2026-10-08 20:23:17 | INFO    | agent4ts.cli | benchmark p12_native/LastValue: ok nmae=0.39508120566250565
+2026-10-08 20:23:17 | INFO    | agent4ts.cli | benchmark p12_native/MeanValue: ok nmae=0.7190848522069344
+2026-10-08 20:23:46 | INFO    | agent4ts.cli | benchmark p12_native/DLinear: ok nmae=0.3765541623782547
+2026-10-08 20:23:46 | INFO    | agent4ts.cli | benchmark physiome_dupont/LastValue: ok nmae=0.09250451624863316
+2026-10-08 20:23:46 | INFO    | agent4ts.cli | benchmark physiome_dupont/MeanValue: ok nmae=0.9606384821735842
+2026-10-08 20:23:46 | INFO    | agent4ts.cli | benchmark physiome_dupont/DLinear: ok nmae=0.039943117767299224
+== [2026-10-08 20:34:07] conda run -n tim python -m agent4ts.cli --config smoke/quick --kind smoke benchmark --models PatchTST,iTransformer --tasks physiome_dupont,p12_native
+/home/tim/Proj/ats/src/agent4ts/models/runners.py:76: RuntimeWarning: Mean of empty slice
+  mean = np.nanmean(X, axis=(0, 2), keepdims=True)
+/home/tim/miniconda3/envs/tim/lib/python3.11/site-packages/numpy/lib/_nanfunctions_impl.py:2019: RuntimeWarning: Degrees of freedom <= 0 for slice.
+  var = nanvar(a, axis=axis, dtype=dtype, out=out, ddof=ddof,
+2026-10-08 20:37:10 | INFO    | agent4ts.cli | benchmark physiome_dupont/PatchTST: ok nmae=0.09644783667740837
+2026-10-08 20:37:10 | INFO    | agent4ts.cli | benchmark physiome_dupont/PatchTST: ok nmae=0.09644783667740837
+/home/tim/Proj/ats/src/agent4ts/models/runners.py:76: RuntimeWarning: Mean of empty slice
+  mean = np.nanmean(X, axis=(0, 2), keepdims=True)
+/home/tim/miniconda3/envs/tim/lib/python3.11/site-packages/numpy/lib/_nanfunctions_impl.py:2019: RuntimeWarning: Degrees of freedom <= 0 for slice.
+  var = nanvar(a, axis=axis, dtype=dtype, out=out, ddof=ddof,
+2026-10-08 20:39:06 | INFO    | agent4ts.cli | benchmark physiome_dupont/iTransformer: ok nmae=0.09744259250466476
+2026-10-08 20:39:06 | INFO    | agent4ts.cli | benchmark physiome_dupont/iTransformer: ok nmae=0.09744259250466476
+2026-10-08 20:39:06 | INFO    | agent4ts.data.p12 | P12 loaded: 300 entities, 68113 history events, 3955 target buckets, targets=p12_native_irr
+2026-10-08 20:39:06 | INFO    | agent4ts.data.p12 | P12 loaded: 300 entities, 68113 history events, 3955 target buckets, targets=p12_native_irr
+== [2026-10-08 20:57:35] conda run -n tim python -m agent4ts.cli --config smoke/quick --kind smoke benchmark --models LastValue,MeanValue,DLinear --tasks p12_native
+2026-10-08 20:57:37 | INFO    | agent4ts.data.p12 | P12 loaded: 300 entities, 68113 history events, 3955 target buckets, targets=p12_native_irr
+2026-10-08 20:57:37 | INFO    | agent4ts.data.p12 | P12 loaded: 300 entities, 68113 history events, 3955 target buckets, targets=p12_native_irr
+2026-10-08 20:57:38 | INFO    | agent4ts.cli | benchmark p12_native/LastValue: ok nmae=0.39508120566250565
+2026-10-08 20:57:38 | INFO    | agent4ts.cli | benchmark p12_native/LastValue: ok nmae=0.39508120566250565
+/home/tim/Proj/ats/src/agent4ts/models/runners.py:136: RuntimeWarning: Mean of empty slice
+  self.per_var = np.nanmean(np.where(valid, y, np.nan), axis=(0, 2)).ravel()
+2026-10-08 20:57:38 | INFO    | agent4ts.cli | benchmark p12_native/MeanValue: ok nmae=0.7190848522069344
+2026-10-08 20:57:38 | INFO    | agent4ts.cli | benchmark p12_native/MeanValue: ok nmae=0.7190848522069344
+/home/tim/Proj/ats/src/agent4ts/models/runners.py:76: RuntimeWarning: Mean of empty slice
+  mean = np.nanmean(X, axis=(0, 2), keepdims=True)
+/home/tim/miniconda3/envs/tim/lib/python3.11/site-packages/numpy/lib/_nanfunctions_impl.py:2019: RuntimeWarning: Degrees of freedom <= 0 for slice.
+  var = nanvar(a, axis=axis, dtype=dtype, out=out, ddof=ddof,
+2026-10-08 20:58:07 | INFO    | agent4ts.cli | benchmark p12_native/DLinear: ok nmae=0.3765541623782547
+2026-10-08 20:58:07 | INFO    | agent4ts.cli | benchmark p12_native/DLinear: ok nmae=0.3765541623782547
+{
+  "run_dir": "/home/tim/Proj/ats/results/smoke/benchmark"
+}
+== [2026-10-08 20:58:20] conda run -n tim python -m agent4ts.cli --config smoke/quick --kind smoke benchmark --models LastValue,MeanValue,DLinear --tasks p12_native,physiome_dupont
+2026-10-08 20:58:23 | INFO    | agent4ts.data.p12 | P12 loaded: 300 entities, 68113 history events, 3955 target buckets, targets=p12_native_irr
+2026-10-08 20:58:23 | INFO    | agent4ts.data.p12 | P12 loaded: 300 entities, 68113 history events, 3955 target buckets, targets=p12_native_irr
+2026-10-08 20:58:23 | INFO    | agent4ts.cli | benchmark p12_native/LastValue: ok nmae=0.39508120566250565
+2026-10-08 20:58:23 | INFO    | agent4ts.cli | benchmark p12_native/LastValue: ok nmae=0.39508120566250565
+/home/tim/Proj/ats/src/agent4ts/models/runners.py:136: RuntimeWarning: Mean of empty slice
+  self.per_var = np.nanmean(np.where(valid, y, np.nan), axis=(0, 2)).ravel()
+2026-10-08 20:58:24 | INFO    | agent4ts.cli | benchmark p12_native/MeanValue: ok nmae=0.7190848522069344
+2026-10-08 20:58:24 | INFO    | agent4ts.cli | benchmark p12_native/MeanValue: ok nmae=0.7190848522069344
+/home/tim/Proj/ats/src/agent4ts/models/runners.py:76: RuntimeWarning: Mean of empty slice
+  mean = np.nanmean(X, axis=(0, 2), keepdims=True)
+/home/tim/miniconda3/envs/tim/lib/python3.11/site-packages/numpy/lib/_nanfunctions_impl.py:2019: RuntimeWarning: Degrees of freedom <= 0 for slice.
+  var = nanvar(a, axis=axis, dtype=dtype, out=out, ddof=ddof,
+2026-10-08 20:58:46 | INFO    | agent4ts.cli | benchmark p12_native/DLinear: ok nmae=0.3765541623782547
+2026-10-08 20:58:46 | INFO    | agent4ts.cli | benchmark p12_native/DLinear: ok nmae=0.3765541623782547
+2026-10-08 20:58:46 | INFO    | agent4ts.cli | benchmark physiome_dupont/LastValue: ok nmae=0.09250451624863316
+2026-10-08 20:58:46 | INFO    | agent4ts.cli | benchmark physiome_dupont/LastValue: ok nmae=0.09250451624863316
+/home/tim/Proj/ats/src/agent4ts/models/runners.py:136: RuntimeWarning: Mean of empty slice
+  self.per_var = np.nanmean(np.where(valid, y, np.nan), axis=(0, 2)).ravel()
+2026-10-08 20:58:46 | INFO    | agent4ts.cli | benchmark physiome_dupont/MeanValue: ok nmae=0.9606384821735842
+2026-10-08 20:58:46 | INFO    | agent4ts.cli | benchmark physiome_dupont/MeanValue: ok nmae=0.9606384821735842
+/home/tim/Proj/ats/src/agent4ts/models/runners.py:76: RuntimeWarning: Mean of empty slice
+  mean = np.nanmean(X, axis=(0, 2), keepdims=True)
+/home/tim/miniconda3/envs/tim/lib/python3.11/site-packages/numpy/lib/_nanfunctions_impl.py:2019: RuntimeWarning: Degrees of freedom <= 0 for slice.
+  var = nanvar(a, axis=axis, dtype=dtype, out=out, ddof=ddof,
+2026-10-08 20:58:46 | INFO    | agent4ts.cli | benchmark physiome_dupont/DLinear: ok nmae=0.039943117767299224
+2026-10-08 20:58:46 | INFO    | agent4ts.cli | benchmark physiome_dupont/DLinear: ok nmae=0.039943117767299224
+{
+  "run_dir": "/home/tim/Proj/ats/results/smoke/benchmark"
+}
+== [2026-10-08 21:00:00] conda run -n tim python -m agent4ts.cli --config smoke/quick --kind smoke benchmark --models PatchTST,iTransformer --tasks physiome_dupont
+/home/tim/Proj/ats/src/agent4ts/models/runners.py:76: RuntimeWarning: Mean of empty slice
+  mean = np.nanmean(X, axis=(0, 2), keepdims=True)
+/home/tim/miniconda3/envs/tim/lib/python3.11/site-packages/numpy/lib/_nanfunctions_impl.py:2019: RuntimeWarning: Degrees of freedom <= 0 for slice.
+  var = nanvar(a, axis=axis, dtype=dtype, out=out, ddof=ddof,
+2026-10-08 21:00:28 | INFO    | agent4ts.cli | benchmark physiome_dupont/PatchTST: ok nmae=0.09644783667740837
+2026-10-08 21:00:28 | INFO    | agent4ts.cli | benchmark physiome_dupont/PatchTST: ok nmae=0.09644783667740837
+/home/tim/Proj/ats/src/agent4ts/models/runners.py:76: RuntimeWarning: Mean of empty slice
+  mean = np.nanmean(X, axis=(0, 2), keepdims=True)
+/home/tim/miniconda3/envs/tim/lib/python3.11/site-packages/numpy/lib/_nanfunctions_impl.py:2019: RuntimeWarning: Degrees of freedom <= 0 for slice.
+  var = nanvar(a, axis=axis, dtype=dtype, out=out, ddof=ddof,
+2026-10-08 21:00:47 | INFO    | agent4ts.cli | benchmark physiome_dupont/iTransformer: ok nmae=0.09744259250466476
+2026-10-08 21:00:47 | INFO    | agent4ts.cli | benchmark physiome_dupont/iTransformer: ok nmae=0.09744259250466476
+{
+  "run_dir": "/home/tim/Proj/ats/results/smoke/benchmark"
+}
+== [2026-10-08 21:01:42] conda run -n tim python -m agent4ts.cli --config smoke/quick --kind smoke benchmark --models LastValue,MeanValue,DLinear,PatchTST,iTransformer --tasks p12_native,physiome_dupont
+2026-10-08 21:01:45 | INFO    | agent4ts.data.p12 | P12 loaded: 300 entities, 68113 history events, 3955 target buckets, targets=p12_native_irr
+2026-10-08 21:01:45 | INFO    | agent4ts.data.p12 | P12 loaded: 300 entities, 68113 history events, 3955 target buckets, targets=p12_native_irr
+2026-10-08 21:01:45 | INFO    | agent4ts.cli | benchmark p12_native/LastValue: ok nmae=0.39508120566250565
+2026-10-08 21:01:45 | INFO    | agent4ts.cli | benchmark p12_native/LastValue: ok nmae=0.39508120566250565
+/home/tim/Proj/ats/src/agent4ts/models/runners.py:136: RuntimeWarning: Mean of empty slice
+  self.per_var = np.nanmean(np.where(valid, y, np.nan), axis=(0, 2)).ravel()
+2026-10-08 21:01:46 | INFO    | agent4ts.cli | benchmark p12_native/MeanValue: ok nmae=0.7190848522069344
+2026-10-08 21:01:46 | INFO    | agent4ts.cli | benchmark p12_native/MeanValue: ok nmae=0.7190848522069344
+/home/tim/Proj/ats/src/agent4ts/models/runners.py:76: RuntimeWarning: Mean of empty slice
+  mean = np.nanmean(X, axis=(0, 2), keepdims=True)
+/home/tim/miniconda3/envs/tim/lib/python3.11/site-packages/numpy/lib/_nanfunctions_impl.py:2019: RuntimeWarning: Degrees of freedom <= 0 for slice.
+  var = nanvar(a, axis=axis, dtype=dtype, out=out, ddof=ddof,
+2026-10-08 21:01:56 | INFO    | agent4ts.cli | benchmark p12_native/DLinear: ok nmae=0.3765541623782547
+2026-10-08 21:01:56 | INFO    | agent4ts.cli | benchmark p12_native/DLinear: ok nmae=0.3765541623782547
+/home/tim/Proj/ats/src/agent4ts/models/runners.py:76: RuntimeWarning: Mean of empty slice
+  mean = np.nanmean(X, axis=(0, 2), keepdims=True)
+/home/tim/miniconda3/envs/tim/lib/python3.11/site-packages/numpy/lib/_nanfunctions_impl.py:2019: RuntimeWarning: Degrees of freedom <= 0 for slice.
+  var = nanvar(a, axis=axis, dtype=dtype, out=out, ddof=ddof,
+2026-10-08 21:10:24 | INFO    | agent4ts.cli | benchmark p12_native/PatchTST: ok nmae=0.4340797980383875
+2026-10-08 21:10:24 | INFO    | agent4ts.cli | benchmark p12_native/PatchTST: ok nmae=0.4340797980383875
+2026-10-08 21:13:36 | INFO    | agent4ts.cli | benchmark p12_native/iTransformer: ok nmae=0.4826500388622717
+2026-10-08 21:13:36 | INFO    | agent4ts.cli | benchmark p12_native/iTransformer: ok nmae=0.4826500388622717
+2026-10-08 21:13:36 | INFO    | agent4ts.cli | benchmark physiome_dupont/LastValue: ok nmae=0.09250451624863316
+2026-10-08 21:13:36 | INFO    | agent4ts.cli | benchmark physiome_dupont/LastValue: ok nmae=0.09250451624863316
+/home/tim/Proj/ats/src/agent4ts/models/runners.py:136: RuntimeWarning: Mean of empty slice
+  self.per_var = np.nanmean(np.where(valid, y, np.nan), axis=(0, 2)).ravel()
+2026-10-08 21:13:36 | INFO    | agent4ts.cli | benchmark physiome_dupont/MeanValue: ok nmae=0.9606384821735842
+2026-10-08 21:13:36 | INFO    | agent4ts.cli | benchmark physiome_dupont/MeanValue: ok nmae=0.9606384821735842
+2026-10-08 21:13:36 | INFO    | agent4ts.cli | benchmark physiome_dupont/DLinear: ok nmae=0.039943117767299224
+2026-10-08 21:13:36 | INFO    | agent4ts.cli | benchmark physiome_dupont/DLinear: ok nmae=0.039943117767299224
+2026-10-08 21:13:55 | INFO    | agent4ts.cli | benchmark physiome_dupont/PatchTST: ok nmae=0.09644783667740837
+2026-10-08 21:13:55 | INFO    | agent4ts.cli | benchmark physiome_dupont/PatchTST: ok nmae=0.09644783667740837
+2026-10-08 21:14:29 | INFO    | agent4ts.cli | benchmark physiome_dupont/iTransformer: ok nmae=0.09744259250466476
+2026-10-08 21:14:29 | INFO    | agent4ts.cli | benchmark physiome_dupont/iTransformer: ok nmae=0.09744259250466476
+{
+  "run_dir": "/home/tim/Proj/ats/results/smoke/benchmark"
+}
