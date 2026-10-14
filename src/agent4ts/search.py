@@ -19,7 +19,8 @@ from . import observe as observe_mod
 from .controller import Controller
 from .harness import Harness
 from .logging_utils import get_logger
-from .schemas import Action, DataView, Observation, PipelineSpec, TaskBundle
+from .schemas import Action, DataView, Feedback, Observation, PipelineSpec, TaskBundle
+from .transforms import TRANSFORM_SPACE
 
 log = get_logger("search")
 
@@ -109,14 +110,19 @@ def run_search(
             archive_summary=[{"pipeline_id": e["pipeline"]["pipeline_id"],
                               "status": e["status"],
                               "normalized_mae": e["metrics"].get("normalized_mae"),
-                              "model": e["pipeline"]["model_id"]} for e in h.archive[-6:]],
+                              "model": e["pipeline"]["model_id"],
+                              "data_view": e["pipeline"]["data_view"],
+                              "model_config": e["pipeline"].get("model_config", {})}
+                             for e in h.archive[-8:]],
             incumbent={"pipeline_id": incumbent.pipeline_id,
                        "model_id": incumbent.model_id,
                        "data_view": incumbent.data_view.to_dict()},
             last_feedback=(h.last_feedback.to_dict() if h.last_feedback else None),
             budget=h.remaining(),
             allowed_ops=["SELECT_DATA", "SET_TRANSFORM", "SELECT_MODEL", "SET_MODEL_OPTION", "INSPECT", "STOP"],
-            action_space={"models": list(_runnable()), "data_fields": sorted(DataView().__dict__.keys())},
+            action_space={"models": list(_runnable()),
+                          "data_fields": sorted(DataView().__dict__.keys()),
+                          "transform_values": TRANSFORM_SPACE},
         )
 
         h.spend_llm_call()
@@ -138,11 +144,40 @@ def run_search(
         if not h.checks_ok(checks):
             log.info("round %d rejected: %s", rounds, checks)
             h.write_trace({"event": "rejected", "round": rounds, "checks": checks})
-            no_improve += 1
+            # the agent must see why its action was rejected, otherwise it keeps
+            # proposing the same invalid action; per DESIGN 5.3 patience counts
+            # *completed trainings* without improvement, so a rejected (never
+            # trained) action does not consume it — the LLM budget bounds the loop
+            h.last_feedback = Feedback(
+                status="rejected", checks=checks,
+                remaining_budget=h.remaining(),
+                error="; ".join(c["msg"] for c in checks if not c["ok"]))
             continue
 
         child = apply_action(action, incumbent, rounds)
         child.seed = seed
+        # an exact re-proposal would be a silent cache hit; surface it as
+        # feedback so the agent learns the value was already tried and moves on
+        prior = h.prior_trial(child)
+        if prior is not None:
+            h.write_trace({"event": "duplicate", "round": rounds,
+                           "pipeline": child.to_dict(),
+                           "prior_status": prior.status,
+                           "prior_metrics": prior.metrics})
+            h.last_feedback = Feedback(
+                status="rejected",
+                checks=[{"check": "duplicate_trial", "ok": False,
+                         "msg": f"{action.target_field or action.op}={action.value!r} was "
+                                f"already tried with normalized_mae="
+                                f"{prior.metrics.get('normalized_mae')}; propose a "
+                                "DIFFERENT field/value or STOP"}],
+                metrics=prior.metrics, remaining_budget=h.remaining(),
+                error="duplicate of an earlier trial")
+            history.append({"round": rounds, "action": action.to_dict(),
+                            "pipeline_id": child.pipeline_id, "status": "duplicate",
+                            "normalized_mae": prior.metrics.get("normalized_mae"),
+                            "accepted": False})
+            continue
         fb = h.run_trial(child, split="search")
         accepted, delta = h.update_incumbent(child, fb)
         fb.delta_vs_f0 = _delta_f0(h, fb)

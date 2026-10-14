@@ -61,6 +61,14 @@
     "status": "not_vendored",
     "note": "TSci-adapted baseline reports unavailable instead of imitating upstream"
   },
+  "tsrouter": {
+    "source_url": "https://github.com/tianyi-lab/TSRouter",
+    "paper": "https://arxiv.org/abs/2607.08940",
+    "dataset": "https://huggingface.co/datasets/umd-zhou-lab/TSRBench",
+    "status": "not_vendored",
+    "python_requires": "==3.10",
+    "note": "COLM 2026 dynamic modality-model routing; external baseline reports unavailable instead of imitating upstream (baselines/tsrouter.py)"
+  },
   "llm": {
     "model": "Qwen3.5-4B",
     "local_path": "/mnt/data/Qwen3.5-4B",

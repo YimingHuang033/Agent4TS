@@ -57,18 +57,30 @@ def run_degradation(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--config", default="default")
     ap.add_argument("--kind", default="gen_eval")
-    ap.add_argument("--task", default=None)
+    ap.add_argument("--task", default=None, help="single task key")
+    ap.add_argument("--tasks", default=None,
+                    help="comma-separated task keys (same convention as cli benchmark/search)")
     ap.add_argument("--model", default="DLinear")
     a = ap.parse_args(argv)
     cfg = cfgmod.load_config(a.config)
     setup_logging(cfgmod.log_dir(cfg, a.kind) / "degradation.log")
+    if a.tasks:
+        keys = [k.strip() for k in a.tasks.split(",") if k.strip()]
+    else:
+        keys = [a.task]  # may be None -> _pick_key falls back to the anchor task
+    for key in keys:
+        _degradation_one(cfg, key, a.model, kind=a.kind)
+    return 0
+
+
+def _degradation_one(cfg, key: str | None, model_id: str, kind: str) -> None:
     from ..degradation import apply_degradation, default_grid
     from ..harness import Harness
     from ..schemas import PipelineSpec
 
-    key = _pick_key(cfg, a.task)
+    key = _pick_key(cfg, key)
     bundle = _load(cfg, key)
-    out_dir = cfgmod.experiment_dir(cfg, a.kind) / "degradation" / key
+    out_dir = cfgmod.experiment_dir(cfg, kind) / "degradation" / key
     out_dir.mkdir(parents=True, exist_ok=True)
     rows = []
     for i, spec in enumerate(default_grid()):
@@ -76,7 +88,7 @@ def run_degradation(argv: list[str] | None = None) -> int:
         h = Harness(deg, cfg, out_dir / spec["tag"], seed=0)
         from ..schemas import DataView
         ps = PipelineSpec(pipeline_id=f"deg_{spec['tag']}", data_view=DataView(),
-                          model_id=a.model, seed=0)
+                          model_id=model_id, seed=0)
         fb = h.run_trial(ps, split="search")
         rows.append({"tag": spec["tag"], "kind": spec["kind"], "setting": spec,
                      "status": fb.status, "normalized_mae": fb.metrics.get("normalized_mae"),
@@ -87,13 +99,12 @@ def run_degradation(argv: list[str] | None = None) -> int:
     h0 = Harness(bundle, cfg, out_dir / "baseline", seed=0)
     from ..schemas import DataView
     fb0 = h0.run_trial(PipelineSpec(pipeline_id="deg_baseline", data_view=DataView(),
-                                    model_id=a.model, seed=0), split="search")
+                                    model_id=model_id, seed=0), split="search")
     rows.insert(0, {"tag": "none", "kind": "baseline", "setting": {},
                     "status": fb0.status, "normalized_mae": fb0.metrics.get("normalized_mae"),
                     "n_valid": fb0.metrics.get("n_valid_targets"), "error": fb0.error})
     (out_dir / "degradation.json").write_text(json.dumps(rows, indent=2), encoding="utf-8")
     _csv(out_dir / "degradation.csv", rows)
-    return 0
 
 
 # ------------------------------------------------------------------ tsci
@@ -115,6 +126,29 @@ def run_tsci(argv: list[str] | None = None) -> int:
         log.warning("TSci not runnable; wrote status.json. See baselines/tsci.py.")
         return 0
     from .tsci import run
+    run(bundle=_load(cfg, _pick_key(cfg, None)), cfg=cfg, run_dir=out_dir)
+    return 0
+
+
+# ------------------------------------------------------------------ tsrouter
+
+def run_tsrouter(argv: list[str] | None = None) -> int:
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--config", default="default")
+    ap.add_argument("--kind", default="gen_eval")
+    a = ap.parse_args(argv)
+    cfg = cfgmod.load_config(a.config)
+    setup_logging(cfgmod.log_dir(cfg, a.kind) / "tsrouter.log")
+    from . import tsrouter
+    st = tsrouter.status(cfg.get("resources"))
+    out_dir = cfgmod.experiment_dir(cfg, a.kind) / "tsrouter"
+    out_dir.mkdir(parents=True, exist_ok=True)
+    (out_dir / "status.json").write_text(json.dumps(st, indent=2), encoding="utf-8")
+    log.info("TSRouter status: %s (%s)", st["status"], st.get("blocked_reason", ""))
+    if st["status"] != "active":
+        log.warning("TSRouter not runnable; wrote status.json. See baselines/tsrouter.py.")
+        return 0
+    from .tsrouter import run
     run(bundle=_load(cfg, _pick_key(cfg, None)), cfg=cfg, run_dir=out_dir)
     return 0
 

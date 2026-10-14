@@ -23,3 +23,23 @@ AttributeError: 'dict' object has no attribute 'to_dict'
 2026-10-08 20:12:11 | INFO    | agent4ts.cli | evaluate physiome_dupont: ok
 2026-10-08 20:23:56 | INFO    | agent4ts.harness | cache hit p0_f0 (3625835efca8142a)
 2026-10-08 20:23:56 | INFO    | agent4ts.cli | evaluate physiome_dupont: ok
+2026-10-10 22:59:57 | INFO    | agent4ts.harness | cache hit p0_f0 (3625835efca8142a)
+2026-10-10 22:59:57 | INFO    | agent4ts.cli | evaluate physiome_dupont: ok
+2026-10-10 23:17:04 | INFO    | agent4ts.harness | cache hit p0_f0 (3625835efca8142a)
+2026-10-10 23:17:04 | INFO    | agent4ts.cli | evaluate physiome_dupont: ok
+2026-10-10 23:19:48 | INFO    | agent4ts.harness | cache hit p0_f0 (3625835efca8142a)
+2026-10-10 23:19:48 | INFO    | agent4ts.cli | evaluate physiome_dupont: ok
+2026-10-13 21:17:30 | INFO    | agent4ts.harness | cache hit p0_f0 (3625835efca8142a)
+2026-10-13 21:17:30 | INFO    | agent4ts.cli | evaluate physiome_dupont: ok
+2026-10-13 21:58:31 | INFO    | agent4ts.harness | cache hit p0_f0 (3625835efca8142a)
+2026-10-13 21:58:31 | INFO    | agent4ts.cli | evaluate physiome_dupont: ok
+2026-10-13 22:03:57 | INFO    | agent4ts.harness | cache hit p2_dlinear (64f56217d0eb4c8e)
+2026-10-13 22:03:57 | INFO    | agent4ts.cli | evaluate physiome_dupont: ok
+2026-10-13 22:22:45 | INFO    | agent4ts.harness | cache hit p2_dlinear (4f0ea44e42fcef18)
+2026-10-13 22:22:45 | INFO    | agent4ts.cli | evaluate physiome_dupont: ok
+2026-10-13 22:24:08 | INFO    | agent4ts.harness | cache hit p2_dlinear (4f0ea44e42fcef18)
+2026-10-13 22:24:08 | INFO    | agent4ts.cli | evaluate physiome_dupont: ok
+2026-10-13 22:27:17 | INFO    | agent4ts.harness | cache hit p2_dlinear (4f0ea44e42fcef18)
+2026-10-13 22:27:17 | INFO    | agent4ts.cli | evaluate physiome_dupont: ok
+2026-10-14 09:03:09 | INFO    | agent4ts.harness | cache hit p2_dlinear (4f0ea44e42fcef18)
+2026-10-14 09:03:09 | INFO    | agent4ts.cli | evaluate physiome_dupont: ok

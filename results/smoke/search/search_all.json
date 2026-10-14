@@ -4,12 +4,12 @@
     "seed": 0,
     "ablation": null,
     "incumbent": {
-      "pipeline_id": "p0_f0",
+      "pipeline_id": "p2_dlinear",
       "data_view": {
         "history_fraction": 1.0,
         "variable_subset": "all",
-        "grid_width": 1.0,
-        "grid_mode": "events",
+        "grid_width": 2.0,
+        "grid_mode": "grid",
         "fill": "mean",
         "forward_limit": 0.0,
         "age_feature": false,
@@ -18,17 +18,17 @@
       "model_id": "DLinear",
       "model_config": {},
       "seed": 0,
-      "parent_id": null
+      "parent_id": "p1_dlinear"
     },
-    "rounds": 2,
+    "rounds": 3,
     "used": {
-      "trials": 2,
-      "llm_calls": 2,
+      "trials": 4,
+      "llm_calls": 3,
       "gpu_hours": 0.0
     },
     "remaining": {
-      "trials": 2,
-      "llm_calls": 6,
+      "trials": 0,
+      "llm_calls": 5,
       "gpu_hours": 0.5
     },
     "archive": [
@@ -50,7 +50,7 @@
           "seed": 0,
           "parent_id": null
         },
-        "fingerprint": "3625835efca8142a",
+        "fingerprint": "4daa4d671958f3b6",
         "status": "ok",
         "metrics": {
           "normalized_mae": 0.039943117767299224,
@@ -59,16 +59,16 @@
           "coverage": 1.0
         },
         "error": null,
-        "wall_s": 0.935
+        "wall_s": 0.712
       },
       {
         "pipeline": {
-          "pipeline_id": "p2_dlinear",
+          "pipeline_id": "p1_dlinear",
           "data_view": {
-            "history_fraction": 0.5,
+            "history_fraction": 1.0,
             "variable_subset": "all",
             "grid_width": 1.0,
-            "grid_mode": "events",
+            "grid_mode": "grid",
             "fill": "mean",
             "forward_limit": 0.0,
             "age_feature": false,
@@ -79,51 +79,124 @@
           "seed": 0,
           "parent_id": "p0_f0"
         },
-        "fingerprint": "9e1a10e7816e9a78",
+        "fingerprint": "455d9ed2e4facbb8",
         "status": "ok",
         "metrics": {
-          "normalized_mae": 0.056725484189708936,
-          "normalized_mse": 0.006203336013246134,
+          "normalized_mae": 0.0353637809588902,
+          "normalized_mse": 0.0022889801233007575,
           "n_valid_targets": 192,
           "coverage": 1.0
         },
         "error": null,
-        "wall_s": 0.098
+        "wall_s": 0.037
+      },
+      {
+        "pipeline": {
+          "pipeline_id": "p2_dlinear",
+          "data_view": {
+            "history_fraction": 1.0,
+            "variable_subset": "all",
+            "grid_width": 2.0,
+            "grid_mode": "grid",
+            "fill": "mean",
+            "forward_limit": 0.0,
+            "age_feature": false,
+            "normalize": "zscore"
+          },
+          "model_id": "DLinear",
+          "model_config": {},
+          "seed": 0,
+          "parent_id": "p1_dlinear"
+        },
+        "fingerprint": "4f0ea44e42fcef18",
+        "status": "ok",
+        "metrics": {
+          "normalized_mae": 0.028936487207972556,
+          "normalized_mse": 0.0014990362140865088,
+          "n_valid_targets": 192,
+          "coverage": 1.0
+        },
+        "error": null,
+        "wall_s": 0.036
+      },
+      {
+        "pipeline": {
+          "pipeline_id": "p3_dlinear",
+          "data_view": {
+            "history_fraction": 1.0,
+            "variable_subset": "all",
+            "grid_width": 2.0,
+            "grid_mode": "grid",
+            "fill": "ffill",
+            "forward_limit": 0.0,
+            "age_feature": false,
+            "normalize": "zscore"
+          },
+          "model_id": "DLinear",
+          "model_config": {},
+          "seed": 0,
+          "parent_id": "p2_dlinear"
+        },
+        "fingerprint": "17e41426db69b842",
+        "status": "ok",
+        "metrics": {
+          "normalized_mae": 0.028936487207972556,
+          "normalized_mse": 0.0014990362140865088,
+          "n_valid_targets": 192,
+          "coverage": 1.0
+        },
+        "error": null,
+        "wall_s": 0.036
       }
     ],
     "history": [
       {
         "round": 1,
         "action": {
-          "op": "SELECT_MODEL",
-          "target_field": null,
-          "value": "DLinear",
+          "op": "SET_TRANSFORM",
+          "target_field": "grid_mode",
+          "value": "grid",
           "parent_id": null,
           "evidence_refs": [],
-          "expected_effect": "start from a linear baseline"
+          "expected_effect": "bucket the irregular history onto a fixed grid"
         },
         "pipeline_id": "p1_dlinear",
         "status": "ok",
-        "normalized_mae": 0.039943117767299224,
-        "accepted": false
+        "normalized_mae": 0.0353637809588902,
+        "accepted": true
       },
       {
         "round": 2,
         "action": {
           "op": "SET_TRANSFORM",
-          "target_field": "history_fraction",
-          "value": 0.5,
+          "target_field": "grid_width",
+          "value": 2.0,
           "parent_id": null,
           "evidence_refs": [],
-          "expected_effect": "shorten lookback to focus on recent regime"
+          "expected_effect": "widen buckets to smooth sparse variables"
         },
         "pipeline_id": "p2_dlinear",
         "status": "ok",
-        "normalized_mae": 0.056725484189708936,
+        "normalized_mae": 0.028936487207972556,
+        "accepted": true
+      },
+      {
+        "round": 3,
+        "action": {
+          "op": "SET_TRANSFORM",
+          "target_field": "fill",
+          "value": "ffill",
+          "parent_id": null,
+          "evidence_refs": [],
+          "expected_effect": "hold last value forward instead of mean fill"
+        },
+        "pipeline_id": "p3_dlinear",
+        "status": "ok",
+        "normalized_mae": 0.028936487207972556,
         "accepted": false
       }
     ],
-    "incumbent_metric": 0.039943117767299224,
+    "incumbent_metric": 0.028936487207972556,
     "f0_metric": 0.039943117767299224
   }
 }

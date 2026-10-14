@@ -25,7 +25,15 @@ llm:
   api_key_env: ATS_LLM_API_KEY
   model: Qwen3.5-4B
   temperature: 0.2
-  max_tokens: 2048
+  max_tokens: 4096
+  # Qwen3.5-4B is a reasoning model. This vLLM deployment has NO reasoning
+  # parser enabled, so with thinking ON the model streams its plan as plain
+  # text ("The user wants to improve...") with no  thinking tags, hits
+  # max_tokens with finish_reason=length, and the JSON action is *never*
+  # emitted — every round fails to parse. Thinking must stay OFF: the reply is
+  # then a clean single JSON object in <2s. (Verified 2026-10-13 on
+  # 127.0.0.1:8848; see log/smoke/llm_smoke.log.)
+  enable_thinking: false
   timeout: 180
   max_retries: 1          # one format-error retry, counted against budget
   transport: openai        # openai | mock
@@ -36,7 +44,9 @@ resources:
   vllm_port: 8848
   vllm_served_name: Qwen3.5-4B
   vllm_gpu_memory_utilization: 0.85
-  vllm_max_model_len: 8192
+  # Qwen3.5-4B supports 256k; 32k leaves room for multi-round prompts that
+  # accumulate statistics, semantic card, PNG observations and per-round feedback
+  vllm_max_model_len: 32768
   vllm_tensor_parallel_size: 1
   vllm_max_num_seqs: 64
   hf_endpoint: https://hf-mirror.com

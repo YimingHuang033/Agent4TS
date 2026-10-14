@@ -1,2 +1,2 @@
 model,n_valid_targets,normalized_mae,normalized_mse,status,task
-test,96,0.052927104936566834,0.004597365585109879,ok,physiome_dupont
+test,96,0.03403572523697926,0.0017732878133465784,ok,physiome_dupont

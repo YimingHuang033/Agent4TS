@@ -12,7 +12,7 @@ ATS_KIND=gen_eval
 MODEL_DIR="${ATS_VLLM_MODEL_DIR:-/mnt/data/Qwen3.5-4B}"
 SERVED_NAME="${ATS_VLLM_NAME:-Qwen3.5-4B}"
 UTIL="${ATS_VLLM_UTIL:-0.85}"
-MAXLEN="${ATS_VLLM_MAXLEN:-8192}"
+MAXLEN="${ATS_VLLM_MAXLEN:-32768}"
 HOST="127.0.0.1"; PORT="${ATS_VLLM_PORT:-8848}"
 LOG_FILE="${LOG_DIR}/vllm_serve.log"
 
@@ -21,6 +21,10 @@ echo "== serving ${MODEL_DIR} as ${SERVED_NAME} on ${HOST}:${PORT} (util=${UTIL}
 # CUDA_HOME/PATH, which FlashInfer JIT needs on this machine)
 ENV_PREFIX="$(conda run -n "${ATS_ENV}" python -c 'import sys;print(sys.prefix)')"
 export PATH="${ENV_PREFIX}/bin:${NVCC_BIN:-}:${PATH}"
+# FlashInfer JIT-compiles its sampling kernels and needs nvcc, which this
+# machine does not have (no /usr/local/cuda, none in the conda env). Use the
+# native vLLM sampler instead — same behavior as the 2026-10-07 llm smoke run.
+export VLLM_USE_FLASHINFER_SAMPLER="${VLLM_USE_FLASHINFER_SAMPLER:-0}"
 "${ENV_PREFIX}/bin/vllm" serve "${MODEL_DIR}" \
     --host "${HOST}" --port "${PORT}" \
     --served-model-name "${SERVED_NAME}" \

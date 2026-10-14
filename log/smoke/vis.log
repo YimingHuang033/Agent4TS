@@ -6,3 +6,9 @@
 4 figures -> /home/tim/Proj/ats/vis/generated/smoke/index.html
 == [2026-10-08 21:24:41] conda run -n tim python /home/tim/Proj/ats/vis/plot_results.py --kind smoke
 4 figures -> /home/tim/Proj/ats/vis/generated/smoke/index.html
+== [2026-10-13 22:24:57] conda run -n tim python /home/tim/Proj/ats/vis/plot_results.py --kind smoke
+3 figures -> /home/tim/Proj/ats/vis/generated/smoke/index.html
+== [2026-10-13 22:24:59] conda run -n tim python /home/tim/Proj/ats/vis/plot_results.py --kind gen_eval
+7 figures -> /home/tim/Proj/ats/vis/generated/gen_eval/index.html
+== [2026-10-14 09:03:27] conda run -n tim python /home/tim/Proj/ats/vis/plot_results.py --kind smoke
+4 figures -> /home/tim/Proj/ats/vis/generated/smoke/index.html

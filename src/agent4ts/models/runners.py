@@ -7,6 +7,8 @@ models named in DESIGN 3 live in `heavy.py` and report their real availability.
 """
 from __future__ import annotations
 
+import warnings
+
 import numpy as np
 
 from ..logging_utils import get_logger
@@ -73,8 +75,12 @@ def resample_series(lw: LabeledWindow, n_vars: int, in_grid: np.ndarray) -> np.n
 
 def fit_stats(X: np.ndarray) -> tuple[np.ndarray, np.ndarray]:
     """Per-variable mean/std over (E, V, T). No-target variables fall back to 0/1."""
-    mean = np.nanmean(X, axis=(0, 2), keepdims=True)
-    std = np.nanstd(X, axis=(0, 2), keepdims=True)
+    with warnings.catch_warnings():
+        # an all-NaN slice (variable with no valid target) is expected here and
+        # handled by the nan_to_num fallbacks below, not a bug to warn about
+        warnings.simplefilter("ignore", RuntimeWarning)
+        mean = np.nanmean(X, axis=(0, 2), keepdims=True)
+        std = np.nanstd(X, axis=(0, 2), keepdims=True)
     mean = np.nan_to_num(mean, nan=0.0)
     std = np.nan_to_num(std, nan=1.0)
     std[std < 1e-8] = 1.0
@@ -133,8 +139,12 @@ class MeanValue(Forecaster):
 
     def fit(self, train, bundle, grid, var_ids):
         y, valid = _build_target_tensor(train, bundle, grid)
-        self.per_var = np.nanmean(np.where(valid, y, np.nan), axis=(0, 2)).ravel()
-        self.global_mean = float(np.nanmean(y)) if valid.any() else 0.0
+        with warnings.catch_warnings():
+            # variables with no valid target become NaN here and are skipped in
+            # predict via the isfinite check, so the warning is not actionable
+            warnings.simplefilter("ignore", RuntimeWarning)
+            self.per_var = np.nanmean(np.where(valid, y, np.nan), axis=(0, 2)).ravel()
+            self.global_mean = float(np.nanmean(y)) if valid.any() else 0.0
 
     def predict(self, lw: LabeledWindow) -> np.ndarray:
         out = np.full(len(lw.query_times), self.global_mean)
@@ -148,24 +158,19 @@ class MeanValue(Forecaster):
 # ------------------------------------------------------------------ DLinear
 
 class DLinear(Forecaster):
-    """Trend+seasonal decomposition with a per-variable linear head.
+    """Linear forecast head per variable: lookback series (length T) -> horizon (length H).
 
-    Faithful to the LTSF-Linear idea: the causal lookback series (length T) is
-    mapped linearly to the forecast horizon (length H) per variable. Input and
-    output live on *different* axes — lookback in the past, forecast in the
-    future — so the linear layer is (T -> H), not (T -> T).
+    Faithful to the LTSF-Linear *linear-mapping* idea: input and output live on
+    *different* axes — lookback in the past, forecast in the future — so the
+    layer is (T -> H), not (T -> T). The moving-average trend/seasonal split of
+    the canonical DLinear is intentionally not applied here (it was dead code);
+    this is the plain shared linear map, which is what actually trains and
+    scores.
     """
     model_id = "DLinear"
 
     def __init__(self, epochs: int = 200, lr: float = 1e-2, kernel: int = 5, seed: int = 0):
         self.epochs, self.lr, self.kernel, self.seed = epochs, lr, kernel, seed
-
-    def _decompose(self, x):
-        k = self.kernel
-        pad = k // 2
-        pad_edges = np.pad(x, ((0, 0), (pad, pad)), mode="edge")
-        trend = np.stack([pad_edges[:, i:i + k].mean(axis=1) for i in range(x.shape[1])], axis=1)
-        return trend, x - trend
 
     def _inputs(self, labeled, bundle, in_grid, view):
         n_vars = len(bundle.variable_names)

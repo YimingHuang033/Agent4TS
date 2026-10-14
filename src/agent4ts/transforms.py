@@ -283,6 +283,20 @@ def _fill(x: np.ndarray, mask: np.ndarray, times: np.ndarray, view: DataView) ->
 
 # ------------------------------------------------------------------ validation
 
+# Single source of truth for the legal single-field transform space. The
+# controller prompt and action_space expose this verbatim so the agent never
+# has to guess a value just to learn it was rejected; `compatible` enforces the
+# same space at trial time.
+TRANSFORM_SPACE: dict[str, Any] = {
+    "history_fraction": [0.5, 1.0],
+    "grid_mode": ["events", "grid"],
+    "grid_width": "positive number",
+    "fill": ["mean", "ffill"],
+    "normalize": ["zscore", "minmax", "none"],
+    "forward_limit": "number >= 0",
+}
+
+
 def compatible(bundle: TaskBundle, view: DataView) -> tuple[bool, str]:
     """Compatibility matrix: reject combinations that make no sense."""
     if view.history_fraction not in (0.5, 1.0):

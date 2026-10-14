@@ -45,7 +45,7 @@ def _catalog() -> dict[str, dict[str, Any]]:
                 epochs=cfg.get("epochs", 200), lr=cfg.get("lr", 1e-2),
                 kernel=cfg.get("kernel", 5), seed=cfg.get("seed", 0)),
             "input_type": "regular_grid", "accepts_mask": False, "accepts_dt": False,
-            "options": {"epochs": [100, 200], "kernel": [3, 5, 7]},
+            "options": {"epochs": [100, 200]},
             "cost": "low",
             "role": "engineering stand-in for f0 until APN is vendored",
         },

@@ -17,5 +17,6 @@ for i in $(seq 1 60); do
 done
 curl -s "http://127.0.0.1:8848/v1/models" | tee -a "${LOG_FILE}"; echo
 
-ats_run_cli --config "${ATS_CONFIG}" --kind smoke search --tasks physiome_dupont --seeds 0
+ats_run_cli --config "${ATS_CONFIG}" --kind smoke \
+    --run-dir "${RESULT_DIR}/llm_search" search --tasks physiome_dupont --seeds 0
 echo "== llm smoke done" | tee -a "${LOG_FILE}"

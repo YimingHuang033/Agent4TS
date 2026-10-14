@@ -107,6 +107,53 @@ def test_heavy_models_not_faked():
             make(mid, {})
 
 
+def test_tsrouter_is_honest_not_faked():
+    """TSRouter must report unavailable and refuse to run, not imitate upstream."""
+    from agent4ts.baselines import tsrouter
+    st = tsrouter.status({})
+    assert st["status"] == "unavailable"
+    with pytest.raises(RuntimeError):
+        tsrouter.run()
+    assert tsrouter.UPSTREAM_URL.endswith("tianyi-lab/TSRouter")
+
+
+def test_mock_ladder_first_action_changes_state(bundle, cfg):
+    """The offline mock's first action must be a real change vs the f0 view, so
+    the smoke run actually exercises the accept path (no opaque no-op step)."""
+    from agent4ts.controller import Controller
+    from agent4ts.schemas import Observation, DataView
+    from agent4ts.search import apply_action
+
+    ctrl = Controller(cfg, Path("."))
+    f0_view = DataView()
+    obs = Observation(
+        task_id=bundle.spec.task_id, round_index=0, dataset_card={},
+        statistics={}, plot_paths=[], archive_summary=[],
+        incumbent={"pipeline_id": "p0_f0", "model_id": bundle.spec.f0_model,
+                   "data_view": f0_view.to_dict()},
+        last_feedback=None, budget={"trials": 4}, allowed_ops=["SET_TRANSFORM"],
+        action_space={})
+    action = ctrl._parse(ctrl._mock(ctrl.build_messages(obs)))
+    assert action.op in ("SET_TRANSFORM", "SELECT_MODEL", "SELECT_DATA")
+    # applying it must actually move the incumbent (field value or model)
+    child = apply_action(action, _spec(bundle, f0_view), n=1)
+    assert (child.data_view.to_dict() != f0_view.to_dict()
+            or child.model_id != bundle.spec.f0_model)
+
+
+def _spec(bundle, view):
+    from agent4ts.schemas import PipelineSpec
+    return PipelineSpec("p0_f0", view, bundle.spec.f0_model, {}, 0)
+
+
+def test_dlinear_kernel_option_removed():
+    """`kernel` was dead code; the registry must not advertise a no-op option."""
+    from agent4ts.models.registry import CATALOG, make
+    assert "kernel" not in CATALOG["DLinear"]["options"]
+    with pytest.raises(ValueError):
+        make("DLinear", {"kernel": 7})
+
+
 def test_lastvalue_predicts_original_units(bundle):
     """Window x is normalized by the view; LastValue must return raw units."""
     from agent4ts.models.runners import LastValue

@@ -1,0 +1,49 @@
+== waiting for LLM endpoint
+{"object":"list","data":[{"id":"Qwen3.5-4B","object":"model","created":1791644734,"owned_by":"vllm","root":"/mnt/data/Qwen3.5-4B","parent":null,"max_model_len":8192,"permission":[{"id":"modelperm-bf4303c9fa7958cd","object":"model_permission","created":1791644734,"allow_create_engine":false,"allow_sampling":true,"allow_logprobs":true,"allow_search_indices":false,"allow_view":true,"allow_fine_tuning":false,"organization":"*","group":null,"is_blocking":false}]}]}== [2026-10-10 23:05:34] conda run -n tim python -m agent4ts.cli --config smoke/llm --kind smoke search --tasks physiome_dupont --seeds 0
+2026-10-10 23:05:50 | WARNING | agent4ts.controller | malformed action, retrying once
+2026-10-10 23:06:02 | INFO    | agent4ts.cli | search physiome_dupont seed=0: rounds=1 incumbent=p0_f0 nmae=0.039943117767299224
+{
+  "run_dir": "/home/tim/Proj/ats/results/smoke/search",
+  "tasks": [
+    "physiome_dupont_s0"
+  ]
+}
+== llm smoke done
+== waiting for LLM endpoint
+{"object":"list","data":[{"id":"Qwen3.5-4B","object":"model","created":1791644843,"owned_by":"vllm","root":"/mnt/data/Qwen3.5-4B","parent":null,"max_model_len":8192,"permission":[{"id":"modelperm-bc72fc5e80f3ab4d","object":"model_permission","created":1791644843,"allow_create_engine":false,"allow_sampling":true,"allow_logprobs":true,"allow_search_indices":false,"allow_view":true,"allow_fine_tuning":false,"organization":"*","group":null,"is_blocking":false}]}]}== [2026-10-10 23:07:23] conda run -n tim python -m agent4ts.cli --config smoke/llm --kind smoke search --tasks physiome_dupont --seeds 0
+2026-10-10 23:07:30 | INFO    | agent4ts.harness | cache hit p2_dlinear (9e1a10e7816e9a78)
+2026-10-10 23:07:30 | INFO    | agent4ts.cli | search physiome_dupont seed=0: rounds=2 incumbent=p0_f0 nmae=0.039943117767299224
+{
+  "run_dir": "/home/tim/Proj/ats/results/smoke/search",
+  "tasks": [
+    "physiome_dupont_s0"
+  ]
+}
+== llm smoke done
+== waiting for LLM endpoint
+{"object":"list","data":[{"id":"Qwen3.5-4B","object":"model","created":1791901373,"owned_by":"vllm","root":"/mnt/data/Qwen3.5-4B","parent":null,"max_model_len":32768,"permission":[{"id":"modelperm-9205eb24b3cd174f","object":"model_permission","created":1791901373,"allow_create_engine":false,"allow_sampling":true,"allow_logprobs":true,"allow_search_indices":false,"allow_view":true,"allow_fine_tuning":false,"organization":"*","group":null,"is_blocking":false}]}]}== [2026-10-13 22:22:53] conda run -n tim python -m agent4ts.cli --config smoke/llm --kind smoke search --tasks physiome_dupont --seeds 0
+2026-10-13 22:23:01 | INFO    | agent4ts.cli | search physiome_dupont seed=0: rounds=3 incumbent=p0_f0 nmae=0.039943117767299224
+{
+  "run_dir": "/home/tim/Proj/ats/results/smoke/search",
+  "tasks": [
+    "physiome_dupont_s0"
+  ]
+}
+== llm smoke done
+== waiting for LLM endpoint
+{"object":"list","data":[{"id":"Qwen3.5-4B","object":"model","created":1791901449,"owned_by":"vllm","root":"/mnt/data/Qwen3.5-4B","parent":null,"max_model_len":32768,"permission":[{"id":"modelperm-bc73fac1acf4b64f","object":"model_permission","created":1791901449,"allow_create_engine":false,"allow_sampling":true,"allow_logprobs":true,"allow_search_indices":false,"allow_view":true,"allow_fine_tuning":false,"organization":"*","group":null,"is_blocking":false}]}]}== [2026-10-13 22:24:09] conda run -n tim python -m agent4ts.cli --config smoke/llm --kind smoke search --tasks physiome_dupont --seeds 0 --run-dir /home/tim/Proj/ats/results/smoke/llm_search
+usage: agent4ts [-h] [--config CONFIG] [--extra [EXTRA ...]]
+                [--run-dir RUN_DIR] [--kind KIND]
+                {prepare,benchmark,search,evaluate,predict,validate} ...
+agent4ts: error: unrecognized arguments: --run-dir /home/tim/Proj/ats/results/smoke/llm_search
+ERROR conda.cli.main_run:execute(127): `conda run python -m agent4ts.cli --config smoke/llm --kind smoke search --tasks physiome_dupont --seeds 0 --run-dir /home/tim/Proj/ats/results/smoke/llm_search` failed. (See above for error)
+== waiting for LLM endpoint
+{"object":"list","data":[{"id":"Qwen3.5-4B","object":"model","created":1791901482,"owned_by":"vllm","root":"/mnt/data/Qwen3.5-4B","parent":null,"max_model_len":32768,"permission":[{"id":"modelperm-ad3866e16a9d895c","object":"model_permission","created":1791901482,"allow_create_engine":false,"allow_sampling":true,"allow_logprobs":true,"allow_search_indices":false,"allow_view":true,"allow_fine_tuning":false,"organization":"*","group":null,"is_blocking":false}]}]}== [2026-10-13 22:24:42] conda run -n tim python -m agent4ts.cli --config smoke/llm --kind smoke --run-dir /home/tim/Proj/ats/results/smoke/llm_search search --tasks physiome_dupont --seeds 0
+2026-10-13 22:24:50 | INFO    | agent4ts.cli | search physiome_dupont seed=0: rounds=3 incumbent=p0_f0 nmae=0.039943117767299224
+{
+  "run_dir": "/home/tim/Proj/ats/results/smoke/llm_search",
+  "tasks": [
+    "physiome_dupont_s0"
+  ]
+}
+== llm smoke done

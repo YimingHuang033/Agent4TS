@@ -1,11 +1,11 @@
 {
   "best_pipeline": {
-    "pipeline_id": "p0_f0",
+    "pipeline_id": "p2_dlinear",
     "data_view": {
       "history_fraction": 1.0,
       "variable_subset": "all",
-      "grid_width": 1.0,
-      "grid_mode": "events",
+      "grid_width": 2.0,
+      "grid_mode": "grid",
       "fill": "mean",
       "forward_limit": 0.0,
       "age_feature": false,
@@ -14,7 +14,7 @@
     "model_id": "DLinear",
     "model_config": {},
     "seed": 0,
-    "parent_id": null
+    "parent_id": "p1_dlinear"
   },
   "normalizer": {
     "mode": "zscore",
@@ -36,5 +36,5 @@
     }
   },
   "metric_version": "v1",
-  "upstream_hash": "e2066ca27f0a98be"
+  "upstream_hash": "d37e297c23876495"
 }

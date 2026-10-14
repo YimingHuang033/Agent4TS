@@ -71,7 +71,9 @@ Time-IMM 的数值、文本可从[数据仓库](https://github.com/blacksnail789
 
 额外实现 LastValue 作为评分和数据管线的 sanity baseline，不计入上述 10 个。首版不增加 foundation model。每个模型注册输入类型、是否接收 mask/Δt、可用数据动作和有限超参选项。规则模型经统一物理时间网格适配，保存 mask 和观测年龄供预处理/审计；不能声称原模型使用了它不接收的特征。所有模型最终映射到相同查询与评分目标。
 
-**唯一外部 agentic baseline：TimeSeriesScientist（TSci）**。[论文](https://arxiv.org/abs/2510.01538)、[代码和安装步骤](https://github.com/Y-Research-SBU/TimeSeriesScientist)。上游自定义数据入口为 `date` / `OT` CSV，不能当作原生多变量 irr 接口。实现 `TSciAdapter`：保留其分析、规划、拟合验证流程，通过桥接工具调用本项目的候选执行器，接入相同数据、语义卡、图片、模型池、LLM 和预算；明确标记 **TSci-adapted**，列出适配改动，不声称原版复现。其内部切分/评分须路由到统一评估器。若适配无法保持上游策略，则标记未完成，不能用自己写的循环冒充 TSci。
+**外部 agentic baseline：TimeSeriesScientist（TSci），以及追加的 TSRouter。** [论文](https://arxiv.org/abs/2510.01538)、[代码和安装步骤](https://github.com/Y-Research-SBU/TimeSeriesScientist)。上游自定义数据入口为 `date` / `OT` CSV，不能当作原生多变量 irr 接口。实现 `TSciAdapter`：保留其分析、规划、拟合验证流程，通过桥接工具调用本项目的候选执行器，接入相同数据、语义卡、图片、模型池、LLM 和预算；明确标记 **TSci-adapted**，列出适配改动，不声称原版复现。其内部切分/评分须路由到统一评估器。若适配无法保持上游策略，则标记未完成，不能用自己写的循环冒充 TSci。
+
+**TSRouter（COLM 2026，追加）**：[代码](https://github.com/tianyi-lab/TSRouter)、[论文](https://arxiv.org/abs/2607.08940)、[数据 TSRBench](https://huggingface.co/datasets/umd-zhou-lab/TSRBench)。它是图式动态路由框架，对每条查询联合选择模态（text/visual/mix）与候选模型（LLM/VLM），在 TSRBench 推理题上以 oracle 正确率训练。其输入不是本项目的事件表/窗口协议，候选是更重的 LLM/VLM，故同样以外部 baseline 登记：未 vendored 时 `status: unavailable` 并给出真实接入步骤，绝不以自写 router 冒充（`baselines/tsrouter.py`）。若日后接入，须与本项目 agent 共享数据、图片、模型池、LLM 与预算，并经统一 harness/evaluator。
 
 为辨别迭代收益，另外保留固定 `f0`、同动作空间随机搜索，以及我们的 `no_vision`、`no_semantics`、`one_shot` 消融；它们不是新增外部 agent 框架。
 
@@ -143,7 +145,7 @@ detect_irr_fault(...) -> {"status": "not_implemented"}
 
 ### 5.3 Harness 与反馈
 
-1. 检查 JSON、动作白名单、数据/模型兼容性、时间与 split 边界；不合法则返回结构化原因，不启动训练。
+1. 检查 JSON、动作白名单、数据/模型兼容性、时间与 split 边界（含与 incumbent 等价的无效提案：直接拒绝，不消耗训练预算）；不合法则返回结构化原因并回灌给下一轮观察，不启动训练。
 2. 预处理仅在训练侧拟合；训练规则固定。候选用配置、数据版本、split、seed、上游版本哈希去重与缓存。
 3. 返回搜索验证集归一化 MAE/MSE、原单位逐变量误差、长缺口/陈旧/异步组误差、有效标签数、相对父候选及 `f0` 的变化、运行错误与成本。空组返回 `null + n=0`；失败不能伪装成零误差。
 4. 候选通过检查且主指标降低则更新 incumbent；分数相同时选成本较低者。所有候选记入 archive，退步/失败则保持原 incumbent，下一轮获得该失败反馈。
@@ -204,4 +206,14 @@ fault_detection: false
 - 网格模型（DLinear/PatchTST/iTransformer）目标侧改用逐变量 target 统计，修复多变量原单位目标下共享输出偏置导致无法区分变量的问题（P12 DLinear nmae 7.35 → 0.38，已优于 MeanValue）。
 - `scripts/gen_eval/*.sh` 不再硬编码 `ATS_KIND=gen_eval`，改为 `${ATS_KIND:-gen_eval}`，便于复用 smoke 配置刷新冒烟产物。
 - 测试增至 13 项（新增 LastValue 原单位回归），`scripts/smoke/run_smoke.sh` 与已提交的 `results/smoke` 产物已按新行为重新生成。
+
+### 附录补充（2026-10-13）
+
+- **真实 LLM 控制器修复（关键）**：`Qwen3.5-4B` 是推理模型，而该 vLLM 部署未启用 reasoning parser。原 `enable_thinking: true` 下模型把推理当**无标签纯文本**逐字输出（`The user wants to improve...`），到 `max_tokens` 被截断（`finish_reason=length`），JSON 动作**永远**解析不出来——真实 `search` 因此每轮都失败。置 `enable_thinking: false` 后回复是干净的单个 JSON 对象（<2s）。实测见 `log/smoke/llm_smoke.log`。
+- **重复提案回灌**：同配置的重复动作之前命中 fingerprint 缓存后静默返回，agent 得不到"已试过"的信号而反复提同一个值。现在 `Harness.prior_trial` 在 `run_trial` 前拦截精确重复，产出 `duplicate_trial` 反馈（含已试分数），`archive_summary` 补充 `data_view`/`model_config`，提示词要求避开已试值。4B 控制器因此从"每轮重提 `history_fraction=0.5`"变为探索不同字段。
+- **离线 smoke 回归修复**：mock ladder 第一步原为 `SELECT_MODEL DLinear`，而 smoke/quick 的 f0 就是 DLinear，被 `action_changes_state` 恒拒，accept 路径不再被演示。改为数据驱动的 ladder：首个动作 `grid_mode=grid` 经实测在 physiome 与 P12 上稳定优于 f0，故冒烟真正走到 accept（0.0399→0.0354），随后是退步与 STOP。
+- **DLinear `kernel` 选项移除**：`_decompose` 是死代码（从未被 `fit` 调用），`kernel` 因而对结果完全无效（3/5/7 同分）。已删除死代码与注册表中的该选项，并修正 DLinear 文档串（不再声称做 trend/seasonal 分解）。
+- **TSRouter baseline 接入**（用户要求）：新增 `baselines/tsrouter.py` + `run_tsrouter.py` + `scripts/gen_eval/12_tsrouter.sh`，按与 TSci 相同的诚实规则登记为 `status: unavailable`（COLM 2026，未 vendored，消费 TSRBench 推理题而非本项目事件表），拒绝以自写 router 冒充。
+- 修正报错里的过时脚本名（`01_download_p12.sh` → `00_download_resources.sh`）；测试增至 16 项。
+- 数据现实记录：在 smoke/quick 的两个小任务上，**f0=DLinear+默认视图已是最优或接近最优**，少数可改善的单字段动作主要是 `grid_mode=grid`（及更宽的 `grid_width`）；重型模型与缩短历史都变差。agent 能否改善取决于任务，工程验收不以此为准。
 

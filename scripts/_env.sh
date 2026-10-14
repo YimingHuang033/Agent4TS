@@ -7,7 +7,16 @@ PROJECT_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 export PROJECT_ROOT
 export ATS_ENV="${ATS_ENV:-tim}"
 export ATS_KIND="${ATS_KIND:-gen_eval}"
-export ATS_CONFIG="${ATS_CONFIG:-default}"
+# default config: this kind's main.yaml when it exists (gen_eval/main carries the
+# task set), else the base config. An explicit ATS_CONFIG always wins.
+if [ -z "${ATS_CONFIG:-}" ]; then
+    if [ -f "${PROJECT_ROOT}/config/${ATS_KIND}/main.yaml" ]; then
+        ATS_CONFIG="${ATS_KIND}/main"
+    else
+        ATS_CONFIG="default"
+    fi
+fi
+export ATS_CONFIG="${ATS_CONFIG}"
 
 # data/resources live outside the repo and never enter git
 export ATS_DATA_ROOT="${ATS_DATA_ROOT:-/mnt/data/ats_resources}"

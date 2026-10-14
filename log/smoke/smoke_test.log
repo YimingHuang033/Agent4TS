@@ -614,3 +614,1042 @@ ERROR conda.cli.main_run:execute(127): `conda run python -m agent4ts.cli --confi
   "run_dir": "/home/tim/Proj/ats/results/smoke/search"
 }
 == smoke done; results in results/smoke
+== [2026-10-10 22:59:42] conda run -n tim python -m agent4ts.cli --config smoke/quick --kind smoke prepare
+2026-10-10 22:59:44 | INFO    | agent4ts.cli | prepare: config=smoke/quick run_dir=/home/tim/Proj/ats/results/smoke/prepare
+2026-10-10 22:59:44 | INFO    | agent4ts.data.p12 | P12 loaded: 300 entities, 68113 history events, 3955 target buckets, targets=p12_native_irr
+2026-10-10 22:59:44 | INFO    | agent4ts.cli | prepare done: 2/2 tasks ok
+{
+  "run_dir": "/home/tim/Proj/ats/results/smoke/prepare",
+  "tasks": {
+    "p12_native": "ok",
+    "physiome_dupont": "ok"
+  }
+}
+== [2026-10-10 22:59:45] conda run -n tim python -m agent4ts.cli --config smoke/quick --kind smoke validate
+2026-10-10 22:59:46 | INFO    | agent4ts.data.p12 | P12 loaded: 300 entities, 68113 history events, 3955 target buckets, targets=p12_native_irr
+{
+  "p12_native": {
+    "status": "ok",
+    "checks": {
+      "no_future_leakage": {
+        "ok": true,
+        "future_events": 0,
+        "future_available": 0
+      },
+      "split_isolation": {
+        "ok": true,
+        "duplicates": [],
+        "n_entities": 300
+      },
+      "padding_invariance": {
+        "ok": true,
+        "masked_entries": 40398,
+        "unique_cells": 40398,
+        "raw_entries": 40512
+      },
+      "unknown_targets_unscored": {
+        "ok": true,
+        "beyond_horizon": 0,
+        "before_cutoff": 0
+      },
+      "grid_maps_to_target": {
+        "ok": true,
+        "n_grid": 6,
+        "min": 0.5,
+        "max": 5.5
+      },
+      "no_label_over_split": {
+        "ok": true,
+        "orphan_target_entities": []
+      }
+    },
+    "failed": []
+  },
+  "physiome_dupont": {
+    "status": "ok",
+    "checks": {
+      "no_future_leakage": {
+        "ok": true,
+        "future_events": 0,
+        "future_available": 0
+      },
+      "split_isolation": {
+        "ok": true,
+        "duplicates": [],
+        "n_entities": 40
+      },
+      "padding_invariance": {
+        "ok": true,
+        "masked_entries": 2142,
+        "unique_cells": 2142,
+        "raw_entries": 2142
+      },
+      "unknown_targets_unscored": {
+        "ok": true,
+        "beyond_horizon": 0,
+        "before_cutoff": 0
+      },
+      "grid_maps_to_target": {
+        "ok": true,
+        "n_grid": 24,
+        "min": 0.25,
+        "max": 6.0
+      },
+      "no_label_over_split": {
+        "ok": true,
+        "orphan_target_entities": []
+      }
+    },
+    "failed": []
+  }
+}
+== [2026-10-10 22:59:47] conda run -n tim python -m agent4ts.cli --config smoke/quick --kind smoke benchmark --models LastValue,MeanValue,DLinear
+2026-10-10 22:59:49 | INFO    | agent4ts.data.p12 | P12 loaded: 300 entities, 68113 history events, 3955 target buckets, targets=p12_native_irr
+2026-10-10 22:59:49 | INFO    | agent4ts.cli | benchmark p12_native/LastValue: ok nmae=0.39508120566250565
+2026-10-10 22:59:49 | INFO    | agent4ts.cli | benchmark p12_native/MeanValue: ok nmae=0.7190848522069344
+2026-10-10 22:59:50 | INFO    | agent4ts.cli | benchmark p12_native/DLinear: ok nmae=0.3765541623782547
+2026-10-10 22:59:50 | INFO    | agent4ts.cli | benchmark physiome_dupont/LastValue: ok nmae=0.09250451624863316
+2026-10-10 22:59:50 | INFO    | agent4ts.cli | benchmark physiome_dupont/MeanValue: ok nmae=0.9606384821735842
+2026-10-10 22:59:50 | INFO    | agent4ts.cli | benchmark physiome_dupont/DLinear: ok nmae=0.039943117767299224
+{
+  "run_dir": "/home/tim/Proj/ats/results/smoke/benchmark"
+}
+== [2026-10-10 22:59:51] conda run -n tim python -m agent4ts.cli --config smoke/quick --kind smoke search --tasks physiome_dupont --seeds 0
+2026-10-10 22:59:54 | INFO    | agent4ts.harness | cache hit p1_dlinear (3625835efca8142a)
+2026-10-10 22:59:54 | INFO    | agent4ts.cli | search physiome_dupont seed=0: rounds=2 incumbent=p0_f0 nmae=0.039943117767299224
+{
+  "run_dir": "/home/tim/Proj/ats/results/smoke/search",
+  "tasks": [
+    "physiome_dupont_s0"
+  ]
+}
+== [2026-10-10 22:59:54] conda run -n tim python -m agent4ts.cli --config smoke/quick --kind smoke evaluate --tasks physiome_dupont --seed 0
+2026-10-10 22:59:57 | INFO    | agent4ts.harness | cache hit p0_f0 (3625835efca8142a)
+2026-10-10 22:59:57 | INFO    | agent4ts.cli | evaluate physiome_dupont: ok
+{
+  "run_dir": "/home/tim/Proj/ats/results/smoke/search"
+}
+== smoke done; results in results/smoke
+== [2026-10-10 23:16:46] conda run -n tim python -m agent4ts.cli --config smoke/quick --kind smoke prepare
+2026-10-10 23:16:48 | INFO    | agent4ts.cli | prepare: config=smoke/quick run_dir=/home/tim/Proj/ats/results/smoke/prepare
+2026-10-10 23:16:48 | INFO    | agent4ts.data.p12 | P12 loaded: 300 entities, 68113 history events, 3955 target buckets, targets=p12_native_irr
+2026-10-10 23:16:49 | INFO    | agent4ts.cli | prepare done: 2/2 tasks ok
+{
+  "run_dir": "/home/tim/Proj/ats/results/smoke/prepare",
+  "tasks": {
+    "p12_native": "ok",
+    "physiome_dupont": "ok"
+  }
+}
+== [2026-10-10 23:16:49] conda run -n tim python -m agent4ts.cli --config smoke/quick --kind smoke validate
+2026-10-10 23:16:51 | INFO    | agent4ts.data.p12 | P12 loaded: 300 entities, 68113 history events, 3955 target buckets, targets=p12_native_irr
+{
+  "p12_native": {
+    "status": "ok",
+    "checks": {
+      "no_future_leakage": {
+        "ok": true,
+        "future_events": 0,
+        "future_available": 0
+      },
+      "split_isolation": {
+        "ok": true,
+        "duplicates": [],
+        "n_entities": 300
+      },
+      "padding_invariance": {
+        "ok": true,
+        "masked_entries": 40398,
+        "unique_cells": 40398,
+        "raw_entries": 40512
+      },
+      "unknown_targets_unscored": {
+        "ok": true,
+        "beyond_horizon": 0,
+        "before_cutoff": 0
+      },
+      "grid_maps_to_target": {
+        "ok": true,
+        "n_grid": 6,
+        "min": 0.5,
+        "max": 5.5
+      },
+      "no_label_over_split": {
+        "ok": true,
+        "orphan_target_entities": []
+      }
+    },
+    "failed": []
+  },
+  "physiome_dupont": {
+    "status": "ok",
+    "checks": {
+      "no_future_leakage": {
+        "ok": true,
+        "future_events": 0,
+        "future_available": 0
+      },
+      "split_isolation": {
+        "ok": true,
+        "duplicates": [],
+        "n_entities": 40
+      },
+      "padding_invariance": {
+        "ok": true,
+        "masked_entries": 2142,
+        "unique_cells": 2142,
+        "raw_entries": 2142
+      },
+      "unknown_targets_unscored": {
+        "ok": true,
+        "beyond_horizon": 0,
+        "before_cutoff": 0
+      },
+      "grid_maps_to_target": {
+        "ok": true,
+        "n_grid": 24,
+        "min": 0.25,
+        "max": 6.0
+      },
+      "no_label_over_split": {
+        "ok": true,
+        "orphan_target_entities": []
+      }
+    },
+    "failed": []
+  }
+}
+== [2026-10-10 23:16:51] conda run -n tim python -m agent4ts.cli --config smoke/quick --kind smoke benchmark --models LastValue,MeanValue,DLinear
+2026-10-10 23:16:54 | INFO    | agent4ts.data.p12 | P12 loaded: 300 entities, 68113 history events, 3955 target buckets, targets=p12_native_irr
+2026-10-10 23:16:54 | INFO    | agent4ts.cli | benchmark p12_native/LastValue: ok nmae=0.39508120566250565
+2026-10-10 23:16:55 | INFO    | agent4ts.cli | benchmark p12_native/MeanValue: ok nmae=0.7190848522069344
+2026-10-10 23:16:56 | INFO    | agent4ts.cli | benchmark p12_native/DLinear: ok nmae=0.3765541623782547
+2026-10-10 23:16:56 | INFO    | agent4ts.cli | benchmark physiome_dupont/LastValue: ok nmae=0.09250451624863316
+2026-10-10 23:16:56 | INFO    | agent4ts.cli | benchmark physiome_dupont/MeanValue: ok nmae=0.9606384821735842
+2026-10-10 23:16:56 | INFO    | agent4ts.cli | benchmark physiome_dupont/DLinear: ok nmae=0.039943117767299224
+{
+  "run_dir": "/home/tim/Proj/ats/results/smoke/benchmark"
+}
+== [2026-10-10 23:16:57] conda run -n tim python -m agent4ts.cli --config smoke/quick --kind smoke search --tasks physiome_dupont --seeds 0
+2026-10-10 23:17:01 | INFO    | agent4ts.harness | cache hit p1_dlinear (3625835efca8142a)
+2026-10-10 23:17:01 | INFO    | agent4ts.cli | search physiome_dupont seed=0: rounds=2 incumbent=p0_f0 nmae=0.039943117767299224
+{
+  "run_dir": "/home/tim/Proj/ats/results/smoke/search",
+  "tasks": [
+    "physiome_dupont_s0"
+  ]
+}
+== [2026-10-10 23:17:01] conda run -n tim python -m agent4ts.cli --config smoke/quick --kind smoke evaluate --tasks physiome_dupont --seed 0
+2026-10-10 23:17:04 | INFO    | agent4ts.harness | cache hit p0_f0 (3625835efca8142a)
+2026-10-10 23:17:04 | INFO    | agent4ts.cli | evaluate physiome_dupont: ok
+{
+  "run_dir": "/home/tim/Proj/ats/results/smoke/search"
+}
+== smoke done; results in results/smoke
+== [2026-10-10 23:19:29] conda run -n tim python -m agent4ts.cli --config smoke/quick --kind smoke prepare
+2026-10-10 23:19:32 | INFO    | agent4ts.cli | prepare: config=smoke/quick run_dir=/home/tim/Proj/ats/results/smoke/prepare
+2026-10-10 23:19:32 | INFO    | agent4ts.data.p12 | P12 loaded: 300 entities, 68113 history events, 3955 target buckets, targets=p12_native_irr
+2026-10-10 23:19:32 | INFO    | agent4ts.cli | prepare done: 2/2 tasks ok
+{
+  "run_dir": "/home/tim/Proj/ats/results/smoke/prepare",
+  "tasks": {
+    "p12_native": "ok",
+    "physiome_dupont": "ok"
+  }
+}
+== [2026-10-10 23:19:33] conda run -n tim python -m agent4ts.cli --config smoke/quick --kind smoke validate
+2026-10-10 23:19:35 | INFO    | agent4ts.data.p12 | P12 loaded: 300 entities, 68113 history events, 3955 target buckets, targets=p12_native_irr
+{
+  "p12_native": {
+    "status": "ok",
+    "checks": {
+      "no_future_leakage": {
+        "ok": true,
+        "future_events": 0,
+        "future_available": 0
+      },
+      "split_isolation": {
+        "ok": true,
+        "duplicates": [],
+        "n_entities": 300
+      },
+      "padding_invariance": {
+        "ok": true,
+        "masked_entries": 40398,
+        "unique_cells": 40398,
+        "raw_entries": 40512
+      },
+      "unknown_targets_unscored": {
+        "ok": true,
+        "beyond_horizon": 0,
+        "before_cutoff": 0
+      },
+      "grid_maps_to_target": {
+        "ok": true,
+        "n_grid": 6,
+        "min": 0.5,
+        "max": 5.5
+      },
+      "no_label_over_split": {
+        "ok": true,
+        "orphan_target_entities": []
+      }
+    },
+    "failed": []
+  },
+  "physiome_dupont": {
+    "status": "ok",
+    "checks": {
+      "no_future_leakage": {
+        "ok": true,
+        "future_events": 0,
+        "future_available": 0
+      },
+      "split_isolation": {
+        "ok": true,
+        "duplicates": [],
+        "n_entities": 40
+      },
+      "padding_invariance": {
+        "ok": true,
+        "masked_entries": 2142,
+        "unique_cells": 2142,
+        "raw_entries": 2142
+      },
+      "unknown_targets_unscored": {
+        "ok": true,
+        "beyond_horizon": 0,
+        "before_cutoff": 0
+      },
+      "grid_maps_to_target": {
+        "ok": true,
+        "n_grid": 24,
+        "min": 0.25,
+        "max": 6.0
+      },
+      "no_label_over_split": {
+        "ok": true,
+        "orphan_target_entities": []
+      }
+    },
+    "failed": []
+  }
+}
+== [2026-10-10 23:19:35] conda run -n tim python -m agent4ts.cli --config smoke/quick --kind smoke benchmark --models LastValue,MeanValue,DLinear
+2026-10-10 23:19:37 | INFO    | agent4ts.data.p12 | P12 loaded: 300 entities, 68113 history events, 3955 target buckets, targets=p12_native_irr
+2026-10-10 23:19:37 | INFO    | agent4ts.cli | benchmark p12_native/LastValue: ok nmae=0.39508120566250565
+2026-10-10 23:19:38 | INFO    | agent4ts.cli | benchmark p12_native/MeanValue: ok nmae=0.7190848522069344
+2026-10-10 23:19:40 | INFO    | agent4ts.cli | benchmark p12_native/DLinear: ok nmae=0.3765541623782547
+2026-10-10 23:19:40 | INFO    | agent4ts.cli | benchmark physiome_dupont/LastValue: ok nmae=0.09250451624863316
+2026-10-10 23:19:40 | INFO    | agent4ts.cli | benchmark physiome_dupont/MeanValue: ok nmae=0.9606384821735842
+2026-10-10 23:19:40 | INFO    | agent4ts.cli | benchmark physiome_dupont/DLinear: ok nmae=0.039943117767299224
+{
+  "run_dir": "/home/tim/Proj/ats/results/smoke/benchmark"
+}
+== [2026-10-10 23:19:41] conda run -n tim python -m agent4ts.cli --config smoke/quick --kind smoke search --tasks physiome_dupont --seeds 0
+2026-10-10 23:19:44 | INFO    | agent4ts.search | round 1 rejected: [{'check': 'op_whitelisted', 'ok': True, 'msg': "op=SELECT_MODEL allowed=['SELECT_DATA', 'SET_TRANSFORM', 'SELECT_MODEL', 'SET_MODEL_OPTION', 'INSPECT', 'STOP']"}, {'check': 'model_registered', 'ok': True, 'msg': 'value=DLinear'}, {'check': 'model_runnable', 'ok': True, 'msg': ''}, {'check': 'action_changes_state', 'ok': False, 'msg': 'proposal is identical to incumbent p0_f0; change exactly one field/model to a NEW value or STOP'}]
+2026-10-10 23:19:44 | INFO    | agent4ts.cli | search physiome_dupont seed=0: rounds=2 incumbent=p0_f0 nmae=0.039943117767299224
+{
+  "run_dir": "/home/tim/Proj/ats/results/smoke/search",
+  "tasks": [
+    "physiome_dupont_s0"
+  ]
+}
+== [2026-10-10 23:19:44] conda run -n tim python -m agent4ts.cli --config smoke/quick --kind smoke evaluate --tasks physiome_dupont --seed 0
+2026-10-10 23:19:48 | INFO    | agent4ts.harness | cache hit p0_f0 (3625835efca8142a)
+2026-10-10 23:19:48 | INFO    | agent4ts.cli | evaluate physiome_dupont: ok
+{
+  "run_dir": "/home/tim/Proj/ats/results/smoke/search"
+}
+== smoke done; results in results/smoke
+== [2026-10-13 21:17:17] conda run -n tim python -m agent4ts.cli --config smoke/quick --kind smoke prepare
+2026-10-13 21:17:18 | INFO    | agent4ts.cli | prepare: config=smoke/quick run_dir=/home/tim/Proj/ats/results/smoke/prepare
+2026-10-13 21:17:18 | INFO    | agent4ts.data.p12 | P12 loaded: 300 entities, 68113 history events, 3955 target buckets, targets=p12_native_irr
+2026-10-13 21:17:19 | INFO    | agent4ts.cli | prepare done: 2/2 tasks ok
+{
+  "run_dir": "/home/tim/Proj/ats/results/smoke/prepare",
+  "tasks": {
+    "p12_native": "ok",
+    "physiome_dupont": "ok"
+  }
+}
+== [2026-10-13 21:17:19] conda run -n tim python -m agent4ts.cli --config smoke/quick --kind smoke validate
+2026-10-13 21:17:20 | INFO    | agent4ts.data.p12 | P12 loaded: 300 entities, 68113 history events, 3955 target buckets, targets=p12_native_irr
+{
+  "p12_native": {
+    "status": "ok",
+    "checks": {
+      "no_future_leakage": {
+        "ok": true,
+        "future_events": 0,
+        "future_available": 0
+      },
+      "split_isolation": {
+        "ok": true,
+        "duplicates": [],
+        "n_entities": 300
+      },
+      "padding_invariance": {
+        "ok": true,
+        "masked_entries": 40398,
+        "unique_cells": 40398,
+        "raw_entries": 40512
+      },
+      "unknown_targets_unscored": {
+        "ok": true,
+        "beyond_horizon": 0,
+        "before_cutoff": 0
+      },
+      "grid_maps_to_target": {
+        "ok": true,
+        "n_grid": 6,
+        "min": 0.5,
+        "max": 5.5
+      },
+      "no_label_over_split": {
+        "ok": true,
+        "orphan_target_entities": []
+      }
+    },
+    "failed": []
+  },
+  "physiome_dupont": {
+    "status": "ok",
+    "checks": {
+      "no_future_leakage": {
+        "ok": true,
+        "future_events": 0,
+        "future_available": 0
+      },
+      "split_isolation": {
+        "ok": true,
+        "duplicates": [],
+        "n_entities": 40
+      },
+      "padding_invariance": {
+        "ok": true,
+        "masked_entries": 2142,
+        "unique_cells": 2142,
+        "raw_entries": 2142
+      },
+      "unknown_targets_unscored": {
+        "ok": true,
+        "beyond_horizon": 0,
+        "before_cutoff": 0
+      },
+      "grid_maps_to_target": {
+        "ok": true,
+        "n_grid": 24,
+        "min": 0.25,
+        "max": 6.0
+      },
+      "no_label_over_split": {
+        "ok": true,
+        "orphan_target_entities": []
+      }
+    },
+    "failed": []
+  }
+}
+== [2026-10-13 21:17:21] conda run -n tim python -m agent4ts.cli --config smoke/quick --kind smoke benchmark --models LastValue,MeanValue,DLinear
+2026-10-13 21:17:23 | INFO    | agent4ts.data.p12 | P12 loaded: 300 entities, 68113 history events, 3955 target buckets, targets=p12_native_irr
+2026-10-13 21:17:23 | INFO    | agent4ts.cli | benchmark p12_native/LastValue: ok nmae=0.39508120566250565
+2026-10-13 21:17:23 | INFO    | agent4ts.cli | benchmark p12_native/MeanValue: ok nmae=0.7190848522069344
+2026-10-13 21:17:24 | INFO    | agent4ts.cli | benchmark p12_native/DLinear: ok nmae=0.3765541623782547
+2026-10-13 21:17:24 | INFO    | agent4ts.cli | benchmark physiome_dupont/LastValue: ok nmae=0.09250451624863316
+2026-10-13 21:17:24 | INFO    | agent4ts.cli | benchmark physiome_dupont/MeanValue: ok nmae=0.9606384821735842
+2026-10-13 21:17:24 | INFO    | agent4ts.cli | benchmark physiome_dupont/DLinear: ok nmae=0.039943117767299224
+{
+  "run_dir": "/home/tim/Proj/ats/results/smoke/benchmark"
+}
+== [2026-10-13 21:17:24] conda run -n tim python -m agent4ts.cli --config smoke/quick --kind smoke search --tasks physiome_dupont --seeds 0
+2026-10-13 21:17:27 | INFO    | agent4ts.search | round 1 rejected: [{'check': 'op_whitelisted', 'ok': True, 'msg': "op=SELECT_MODEL allowed=['SELECT_DATA', 'SET_TRANSFORM', 'SELECT_MODEL', 'SET_MODEL_OPTION', 'INSPECT', 'STOP']"}, {'check': 'model_registered', 'ok': True, 'msg': 'value=DLinear'}, {'check': 'model_runnable', 'ok': True, 'msg': ''}, {'check': 'action_changes_state', 'ok': False, 'msg': 'proposal is identical to incumbent p0_f0; change exactly one field/model to a NEW value or STOP'}]
+2026-10-13 21:17:27 | INFO    | agent4ts.cli | search physiome_dupont seed=0: rounds=3 incumbent=p0_f0 nmae=0.039943117767299224
+{
+  "run_dir": "/home/tim/Proj/ats/results/smoke/search",
+  "tasks": [
+    "physiome_dupont_s0"
+  ]
+}
+== [2026-10-13 21:17:28] conda run -n tim python -m agent4ts.cli --config smoke/quick --kind smoke evaluate --tasks physiome_dupont --seed 0
+2026-10-13 21:17:30 | INFO    | agent4ts.harness | cache hit p0_f0 (3625835efca8142a)
+2026-10-13 21:17:30 | INFO    | agent4ts.cli | evaluate physiome_dupont: ok
+{
+  "run_dir": "/home/tim/Proj/ats/results/smoke/search"
+}
+== smoke done; results in results/smoke
+== [2026-10-13 21:58:16] conda run -n tim python -m agent4ts.cli --config smoke/quick --kind smoke prepare
+2026-10-13 21:58:18 | INFO    | agent4ts.cli | prepare: config=smoke/quick run_dir=/home/tim/Proj/ats/results/smoke/prepare
+2026-10-13 21:58:18 | INFO    | agent4ts.data.p12 | P12 loaded: 300 entities, 68113 history events, 3955 target buckets, targets=p12_native_irr
+2026-10-13 21:58:18 | INFO    | agent4ts.cli | prepare done: 2/2 tasks ok
+{
+  "run_dir": "/home/tim/Proj/ats/results/smoke/prepare",
+  "tasks": {
+    "p12_native": "ok",
+    "physiome_dupont": "ok"
+  }
+}
+== [2026-10-13 21:58:18] conda run -n tim python -m agent4ts.cli --config smoke/quick --kind smoke validate
+2026-10-13 21:58:20 | INFO    | agent4ts.data.p12 | P12 loaded: 300 entities, 68113 history events, 3955 target buckets, targets=p12_native_irr
+{
+  "p12_native": {
+    "status": "ok",
+    "checks": {
+      "no_future_leakage": {
+        "ok": true,
+        "future_events": 0,
+        "future_available": 0
+      },
+      "split_isolation": {
+        "ok": true,
+        "duplicates": [],
+        "n_entities": 300
+      },
+      "padding_invariance": {
+        "ok": true,
+        "masked_entries": 40398,
+        "unique_cells": 40398,
+        "raw_entries": 40512
+      },
+      "unknown_targets_unscored": {
+        "ok": true,
+        "beyond_horizon": 0,
+        "before_cutoff": 0
+      },
+      "grid_maps_to_target": {
+        "ok": true,
+        "n_grid": 6,
+        "min": 0.5,
+        "max": 5.5
+      },
+      "no_label_over_split": {
+        "ok": true,
+        "orphan_target_entities": []
+      }
+    },
+    "failed": []
+  },
+  "physiome_dupont": {
+    "status": "ok",
+    "checks": {
+      "no_future_leakage": {
+        "ok": true,
+        "future_events": 0,
+        "future_available": 0
+      },
+      "split_isolation": {
+        "ok": true,
+        "duplicates": [],
+        "n_entities": 40
+      },
+      "padding_invariance": {
+        "ok": true,
+        "masked_entries": 2142,
+        "unique_cells": 2142,
+        "raw_entries": 2142
+      },
+      "unknown_targets_unscored": {
+        "ok": true,
+        "beyond_horizon": 0,
+        "before_cutoff": 0
+      },
+      "grid_maps_to_target": {
+        "ok": true,
+        "n_grid": 24,
+        "min": 0.25,
+        "max": 6.0
+      },
+      "no_label_over_split": {
+        "ok": true,
+        "orphan_target_entities": []
+      }
+    },
+    "failed": []
+  }
+}
+== [2026-10-13 21:58:20] conda run -n tim python -m agent4ts.cli --config smoke/quick --kind smoke benchmark --models LastValue,MeanValue,DLinear
+2026-10-13 21:58:22 | INFO    | agent4ts.data.p12 | P12 loaded: 300 entities, 68113 history events, 3955 target buckets, targets=p12_native_irr
+2026-10-13 21:58:22 | INFO    | agent4ts.cli | benchmark p12_native/LastValue: ok nmae=0.39508120566250565
+2026-10-13 21:58:22 | INFO    | agent4ts.cli | benchmark p12_native/MeanValue: ok nmae=0.7190848522069344
+2026-10-13 21:58:23 | INFO    | agent4ts.cli | benchmark p12_native/DLinear: ok nmae=0.3765541623782547
+2026-10-13 21:58:23 | INFO    | agent4ts.cli | benchmark physiome_dupont/LastValue: ok nmae=0.09250451624863316
+2026-10-13 21:58:23 | INFO    | agent4ts.cli | benchmark physiome_dupont/MeanValue: ok nmae=0.9606384821735842
+2026-10-13 21:58:23 | INFO    | agent4ts.cli | benchmark physiome_dupont/DLinear: ok nmae=0.039943117767299224
+{
+  "run_dir": "/home/tim/Proj/ats/results/smoke/benchmark"
+}
+== [2026-10-13 21:58:23] conda run -n tim python -m agent4ts.cli --config smoke/quick --kind smoke search --tasks physiome_dupont --seeds 0
+2026-10-13 21:58:28 | INFO    | agent4ts.cli | search physiome_dupont seed=0: rounds=2 incumbent=p0_f0 nmae=0.039943117767299224
+{
+  "run_dir": "/home/tim/Proj/ats/results/smoke/search",
+  "tasks": [
+    "physiome_dupont_s0"
+  ]
+}
+== [2026-10-13 21:58:28] conda run -n tim python -m agent4ts.cli --config smoke/quick --kind smoke evaluate --tasks physiome_dupont --seed 0
+2026-10-13 21:58:31 | INFO    | agent4ts.harness | cache hit p0_f0 (3625835efca8142a)
+2026-10-13 21:58:31 | INFO    | agent4ts.cli | evaluate physiome_dupont: ok
+{
+  "run_dir": "/home/tim/Proj/ats/results/smoke/search"
+}
+== smoke done; results in results/smoke
+== [2026-10-13 22:03:44] conda run -n tim python -m agent4ts.cli --config smoke/quick --kind smoke prepare
+2026-10-13 22:03:46 | INFO    | agent4ts.cli | prepare: config=smoke/quick run_dir=/home/tim/Proj/ats/results/smoke/prepare
+2026-10-13 22:03:46 | INFO    | agent4ts.data.p12 | P12 loaded: 300 entities, 68113 history events, 3955 target buckets, targets=p12_native_irr
+2026-10-13 22:03:46 | INFO    | agent4ts.cli | prepare done: 2/2 tasks ok
+{
+  "run_dir": "/home/tim/Proj/ats/results/smoke/prepare",
+  "tasks": {
+    "p12_native": "ok",
+    "physiome_dupont": "ok"
+  }
+}
+== [2026-10-13 22:03:46] conda run -n tim python -m agent4ts.cli --config smoke/quick --kind smoke validate
+2026-10-13 22:03:48 | INFO    | agent4ts.data.p12 | P12 loaded: 300 entities, 68113 history events, 3955 target buckets, targets=p12_native_irr
+{
+  "p12_native": {
+    "status": "ok",
+    "checks": {
+      "no_future_leakage": {
+        "ok": true,
+        "future_events": 0,
+        "future_available": 0
+      },
+      "split_isolation": {
+        "ok": true,
+        "duplicates": [],
+        "n_entities": 300
+      },
+      "padding_invariance": {
+        "ok": true,
+        "masked_entries": 40398,
+        "unique_cells": 40398,
+        "raw_entries": 40512
+      },
+      "unknown_targets_unscored": {
+        "ok": true,
+        "beyond_horizon": 0,
+        "before_cutoff": 0
+      },
+      "grid_maps_to_target": {
+        "ok": true,
+        "n_grid": 6,
+        "min": 0.5,
+        "max": 5.5
+      },
+      "no_label_over_split": {
+        "ok": true,
+        "orphan_target_entities": []
+      }
+    },
+    "failed": []
+  },
+  "physiome_dupont": {
+    "status": "ok",
+    "checks": {
+      "no_future_leakage": {
+        "ok": true,
+        "future_events": 0,
+        "future_available": 0
+      },
+      "split_isolation": {
+        "ok": true,
+        "duplicates": [],
+        "n_entities": 40
+      },
+      "padding_invariance": {
+        "ok": true,
+        "masked_entries": 2142,
+        "unique_cells": 2142,
+        "raw_entries": 2142
+      },
+      "unknown_targets_unscored": {
+        "ok": true,
+        "beyond_horizon": 0,
+        "before_cutoff": 0
+      },
+      "grid_maps_to_target": {
+        "ok": true,
+        "n_grid": 24,
+        "min": 0.25,
+        "max": 6.0
+      },
+      "no_label_over_split": {
+        "ok": true,
+        "orphan_target_entities": []
+      }
+    },
+    "failed": []
+  }
+}
+== [2026-10-13 22:03:48] conda run -n tim python -m agent4ts.cli --config smoke/quick --kind smoke benchmark --models LastValue,MeanValue,DLinear
+2026-10-13 22:03:50 | INFO    | agent4ts.data.p12 | P12 loaded: 300 entities, 68113 history events, 3955 target buckets, targets=p12_native_irr
+2026-10-13 22:03:50 | INFO    | agent4ts.cli | benchmark p12_native/LastValue: ok nmae=0.39508120566250565
+2026-10-13 22:03:50 | INFO    | agent4ts.cli | benchmark p12_native/MeanValue: ok nmae=0.7190848522069344
+2026-10-13 22:03:51 | INFO    | agent4ts.cli | benchmark p12_native/DLinear: ok nmae=0.3765541623782547
+2026-10-13 22:03:51 | INFO    | agent4ts.cli | benchmark physiome_dupont/LastValue: ok nmae=0.09250451624863316
+2026-10-13 22:03:51 | INFO    | agent4ts.cli | benchmark physiome_dupont/MeanValue: ok nmae=0.9606384821735842
+2026-10-13 22:03:51 | INFO    | agent4ts.cli | benchmark physiome_dupont/DLinear: ok nmae=0.039943117767299224
+{
+  "run_dir": "/home/tim/Proj/ats/results/smoke/benchmark"
+}
+== [2026-10-13 22:03:52] conda run -n tim python -m agent4ts.cli --config smoke/quick --kind smoke search --tasks physiome_dupont --seeds 0
+2026-10-13 22:03:55 | INFO    | agent4ts.cli | search physiome_dupont seed=0: rounds=3 incumbent=p2_dlinear nmae=0.028936487207972556
+{
+  "run_dir": "/home/tim/Proj/ats/results/smoke/search",
+  "tasks": [
+    "physiome_dupont_s0"
+  ]
+}
+== [2026-10-13 22:03:55] conda run -n tim python -m agent4ts.cli --config smoke/quick --kind smoke evaluate --tasks physiome_dupont --seed 0
+2026-10-13 22:03:57 | INFO    | agent4ts.harness | cache hit p2_dlinear (64f56217d0eb4c8e)
+2026-10-13 22:03:57 | INFO    | agent4ts.cli | evaluate physiome_dupont: ok
+{
+  "run_dir": "/home/tim/Proj/ats/results/smoke/search"
+}
+== smoke done; results in results/smoke
+== [2026-10-13 22:22:27] conda run -n tim python -m agent4ts.cli --config smoke/quick --kind smoke prepare
+2026-10-13 22:22:29 | INFO    | agent4ts.cli | prepare: config=smoke/quick run_dir=/home/tim/Proj/ats/results/smoke/prepare
+2026-10-13 22:22:29 | INFO    | agent4ts.data.p12 | P12 loaded: 300 entities, 68113 history events, 3955 target buckets, targets=p12_native_irr
+2026-10-13 22:22:30 | INFO    | agent4ts.cli | prepare done: 2/2 tasks ok
+{
+  "run_dir": "/home/tim/Proj/ats/results/smoke/prepare",
+  "tasks": {
+    "p12_native": "ok",
+    "physiome_dupont": "ok"
+  }
+}
+== [2026-10-13 22:22:30] conda run -n tim python -m agent4ts.cli --config smoke/quick --kind smoke validate
+2026-10-13 22:22:32 | INFO    | agent4ts.data.p12 | P12 loaded: 300 entities, 68113 history events, 3955 target buckets, targets=p12_native_irr
+{
+  "p12_native": {
+    "status": "ok",
+    "checks": {
+      "no_future_leakage": {
+        "ok": true,
+        "future_events": 0,
+        "future_available": 0
+      },
+      "split_isolation": {
+        "ok": true,
+        "duplicates": [],
+        "n_entities": 300
+      },
+      "padding_invariance": {
+        "ok": true,
+        "masked_entries": 40398,
+        "unique_cells": 40398,
+        "raw_entries": 40512
+      },
+      "unknown_targets_unscored": {
+        "ok": true,
+        "beyond_horizon": 0,
+        "before_cutoff": 0
+      },
+      "grid_maps_to_target": {
+        "ok": true,
+        "n_grid": 6,
+        "min": 0.5,
+        "max": 5.5
+      },
+      "no_label_over_split": {
+        "ok": true,
+        "orphan_target_entities": []
+      }
+    },
+    "failed": []
+  },
+  "physiome_dupont": {
+    "status": "ok",
+    "checks": {
+      "no_future_leakage": {
+        "ok": true,
+        "future_events": 0,
+        "future_available": 0
+      },
+      "split_isolation": {
+        "ok": true,
+        "duplicates": [],
+        "n_entities": 40
+      },
+      "padding_invariance": {
+        "ok": true,
+        "masked_entries": 2142,
+        "unique_cells": 2142,
+        "raw_entries": 2142
+      },
+      "unknown_targets_unscored": {
+        "ok": true,
+        "beyond_horizon": 0,
+        "before_cutoff": 0
+      },
+      "grid_maps_to_target": {
+        "ok": true,
+        "n_grid": 24,
+        "min": 0.25,
+        "max": 6.0
+      },
+      "no_label_over_split": {
+        "ok": true,
+        "orphan_target_entities": []
+      }
+    },
+    "failed": []
+  }
+}
+== [2026-10-13 22:22:33] conda run -n tim python -m agent4ts.cli --config smoke/quick --kind smoke benchmark --models LastValue,MeanValue,DLinear
+2026-10-13 22:22:35 | INFO    | agent4ts.data.p12 | P12 loaded: 300 entities, 68113 history events, 3955 target buckets, targets=p12_native_irr
+2026-10-13 22:22:35 | INFO    | agent4ts.cli | benchmark p12_native/LastValue: ok nmae=0.39508120566250565
+2026-10-13 22:22:36 | INFO    | agent4ts.cli | benchmark p12_native/MeanValue: ok nmae=0.7190848522069344
+2026-10-13 22:22:37 | INFO    | agent4ts.cli | benchmark p12_native/DLinear: ok nmae=0.3765541623782547
+2026-10-13 22:22:37 | INFO    | agent4ts.cli | benchmark physiome_dupont/LastValue: ok nmae=0.09250451624863316
+2026-10-13 22:22:37 | INFO    | agent4ts.cli | benchmark physiome_dupont/MeanValue: ok nmae=0.9606384821735842
+2026-10-13 22:22:37 | INFO    | agent4ts.cli | benchmark physiome_dupont/DLinear: ok nmae=0.039943117767299224
+{
+  "run_dir": "/home/tim/Proj/ats/results/smoke/benchmark"
+}
+== [2026-10-13 22:22:37] conda run -n tim python -m agent4ts.cli --config smoke/quick --kind smoke search --tasks physiome_dupont --seeds 0
+2026-10-13 22:22:41 | INFO    | agent4ts.cli | search physiome_dupont seed=0: rounds=3 incumbent=p2_dlinear nmae=0.028936487207972556
+{
+  "run_dir": "/home/tim/Proj/ats/results/smoke/search",
+  "tasks": [
+    "physiome_dupont_s0"
+  ]
+}
+== [2026-10-13 22:22:42] conda run -n tim python -m agent4ts.cli --config smoke/quick --kind smoke evaluate --tasks physiome_dupont --seed 0
+2026-10-13 22:22:45 | INFO    | agent4ts.harness | cache hit p2_dlinear (4f0ea44e42fcef18)
+2026-10-13 22:22:45 | INFO    | agent4ts.cli | evaluate physiome_dupont: ok
+{
+  "run_dir": "/home/tim/Proj/ats/results/smoke/search"
+}
+== smoke done; results in results/smoke
+== [2026-10-13 22:23:50] conda run -n tim python -m agent4ts.cli --config smoke/quick --kind smoke prepare
+2026-10-13 22:23:52 | INFO    | agent4ts.cli | prepare: config=smoke/quick run_dir=/home/tim/Proj/ats/results/smoke/prepare
+2026-10-13 22:23:52 | INFO    | agent4ts.data.p12 | P12 loaded: 300 entities, 68113 history events, 3955 target buckets, targets=p12_native_irr
+2026-10-13 22:23:52 | INFO    | agent4ts.cli | prepare done: 2/2 tasks ok
+{
+  "run_dir": "/home/tim/Proj/ats/results/smoke/prepare",
+  "tasks": {
+    "p12_native": "ok",
+    "physiome_dupont": "ok"
+  }
+}
+== [2026-10-13 22:23:53] conda run -n tim python -m agent4ts.cli --config smoke/quick --kind smoke validate
+2026-10-13 22:23:55 | INFO    | agent4ts.data.p12 | P12 loaded: 300 entities, 68113 history events, 3955 target buckets, targets=p12_native_irr
+{
+  "p12_native": {
+    "status": "ok",
+    "checks": {
+      "no_future_leakage": {
+        "ok": true,
+        "future_events": 0,
+        "future_available": 0
+      },
+      "split_isolation": {
+        "ok": true,
+        "duplicates": [],
+        "n_entities": 300
+      },
+      "padding_invariance": {
+        "ok": true,
+        "masked_entries": 40398,
+        "unique_cells": 40398,
+        "raw_entries": 40512
+      },
+      "unknown_targets_unscored": {
+        "ok": true,
+        "beyond_horizon": 0,
+        "before_cutoff": 0
+      },
+      "grid_maps_to_target": {
+        "ok": true,
+        "n_grid": 6,
+        "min": 0.5,
+        "max": 5.5
+      },
+      "no_label_over_split": {
+        "ok": true,
+        "orphan_target_entities": []
+      }
+    },
+    "failed": []
+  },
+  "physiome_dupont": {
+    "status": "ok",
+    "checks": {
+      "no_future_leakage": {
+        "ok": true,
+        "future_events": 0,
+        "future_available": 0
+      },
+      "split_isolation": {
+        "ok": true,
+        "duplicates": [],
+        "n_entities": 40
+      },
+      "padding_invariance": {
+        "ok": true,
+        "masked_entries": 2142,
+        "unique_cells": 2142,
+        "raw_entries": 2142
+      },
+      "unknown_targets_unscored": {
+        "ok": true,
+        "beyond_horizon": 0,
+        "before_cutoff": 0
+      },
+      "grid_maps_to_target": {
+        "ok": true,
+        "n_grid": 24,
+        "min": 0.25,
+        "max": 6.0
+      },
+      "no_label_over_split": {
+        "ok": true,
+        "orphan_target_entities": []
+      }
+    },
+    "failed": []
+  }
+}
+== [2026-10-13 22:23:56] conda run -n tim python -m agent4ts.cli --config smoke/quick --kind smoke benchmark --models LastValue,MeanValue,DLinear
+2026-10-13 22:23:58 | INFO    | agent4ts.data.p12 | P12 loaded: 300 entities, 68113 history events, 3955 target buckets, targets=p12_native_irr
+2026-10-13 22:23:58 | INFO    | agent4ts.cli | benchmark p12_native/LastValue: ok nmae=0.39508120566250565
+2026-10-13 22:23:59 | INFO    | agent4ts.cli | benchmark p12_native/MeanValue: ok nmae=0.7190848522069344
+2026-10-13 22:24:00 | INFO    | agent4ts.cli | benchmark p12_native/DLinear: ok nmae=0.3765541623782547
+2026-10-13 22:24:00 | INFO    | agent4ts.cli | benchmark physiome_dupont/LastValue: ok nmae=0.09250451624863316
+2026-10-13 22:24:00 | INFO    | agent4ts.cli | benchmark physiome_dupont/MeanValue: ok nmae=0.9606384821735842
+2026-10-13 22:24:00 | INFO    | agent4ts.cli | benchmark physiome_dupont/DLinear: ok nmae=0.039943117767299224
+{
+  "run_dir": "/home/tim/Proj/ats/results/smoke/benchmark"
+}
+== [2026-10-13 22:24:00] conda run -n tim python -m agent4ts.cli --config smoke/quick --kind smoke search --tasks physiome_dupont --seeds 0
+2026-10-13 22:24:05 | INFO    | agent4ts.cli | search physiome_dupont seed=0: rounds=3 incumbent=p2_dlinear nmae=0.028936487207972556
+{
+  "run_dir": "/home/tim/Proj/ats/results/smoke/search",
+  "tasks": [
+    "physiome_dupont_s0"
+  ]
+}
+== [2026-10-13 22:24:05] conda run -n tim python -m agent4ts.cli --config smoke/quick --kind smoke evaluate --tasks physiome_dupont --seed 0
+2026-10-13 22:24:08 | INFO    | agent4ts.harness | cache hit p2_dlinear (4f0ea44e42fcef18)
+2026-10-13 22:24:08 | INFO    | agent4ts.cli | evaluate physiome_dupont: ok
+{
+  "run_dir": "/home/tim/Proj/ats/results/smoke/search"
+}
+== smoke done; results in results/smoke
+== [2026-10-13 22:27:04] conda run -n tim python -m agent4ts.cli --config smoke/quick --kind smoke prepare
+2026-10-13 22:27:06 | INFO    | agent4ts.cli | prepare: config=smoke/quick run_dir=/home/tim/Proj/ats/results/smoke/prepare
+2026-10-13 22:27:06 | INFO    | agent4ts.data.p12 | P12 loaded: 300 entities, 68113 history events, 3955 target buckets, targets=p12_native_irr
+2026-10-13 22:27:06 | INFO    | agent4ts.cli | prepare done: 2/2 tasks ok
+{
+  "run_dir": "/home/tim/Proj/ats/results/smoke/prepare",
+  "tasks": {
+    "p12_native": "ok",
+    "physiome_dupont": "ok"
+  }
+}
+== [2026-10-13 22:27:06] conda run -n tim python -m agent4ts.cli --config smoke/quick --kind smoke validate
+2026-10-13 22:27:08 | INFO    | agent4ts.data.p12 | P12 loaded: 300 entities, 68113 history events, 3955 target buckets, targets=p12_native_irr
+{
+  "p12_native": {
+    "status": "ok",
+    "checks": {
+      "no_future_leakage": {
+        "ok": true,
+        "future_events": 0,
+        "future_available": 0
+      },
+      "split_isolation": {
+        "ok": true,
+        "duplicates": [],
+        "n_entities": 300
+      },
+      "padding_invariance": {
+        "ok": true,
+        "masked_entries": 40398,
+        "unique_cells": 40398,
+        "raw_entries": 40512
+      },
+      "unknown_targets_unscored": {
+        "ok": true,
+        "beyond_horizon": 0,
+        "before_cutoff": 0
+      },
+      "grid_maps_to_target": {
+        "ok": true,
+        "n_grid": 6,
+        "min": 0.5,
+        "max": 5.5
+      },
+      "no_label_over_split": {
+        "ok": true,
+        "orphan_target_entities": []
+      }
+    },
+    "failed": []
+  },
+  "physiome_dupont": {
+    "status": "ok",
+    "checks": {
+      "no_future_leakage": {
+        "ok": true,
+        "future_events": 0,
+        "future_available": 0
+      },
+      "split_isolation": {
+        "ok": true,
+        "duplicates": [],
+        "n_entities": 40
+      },
+      "padding_invariance": {
+        "ok": true,
+        "masked_entries": 2142,
+        "unique_cells": 2142,
+        "raw_entries": 2142
+      },
+      "unknown_targets_unscored": {
+        "ok": true,
+        "beyond_horizon": 0,
+        "before_cutoff": 0
+      },
+      "grid_maps_to_target": {
+        "ok": true,
+        "n_grid": 24,
+        "min": 0.25,
+        "max": 6.0
+      },
+      "no_label_over_split": {
+        "ok": true,
+        "orphan_target_entities": []
+      }
+    },
+    "failed": []
+  }
+}
+== [2026-10-13 22:27:08] conda run -n tim python -m agent4ts.cli --config smoke/quick --kind smoke benchmark --models LastValue,MeanValue,DLinear
+2026-10-13 22:27:10 | INFO    | agent4ts.data.p12 | P12 loaded: 300 entities, 68113 history events, 3955 target buckets, targets=p12_native_irr
+2026-10-13 22:27:10 | INFO    | agent4ts.cli | benchmark p12_native/LastValue: ok nmae=0.39508120566250565
+2026-10-13 22:27:10 | INFO    | agent4ts.cli | benchmark p12_native/MeanValue: ok nmae=0.7190848522069344
+2026-10-13 22:27:11 | INFO    | agent4ts.cli | benchmark p12_native/DLinear: ok nmae=0.3765541623782547
+2026-10-13 22:27:11 | INFO    | agent4ts.cli | benchmark physiome_dupont/LastValue: ok nmae=0.09250451624863316
+2026-10-13 22:27:11 | INFO    | agent4ts.cli | benchmark physiome_dupont/MeanValue: ok nmae=0.9606384821735842
+2026-10-13 22:27:11 | INFO    | agent4ts.cli | benchmark physiome_dupont/DLinear: ok nmae=0.039943117767299224
+{
+  "run_dir": "/home/tim/Proj/ats/results/smoke/benchmark"
+}
+== [2026-10-13 22:27:12] conda run -n tim python -m agent4ts.cli --config smoke/quick --kind smoke search --tasks physiome_dupont --seeds 0
+2026-10-13 22:27:15 | INFO    | agent4ts.cli | search physiome_dupont seed=0: rounds=3 incumbent=p2_dlinear nmae=0.028936487207972556
+{
+  "run_dir": "/home/tim/Proj/ats/results/smoke/search",
+  "tasks": [
+    "physiome_dupont_s0"
+  ]
+}
+== [2026-10-13 22:27:15] conda run -n tim python -m agent4ts.cli --config smoke/quick --kind smoke evaluate --tasks physiome_dupont --seed 0
+2026-10-13 22:27:17 | INFO    | agent4ts.harness | cache hit p2_dlinear (4f0ea44e42fcef18)
+2026-10-13 22:27:17 | INFO    | agent4ts.cli | evaluate physiome_dupont: ok
+{
+  "run_dir": "/home/tim/Proj/ats/results/smoke/search"
+}
+== smoke done; results in results/smoke

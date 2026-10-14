@@ -106,12 +106,39 @@ class Harness:
             ok_field = action.target_field in DataView().__dict__
             add("data_field", ok_field, f"field={action.target_field}")
 
+        # a proposal equivalent to the incumbent must not silently consume a
+        # trial via the fingerprint cache; reject it so the agent is told to
+        # change something real or STOP (rejected actions cost no trial)
+        if action.op == "SELECT_MODEL":
+            changed = action.value != parent.model_id or bool(parent.model_config)
+        elif action.op in ("SET_TRANSFORM", "SELECT_DATA"):
+            changed = ok_field and getattr(parent.data_view, action.target_field, None) != action.value
+        elif action.op == "SET_MODEL_OPTION":
+            changed = ok_key and parent.model_config.get(action.target_field) != action.value
+        else:
+            changed = True
+        add("action_changes_state", changed,
+            f"proposal is identical to incumbent {parent.pipeline_id}; "
+            "change exactly one field/model to a NEW value or STOP")
+
         return checks
 
     def checks_ok(self, checks: list[dict[str, Any]]) -> bool:
         return all(c["ok"] for c in checks)
 
     # ------------------------------------------------------------- run a trial
+    def prior_trial(self, spec: PipelineSpec) -> Feedback | None:
+        """Return the cached Feedback for a pipeline identical to `spec` (same
+        data_view/model/config/seed and same data/split versions), else None.
+
+        Lets the search loop reject an exact re-proposal *before* it silently
+        becomes a cache hit, so the agent is told the value was already tried
+        instead of fixating on it.
+        """
+        fp = spec.fingerprint(self._upstream_hash(), self.bundle.spec.dataset_version,
+                              self._splits_hash())
+        return self.cache.get(fp)
+
     def run_trial(self, spec: PipelineSpec, split: str = "search") -> Feedback:
         fp = spec.fingerprint(self._upstream_hash(), self.bundle.spec.dataset_version,
                               self._splits_hash())

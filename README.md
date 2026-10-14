@@ -14,7 +14,7 @@ config/      all keys, paths, budgets, task definitions (never hard-coded)
   gen_eval/main.yaml     full task set, real budgets, live LLM
 scripts/     every runnable command lives here, nothing runs outside scripts/
   smoke/     run_smoke.sh, run_llm_smoke.sh, run_vis.sh
-  gen_eval/  00_download_resources.sh … 11_tsci.sh (numbered pipeline)
+  gen_eval/  00_download_resources.sh … 12_tsrouter.sh (numbered pipeline)
   perf/      01_benchmark_perf.sh        (performance/cost experiments)
   interp/    01_trace_analysis.sh        (interpretability experiments)
 log/         all logs, per experiment kind (smoke/ gen_eval/ perf/ interp/)
@@ -57,6 +57,7 @@ scripts/gen_eval/08_random_search.sh
 scripts/gen_eval/09_degradation.sh
 scripts/gen_eval/10_ablation.sh
 scripts/gen_eval/11_tsci.sh
+scripts/gen_eval/12_tsrouter.sh
 
 # other experiment kinds
 scripts/perf/01_benchmark_perf.sh
@@ -109,6 +110,11 @@ Explicitly **not** implemented (reported as such at runtime, never faked):
   recorded engineering stand-in.
 * **TSci-adapted**: upstream TimeSeriesScientist is not vendored; the runner
   writes `status: unavailable` with setup steps instead of imitating TSci.
+* **TSRouter** (COLM 2026, dynamic modality-model routing): a second external
+  framework, added on request. Its package is not vendored and it consumes
+  TSRBench reasoning problems over LLM/VLM candidates, not this project's event
+  tables; the runner (`12_tsrouter.sh`) writes `status: unavailable` with the
+  real setup steps and refuses to run rather than imitating it.
 * **MIMIC-IV**: `blocked_access` until credentialed access exists.
 * **RepoHealth**: not audited, hence not registered.
 * **Fault injection/detection**: disabled placeholder (`faults.py`), per design.

@@ -11,3 +11,23 @@
 2026-10-08 20:12:06 | INFO    | agent4ts.cli | search physiome_dupont seed=0: rounds=2 incumbent=p0_f0 nmae=0.4213141218107457
 2026-10-08 20:23:51 | INFO    | agent4ts.harness | cache hit p1_dlinear (3625835efca8142a)
 2026-10-08 20:23:52 | INFO    | agent4ts.cli | search physiome_dupont seed=0: rounds=2 incumbent=p0_f0 nmae=0.039943117767299224
+2026-10-10 22:59:54 | INFO    | agent4ts.harness | cache hit p1_dlinear (3625835efca8142a)
+2026-10-10 22:59:54 | INFO    | agent4ts.cli | search physiome_dupont seed=0: rounds=2 incumbent=p0_f0 nmae=0.039943117767299224
+2026-10-10 23:05:50 | WARNING | agent4ts.controller | malformed action, retrying once
+2026-10-10 23:06:02 | INFO    | agent4ts.cli | search physiome_dupont seed=0: rounds=1 incumbent=p0_f0 nmae=0.039943117767299224
+2026-10-10 23:07:30 | INFO    | agent4ts.harness | cache hit p2_dlinear (9e1a10e7816e9a78)
+2026-10-10 23:07:30 | INFO    | agent4ts.cli | search physiome_dupont seed=0: rounds=2 incumbent=p0_f0 nmae=0.039943117767299224
+2026-10-10 23:17:01 | INFO    | agent4ts.harness | cache hit p1_dlinear (3625835efca8142a)
+2026-10-10 23:17:01 | INFO    | agent4ts.cli | search physiome_dupont seed=0: rounds=2 incumbent=p0_f0 nmae=0.039943117767299224
+2026-10-10 23:19:44 | INFO    | agent4ts.search | round 1 rejected: [{'check': 'op_whitelisted', 'ok': True, 'msg': "op=SELECT_MODEL allowed=['SELECT_DATA', 'SET_TRANSFORM', 'SELECT_MODEL', 'SET_MODEL_OPTION', 'INSPECT', 'STOP']"}, {'check': 'model_registered', 'ok': True, 'msg': 'value=DLinear'}, {'check': 'model_runnable', 'ok': True, 'msg': ''}, {'check': 'action_changes_state', 'ok': False, 'msg': 'proposal is identical to incumbent p0_f0; change exactly one field/model to a NEW value or STOP'}]
+2026-10-10 23:19:44 | INFO    | agent4ts.cli | search physiome_dupont seed=0: rounds=2 incumbent=p0_f0 nmae=0.039943117767299224
+2026-10-13 21:17:27 | INFO    | agent4ts.search | round 1 rejected: [{'check': 'op_whitelisted', 'ok': True, 'msg': "op=SELECT_MODEL allowed=['SELECT_DATA', 'SET_TRANSFORM', 'SELECT_MODEL', 'SET_MODEL_OPTION', 'INSPECT', 'STOP']"}, {'check': 'model_registered', 'ok': True, 'msg': 'value=DLinear'}, {'check': 'model_runnable', 'ok': True, 'msg': ''}, {'check': 'action_changes_state', 'ok': False, 'msg': 'proposal is identical to incumbent p0_f0; change exactly one field/model to a NEW value or STOP'}]
+2026-10-13 21:17:27 | INFO    | agent4ts.cli | search physiome_dupont seed=0: rounds=3 incumbent=p0_f0 nmae=0.039943117767299224
+2026-10-13 21:58:28 | INFO    | agent4ts.cli | search physiome_dupont seed=0: rounds=2 incumbent=p0_f0 nmae=0.039943117767299224
+2026-10-13 22:03:55 | INFO    | agent4ts.cli | search physiome_dupont seed=0: rounds=3 incumbent=p2_dlinear nmae=0.028936487207972556
+2026-10-13 22:22:41 | INFO    | agent4ts.cli | search physiome_dupont seed=0: rounds=3 incumbent=p2_dlinear nmae=0.028936487207972556
+2026-10-13 22:23:01 | INFO    | agent4ts.cli | search physiome_dupont seed=0: rounds=3 incumbent=p0_f0 nmae=0.039943117767299224
+2026-10-13 22:24:05 | INFO    | agent4ts.cli | search physiome_dupont seed=0: rounds=3 incumbent=p2_dlinear nmae=0.028936487207972556
+2026-10-13 22:24:50 | INFO    | agent4ts.cli | search physiome_dupont seed=0: rounds=3 incumbent=p0_f0 nmae=0.039943117767299224
+2026-10-13 22:27:15 | INFO    | agent4ts.cli | search physiome_dupont seed=0: rounds=3 incumbent=p2_dlinear nmae=0.028936487207972556
+2026-10-14 09:03:06 | INFO    | agent4ts.cli | search physiome_dupont seed=0: rounds=3 incumbent=p2_dlinear nmae=0.028936487207972556

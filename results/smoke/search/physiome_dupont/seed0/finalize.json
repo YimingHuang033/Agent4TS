@@ -2,19 +2,19 @@
   "status": "ok",
   "confirm": [
     {
-      "pipeline_id": "p0_f0",
+      "pipeline_id": "p2_dlinear",
       "status": "ok",
-      "normalized_mae": 0.052927104936566834,
+      "normalized_mae": 0.03403572523697926,
       "error": null
     }
   ],
   "selected": {
-    "pipeline_id": "p0_f0",
+    "pipeline_id": "p2_dlinear",
     "data_view": {
       "history_fraction": 1.0,
       "variable_subset": "all",
-      "grid_width": 1.0,
-      "grid_mode": "events",
+      "grid_width": 2.0,
+      "grid_mode": "grid",
       "fill": "mean",
       "forward_limit": 0.0,
       "age_feature": false,
@@ -23,20 +23,20 @@
     "model_id": "DLinear",
     "model_config": {},
     "seed": 0,
-    "parent_id": null
+    "parent_id": "p1_dlinear"
   },
   "test": {
     "status": "ok",
     "metrics": {
-      "normalized_mae": 0.052927104936566834,
-      "normalized_mse": 0.004597365585109879,
+      "normalized_mae": 0.03403572523697926,
+      "normalized_mse": 0.0017732878133465784,
       "n_valid_targets": 96,
       "coverage": 1.0
     },
     "groups": {
       "all": {
-        "nmae": 0.052927104936566834,
-        "nmse": 0.004597365585109879,
+        "nmae": 0.03403572523697926,
+        "nmse": 0.0017732878133465784,
         "n": 96
       },
       "long_gap": {
@@ -50,8 +50,8 @@
         "n": 0
       },
       "fresh": {
-        "nmae": 0.052927104936566834,
-        "nmse": 0.004597365585109879,
+        "nmae": 0.03403572523697926,
+        "nmse": 0.0017732878133465784,
         "n": 96
       },
       "sparse": {
@@ -60,8 +60,8 @@
         "n": 0
       },
       "dense": {
-        "nmae": 0.052927104936566834,
-        "nmse": 0.004597365585109879,
+        "nmae": 0.03403572523697926,
+        "nmse": 0.0017732878133465784,
         "n": 96
       }
     },
