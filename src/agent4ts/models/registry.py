@@ -53,7 +53,7 @@ def _catalog() -> dict[str, dict[str, Any]]:
             "factory": lambda cfg: PatchTST(
                 patch=cfg.get("patch", 4), stride=cfg.get("stride", 2),
                 d_model=cfg.get("d_model", 32), n_layers=cfg.get("n_layers", 2),
-                epochs=cfg.get("epochs", 120), lr=cfg.get("lr", 1e-3)),
+                epochs=cfg.get("epochs", 120), lr=cfg.get("lr", 1e-3), seed=cfg.get("seed", 0)),
             "input_type": "regular_grid", "accepts_mask": False, "accepts_dt": False,
             "options": {"patch": [2, 4, 8], "d_model": [16, 32, 64], "n_layers": [1, 2]},
             "cost": "medium",
@@ -62,7 +62,7 @@ def _catalog() -> dict[str, dict[str, Any]]:
         "iTransformer": {
             "factory": lambda cfg: ITransformer(
                 d_model=cfg.get("d_model", 32), n_layers=cfg.get("n_layers", 2),
-                epochs=cfg.get("epochs", 120), lr=cfg.get("lr", 1e-3)),
+                epochs=cfg.get("epochs", 120), lr=cfg.get("lr", 1e-3), seed=cfg.get("seed", 0)),
             "input_type": "regular_grid", "accepts_mask": False, "accepts_dt": False,
             "options": {"d_model": [16, 32, 64], "n_layers": [1, 2]},
             "cost": "medium",
@@ -81,6 +81,17 @@ def _catalog() -> dict[str, dict[str, Any]]:
             "available": False,
             "blocked_reason": "author code not vendored in this environment",
         }
+    from .apn import APN
+    cat["APN"].update(factory=lambda cfg: APN(cfg["source"],seed=cfg.get("seed",0)),
+                      available=True, role="BITS snapshot APN model with project training adapter",
+                      blocked_reason=None)
+    cat["ASTGI"].update(factory=lambda cfg: APN(cfg["source"],seed=cfg.get("seed",0),model_id="ASTGI"), available=True,
+                       role="BITS snapshot ASTGI model with project adapter", blocked_reason=None)
+    for mid in ("TFMixer", "KAFNet", "HyperIMTS", "TiWeaver", "tPatchGNN"):
+        cat[mid].update(factory=lambda cfg, name=mid: APN(cfg["source"], model_id=name), available=True,
+                        role="Locked upstream model with project training adapter", blocked_reason=None)
+    for mid in ("APN", "ASTGI", "TFMixer", "KAFNet", "HyperIMTS", "TiWeaver", "tPatchGNN"):
+        cat[mid]["supports_age_features"] = True
     return cat
 
 
@@ -102,6 +113,14 @@ def describe(model_id: str) -> dict[str, Any]:
 
 
 def make(model_id: str, model_config: dict[str, Any], resources_cfg: dict[str, Any] | None = None) -> Forecaster:
+    if model_id in ("APN", "ASTGI", "TFMixer", "KAFNet", "HyperIMTS", "TiWeaver", "tPatchGNN"):
+        from .apn import APN
+        source = (resources_cfg or {}).get(model_id.lower() + "_source")
+        if not source:
+            raise NotImplementedError("resources.apn_source must name the locked APN model source")
+        if set(model_config) - {"seed"}:
+            raise ValueError("APN has no exposed model options")
+        return APN(source, seed=model_config.get("seed", 0), epochs=(resources_cfg or {}).get("upstream_training_epochs", 10), model_id=model_id, model_params=(resources_cfg or {}).get("upstream_model_params", {}).get(model_id, {}))
     meta = CATALOG.get(model_id)
     if meta is None:
         raise ValueError(f"unknown model {model_id!r}; registered: {registered_ids()}")

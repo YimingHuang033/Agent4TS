@@ -1,0 +1,31 @@
+tasks:
+  physiome_dupont:
+    backend: physiome
+    model_key: dupont_1991a
+    track: robust_improve
+    n_entities: 40
+    history_hours: 24.0
+    horizon_hours: 6.0
+    target_var: x
+    seed: 0
+  p12_native:
+    backend: p12
+    track: native_irr
+    history_hours: 24.0
+    horizon_hours: 6.0
+    target_variables:
+    - HR
+    - SysABP
+    - Temp
+    max_entities: 300
+budget:
+  trials: 3
+  llm_calls: 4
+  gpu_hours: 0.5
+  patience: 2
+seeds:
+- 0
+llm:
+  transport: openai
+  provider: ark
+  model: deepseek-v4.1-flash-economy

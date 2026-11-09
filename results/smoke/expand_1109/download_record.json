@@ -1,0 +1,77 @@
+{
+  "snapshots": {
+    "ushcn": {
+      "url": "https://huggingface.co/datasets/ykj111/BITS-data/resolve/47579a87a8d95306a5ef1d0200334c45ba42be8c/ushcn/processed/ushcn.pt",
+      "relative_path": "ushcn/processed/ushcn.pt",
+      "size": 16283608,
+      "sha256": "824af1ca63c31eb25994d3fcf7dcd8af1d2fc9040c3e262e0cd5b579af6e0a03",
+      "verified": true,
+      "record_count": 1114,
+      "length_range": [
+        18,
+        370
+      ],
+      "shapes": [
+        [
+          285,
+          5
+        ],
+        [
+          324,
+          5
+        ]
+      ],
+      "status": "rejected_for_formal_forecast",
+      "reason": "Global normalization before splitting in GRU-ODE-Bayes process.py; absent scale and station mapping. Cannot recover raw-unit forecasts."
+    },
+    "pamap2": {
+      "url": "https://huggingface.co/datasets/ykj111/BITS-data/resolve/47579a87a8d95306a5ef1d0200334c45ba42be8c/Pamap2/processed/Pamap2.pt",
+      "relative_path": "pamap2/processed/Pamap2.pt",
+      "size": 2925630,
+      "sha256": "e6bf195c79519f118fd7dba690c6732d3699ac579674de591040b7a55bdb3710",
+      "verified": true,
+      "record_count": 2,
+      "length_range": [
+        27114,
+        54089
+      ],
+      "shapes": [
+        [
+          54089,
+          4
+        ],
+        [
+          27114,
+          4
+        ]
+      ],
+      "status": "rejected_for_formal_forecast",
+      "reason": "Only two anonymous records / four channels; exact column lineage and subject/session provenance not recoverable from snapshot. Use official raw data."
+    }
+  },
+  "raw_files": {
+    "/mnt/data/ats_resources/data/ushcn/raw/USC00011084.dly": "cff2fa957618690fc7e92dc40e025f4178090017975df51278a67d64738c826d",
+    "/mnt/data/ats_resources/data/ushcn/raw/USC00042941.dly": "b6620b9d35a68f9516ab31fd5fb801fb0eded4cdc1bfee12aa1cdf1b93865234",
+    "/mnt/data/ats_resources/data/ushcn/raw/USC00063207.dly": "686078bda39f8dd9ba6aba73079bdcecd20f959780d603bb79cd4ef0aedbedf9",
+    "/mnt/data/ats_resources/data/ushcn/raw/USC00105462.dly": "b6acb061bcc422d3968c55bd962a4f4d6673a6b4adb4c0938818257a3304eeb7",
+    "/mnt/data/ats_resources/data/ushcn/raw/USC00125337.dly": "60b652bc55222bcc8442a9374e3977fce31a4e02e067dcaf37e843681fe1edd7",
+    "/mnt/data/ats_resources/data/ushcn/raw/USC00145906.dly": "ab8c55cf2d943867ccdafb655b44b5b64c3f1b51eff9523cc3a1fcd6d9b3d725",
+    "/mnt/data/ats_resources/data/ushcn/raw/USC00193213.dly": "282526625c95e964cd9f740878546aba2e0611ffb0cd1bf420e90e9f6bd51045",
+    "/mnt/data/ats_resources/data/ushcn/raw/USC00220488.dly": "9e5e81bc1093c2e7a5261f73ff2be027ff32aa7ae156d45e5f066cdd7f12b9df",
+    "/mnt/data/ats_resources/data/ushcn/raw/USC00242409.dly": "ecbfec32c331769d61608f02733738d9bf96584a16f5cdb88b245f5c9c7ad7ab",
+    "/mnt/data/ats_resources/data/ushcn/raw/USC00256040.dly": "f091fe7616e99ddcae5c106841a022ee1106366d56bea2d5880c8e641dc77c0a",
+    "/mnt/data/ats_resources/data/ushcn/raw/USC00299165.dly": "be554f7962231cd879415f0cac656812498d61fe679c69810e02536f1ba9089c",
+    "/mnt/data/ats_resources/data/ushcn/raw/USC00315830.dly": "5b6c62f96b02c2fab38fac43ed340984ae5e122b983511ac518e6905ff1d4993",
+    "/mnt/data/ats_resources/data/ushcn/raw/USC00340292.dly": "80acd40c42fea576e191c7495ec947a145c1aeff70a1401eb4efcd740c1968e7",
+    "/mnt/data/ats_resources/data/ushcn/raw/USC00356426.dly": "111f49f91ef59f7bc27d4b48d2b8f9a2a7f1fbf737342aa88344d69bb6aa42ea",
+    "/mnt/data/ats_resources/data/ushcn/raw/USC00391972.dly": "2591b2a0e274fcfe7e6411342311cfb807c27ef948852dd4e25f9374afde42e1",
+    "/mnt/data/ats_resources/data/ushcn/raw/USC00415707.dly": "bd259f253b4f86999e5590d932883cfa9fd528b8b6c9802a5022ddae63cb20da",
+    "/mnt/data/ats_resources/data/ushcn/raw/USC00442245.dly": "3ee1c0658faa667b83856a7852f2b15b6cfcd85965e093ba247a177ea4db0891",
+    "/mnt/data/ats_resources/data/ushcn/raw/USC00469610.dly": "82f3313a949cccbd0030c097c6b1522a4657e7905f899bba73bd8d578fb6e74a",
+    "/mnt/data/ats_resources/data/ushcn/raw/USW00013782.dly": "8bb08ddbd4948ddbabde7b9d3ece2175428b1990141c136b848487d5180907e2",
+    "/mnt/data/ats_resources/data/ushcn/raw/USW00094967.dly": "76c781ae10f9fa6da803899ca8a14b46f49d459b7d908ef21c06f0489528ad73",
+    "/mnt/data/ats_resources/data/ushcn/raw/selection.json": "91e32fa31acec18cd90ad4ab1daba7a097a7e43dba8f2d9059ca2d656269db9a",
+    "/mnt/data/ats_resources/data/ushcn/raw/ghcnd-stations.txt": "437ee87f0343bcad408a492cf7a02163fb69255364c541b4006d5d76055d0dc3",
+    "/mnt/data/ats_resources/data/pamap2/raw/pamap2_raw_windows_1109.zip": "5fcfd341b81913705e8adcc1b19ad31e3e6c96059b49876ccf7dc7a677a580dc"
+  }
+}

@@ -39,14 +39,15 @@ def statistics(bundle: TaskBundle, view: DataView, split: str) -> dict[str, Any]
         m = sub.variable_id == vid
         t = sub.event_time[m]
         v = sub.value[m]
-        gaps = np.diff(np.sort(t)) if t.size > 1 else np.array([])
+        gap_parts = [np.diff(np.sort(sub.event_time[m & (sub.entity_id == eid)])) for eid in ents]
+        gaps = np.concatenate(gap_parts) if gap_parts else np.array([])
         per_var[bundle.var_name(int(vid))] = {
             "n": int(m.sum()),
             "unit": bundle.card.unit(bundle.var_name(int(vid))),
             "obs_per_entity": float(m.sum() / max(1, len(ents))),
-            "coverage_frac": float(m.sum() / max(1, len(ents) * cutoff)),
-            "median_gap_h": float(np.median(gaps)) if gaps.size else None,
-            "max_gap_h": float(gaps.max()) if gaps.size else None,
+            "observations_per_time_unit": float(m.sum() / max(1, len(ents) * cutoff)),
+            "median_gap": float(np.median(gaps)) if gaps.size else None,
+            "max_gap": float(gaps.max()) if gaps.size else None,
             "mean": float(np.mean(v)), "std": float(np.std(v)),
             "min": float(np.min(v)), "max": float(np.max(v)),
         }
@@ -54,10 +55,11 @@ def statistics(bundle: TaskBundle, view: DataView, split: str) -> dict[str, Any]
     return {
         "n_events": int(len(sub)),
         "n_entities": len(ents),
-        "cutoff_hours": cutoff,
-        "horizon_hours": bundle.spec.horizon,
+        "cutoff": cutoff,
+        "time_unit": bundle.card.time_semantics.get("unit", "hours"),
+        "horizon": bundle.spec.horizon,
         "history_duration": bundle.spec.history_duration,
-        "obs_age_h": {"mean": float(age_all.mean()), "p90": float(np.percentile(age_all, 90))},
+        "obs_age": {"mean": float(age_all.mean()), "p90": float(np.percentile(age_all, 90))},
         "variables": per_var,
         "target_variables": bundle.spec.target_variables,
         "query_policy": bundle.spec.query_policy.value,
@@ -113,7 +115,7 @@ def make_plots(
             ax.scatter(t, v, s=10, color=_COLORS[i % len(_COLORS)], alpha=0.8,
                        label=f"{bundle.var_name(int(vid))} [{bundle.card.unit(bundle.var_name(int(vid)))}]")
         ax.axvline(bundle.spec.history_duration, color="k", ls="--", lw=1, label="cutoff")
-        ax.set_xlabel("relative time (h)")
+        ax.set_xlabel("relative time (" + bundle.card.time_semantics.get("unit", "hours") + ")")
         ax.set_title(f"entity {eid} — {split} history (scatter=real obs)")
         ax.legend(fontsize=6, loc="upper left")
         ax.grid(alpha=0.25)

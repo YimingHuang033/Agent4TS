@@ -217,3 +217,73 @@ fault_detection: false
 - 修正报错里的过时脚本名（`01_download_p12.sh` → `00_download_resources.sh`）；测试增至 16 项。
 - 数据现实记录：在 smoke/quick 的两个小任务上，**f0=DLinear+默认视图已是最优或接近最优**，少数可改善的单字段动作主要是 `grid_mode=grid`（及更宽的 `grid_width`）；重型模型与缩短历史都变差。agent 能否改善取决于任务，工程验收不以此为准。
 
+
+
+### Implementation update — 2026-11-07 (work in progress)
+
+The user requests completion on BBQCard2 via SSH, with remote Ark LLM only;
+MIMIC-IV is explicitly deferred. README's active-work section records scope.
+Scoring v2 implements entity-variable macro aggregation. A previously untested
+split-cache collision and seed lookup fallback were corrected: old final test
+scores must be recomputed. Exports now include fitted models with checksums;
+predict loads weights and does not fit. APN/ASTGI reuse locked BITS model source,
+without installing the conflicting runtime. APN is the frozen f0 for the new
+formal matrix; existing smoke configs retain DLinear for regression continuity.
+The formal matrix has three seeds and explicit per-cell status, 600-second
+training timeout, original budgets and full action space. It runs numerical
+training on GPU 0, never LLM inference. EPA uses disjoint chronological windows,
+not random overlapping windows. This is a separately versioned custom protocol.
+Unknown physical units remain unknown. Full experiment completion and remaining
+external integrations must be verified from artifacts, not inferred from scripts.
+
+
+Seven upstream numerical adapters now pass CPU integration checks; fixed training
+settings and compatibility patches are recorded in resources.lock.json. TSci-adapted
+reuses upstream validation orchestration, replacing only transport/execution/data
+boundaries and refusing synthetic fallback scores. Its real API smoke succeeded.
+Formal matrix: 720 planned cells, launched but not yet complete. RepoHealth remains
+blocked_semantics after audit; TSRouter remains blocked_protocol pending a valid
+numerical forecasting bridge. MIMIC remains explicitly out of current execution.
+
+
+Final validation checkpoint for this implementation revision: 24 core tests pass;
+all 12 registered models pass CPU fitted-export/reload and future-label-independence
+checks. All seven upstream irregular models also pass the same checks with real
+age covariates enabled. Age is derived exclusively from history, scaled by the
+known history duration and clipped to [0,1]; unsupported models reject this action.
+The finite transform space is shared by random search and the API controller.
+PatchTST/iTransformer anonymous forward closures were replaced by serializable
+methods and prediction now uses eval mode. Earlier formal preflights are retained
+separately; use only v2_ark_20261107 for the current matrix.
+
+Progress command on BBQCard2:
+`/home/tim/miniconda3/envs/tim/bin/python /home/tim/Proj/ats/scripts/gen_eval/status_complete.py`
+The job remains running until DONE exists; the complete research request is not
+finished while that matrix or the explicitly recorded protocol/semantic blockers
+remain unresolved.
+
+### 2026-11-09 expansion protocol implementation
+
+The custom raw USHCN/PAMAP2 task definitions, exact raw-file hashes, mother-entity
+splits, aggregation contracts and train-only coverage checks are frozen by
+`scripts/gen_eval/14_prepare_expand.sh`. USHCN uses physical days: SNOW/PRCP sums
+require complete daily buckets, SNWD uses the last observed state, TMAX/TMIN use
+complete-bucket extrema. PAMAP2 uses seconds and observed-value means; original
+IMU/HR masks remain distinct. The data subset selection uses IDs and timestamps,
+not held-out measurement values. BITS tensors remain rejected audit artifacts.
+
+Shared v3 spaces distinguish model_only, data_only and full. `ActionSpace`
+canonicalizes implicit model defaults, checks compatibility through Harness and
+enumerates legal single-field neighbors. Greedy evaluates at most three neighbors
+of a fixed incumbent, with seeded ordering and deterministic ties. TSci retains
+upstream orchestration with the same finite model parameter domain; it must train
+at least one successful recommended candidate beyond f0. No synthetic fallback.
+Budgets 4/8/12 are independent runs; identical B=12 identities are reused across
+phases. Fixed and non-LLM methods do not require LLM usage records.
+
+The v3 manifest is immutable and contains task/data/split/protocol/space/budget/
+f0/seed/degradation/code/training identity. Source archives and environment
+versions are retained. Source drift aborts resume. Explicit retries create new
+attempt directories. A finished matrix is distinct from accepted scientific
+results. Prior v2 traces are legacy diagnostics only following grid, statistics
+and API-transport fixes; old outputs are never modified or mixed into v3 means.

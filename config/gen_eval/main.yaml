@@ -1,20 +1,24 @@
-# General evaluation config: the full task set with real budgets.
-# Merged on top of config/default.yaml.
-
 tasks:
   p12_native:
     backend: p12
     track: native_irr
     history_hours: 24.0
     horizon_hours: 6.0
-    target_variables: [HR, SysABP, Temp, Urine]
+    target_variables:
+    - HR
+    - SysABP
+    - Temp
+    - Urine
     max_entities: 4000
   p12_robust:
     backend: p12
     track: robust_improve
     history_hours: 24.0
     horizon_hours: 6.0
-    target_variables: [HR, SysABP, Temp]
+    target_variables:
+    - HR
+    - SysABP
+    - Temp
     max_entities: 4000
   physiome_dupont:
     backend: physiome
@@ -46,19 +50,37 @@ tasks:
     city: Los_Angeles
     history_days: 7.0
     horizon_days: 1.0
-    target_variables: [O3, PM2.5]
+    target_variables: &id001
+    - O3
+    - PM2.5
     max_entities: 400
   mimic_iv:
     backend: mimic
     track: native_irr
-
+  epa_air_dallas:
+    backend: timeimm
+    track: native_irr
+    city: Dallas
+    history_days: 7.0
+    horizon_days: 1.0
+    target_variables: *id001
+    max_entities: 400
+  epa_air_denver:
+    backend: timeimm
+    track: native_irr
+    city: Denver
+    history_days: 7.0
+    horizon_days: 1.0
+    target_variables: *id001
+    max_entities: 400
 budget:
   trials: 12
   llm_calls: 24
   gpu_hours: 2.0
   patience: 3
-
-seeds: [0, 1, 2]
-
+seeds:
+- 0
+- 1
+- 2
 llm:
   transport: openai

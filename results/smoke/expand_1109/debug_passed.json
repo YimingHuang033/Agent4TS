@@ -1,0 +1,538 @@
+{
+  "status": "passed",
+  "scope": "CPU, actual data, tiny per-split integration subsets; no formal scores",
+  "results": [
+    {
+      "task": "ushcn_forecast",
+      "model": "APN",
+      "status": "ok",
+      "normalized_mae": 1.452597226422964,
+      "prediction_std": 10.036114692687988,
+      "prediction_std_by_variable": {
+        "SNOW": 0.0008584166062064469,
+        "SNWD": 0.0008442623657174408,
+        "PRCP": 0.026525110006332397,
+        "TMAX": 0.001036933739669621,
+        "TMIN": 0.0016510260757058859
+      },
+      "target_std": 12.98875575257307,
+      "training_diagnostics": {
+        "epoch_loss": [
+          0.5535279214382172
+        ],
+        "last_grad_norm": 0.6637189984321594,
+        "weight_delta_l2": 0.7876336574554443
+      },
+      "reload_label_independence": "passed"
+    },
+    {
+      "task": "ushcn_forecast",
+      "model": "ASTGI",
+      "status": "ok",
+      "normalized_mae": 1.4895829190510719,
+      "prediction_std": 10.057852745056152,
+      "prediction_std_by_variable": {
+        "SNOW": 2.9158209144952707e-05,
+        "SNWD": 7.85037536843447e-06,
+        "PRCP": 0.0002318789775017649,
+        "TMAX": 0.00010109487629961222,
+        "TMIN": 8.845143020153046e-05
+      },
+      "target_std": 12.98875575257307,
+      "training_diagnostics": {
+        "epoch_loss": [
+          0.6818702816963196
+        ],
+        "last_grad_norm": 5.802732944488525,
+        "weight_delta_l2": 9.647165298461914
+      },
+      "reload_label_independence": "passed"
+    },
+    {
+      "task": "ushcn_forecast",
+      "model": "DLinear",
+      "status": "ok",
+      "normalized_mae": 6.282932007023791,
+      "prediction_std": 41.37315631585564,
+      "prediction_std_by_variable": {
+        "SNOW": 0.09169141036377032,
+        "SNWD": 84.21403752214118,
+        "PRCP": 8.410158946909675,
+        "TMAX": 11.230927125012569,
+        "TMIN": 12.038803722684989
+      },
+      "target_std": 12.98875575257307,
+      "training_diagnostics": null,
+      "reload_label_independence": "passed"
+    },
+    {
+      "task": "ushcn_forecast",
+      "model": "HyperIMTS",
+      "status": "ok",
+      "normalized_mae": 3.506474658194141,
+      "prediction_std": 31.371728897094727,
+      "prediction_std_by_variable": {
+        "SNOW": 0.004226486198604107,
+        "SNWD": 0.008211228996515274,
+        "PRCP": 0.09614329785108566,
+        "TMAX": 0.03129100799560547,
+        "TMIN": 0.032627228647470474
+      },
+      "target_std": 12.98875575257307,
+      "training_diagnostics": {
+        "epoch_loss": [
+          5.637605786323547
+        ],
+        "last_grad_norm": 11.924456596374512,
+        "weight_delta_l2": 4.213864803314209
+      },
+      "reload_label_independence": "passed"
+    },
+    {
+      "task": "ushcn_forecast",
+      "model": "KAFNet",
+      "status": "ok",
+      "normalized_mae": 2.1123919607416086,
+      "prediction_std": 13.0557222366333,
+      "prediction_std_by_variable": {
+        "SNOW": 0.0016128110000863671,
+        "SNWD": 0.0011665993370115757,
+        "PRCP": 0.023635542020201683,
+        "TMAX": 0.008032445795834064,
+        "TMIN": 0.008764750324189663
+      },
+      "target_std": 12.98875575257307,
+      "training_diagnostics": {
+        "epoch_loss": [
+          0.8752356370290121
+        ],
+        "last_grad_norm": 3.8775675296783447,
+        "weight_delta_l2": 5.459066390991211
+      },
+      "reload_label_independence": "passed"
+    },
+    {
+      "task": "ushcn_forecast",
+      "model": "LastValue",
+      "status": "ok",
+      "normalized_mae": 1.1303708845783342,
+      "prediction_std": 10.118972279831585,
+      "prediction_std_by_variable": {
+        "SNOW": 0.0,
+        "SNWD": 0.0,
+        "PRCP": 0.0,
+        "TMAX": 0.0,
+        "TMIN": 0.0
+      },
+      "target_std": 12.98875575257307,
+      "training_diagnostics": null,
+      "reload_label_independence": "passed"
+    },
+    {
+      "task": "ushcn_forecast",
+      "model": "MeanValue",
+      "status": "ok",
+      "normalized_mae": 1.4456822947095957,
+      "prediction_std": 10.026426336701203,
+      "prediction_std_by_variable": {
+        "SNOW": 0.0,
+        "SNWD": 0.0,
+        "PRCP": 0.0,
+        "TMAX": 0.0,
+        "TMIN": 0.0
+      },
+      "target_std": 12.98875575257307,
+      "training_diagnostics": null,
+      "reload_label_independence": "passed"
+    },
+    {
+      "task": "ushcn_forecast",
+      "model": "PatchTST",
+      "status": "ok",
+      "normalized_mae": 1.444948217263723,
+      "prediction_std": 11.570780309299801,
+      "prediction_std_by_variable": {
+        "SNOW": 0.06425579184373048,
+        "SNWD": 0.5335962603766072,
+        "PRCP": 14.327904435262926,
+        "TMAX": 2.353892226856251,
+        "TMIN": 3.865300540995379
+      },
+      "target_std": 12.98875575257307,
+      "training_diagnostics": null,
+      "reload_label_independence": "passed"
+    },
+    {
+      "task": "ushcn_forecast",
+      "model": "TFMixer",
+      "status": "ok",
+      "normalized_mae": 4.312872991258081,
+      "prediction_std": 16.208375930786133,
+      "prediction_std_by_variable": {
+        "SNOW": 4.036853313446045,
+        "SNWD": 8.243419647216797,
+        "PRCP": 0.49452105164527893,
+        "TMAX": 0.8151131868362427,
+        "TMIN": 0.4957958161830902
+      },
+      "target_std": 12.98875575257307,
+      "training_diagnostics": {
+        "epoch_loss": [
+          0.6272632380326589
+        ],
+        "last_grad_norm": 1.9701188802719116,
+        "weight_delta_l2": 3.845287561416626
+      },
+      "reload_label_independence": "passed"
+    },
+    {
+      "task": "ushcn_forecast",
+      "model": "TiWeaver",
+      "status": "ok",
+      "normalized_mae": 10.524302847511962,
+      "prediction_std": 40.563114166259766,
+      "prediction_std_by_variable": {
+        "SNOW": 0.1546221524477005,
+        "SNWD": 0.29960566759109497,
+        "PRCP": 0.020475907251238823,
+        "TMAX": 0.03228561207652092,
+        "TMIN": 0.020036129280924797
+      },
+      "target_std": 12.98875575257307,
+      "training_diagnostics": {
+        "epoch_loss": [
+          1.1773811082045238
+        ],
+        "last_grad_norm": 10.507577896118164,
+        "weight_delta_l2": 7.039658546447754
+      },
+      "reload_label_independence": "passed"
+    },
+    {
+      "task": "ushcn_forecast",
+      "model": "iTransformer",
+      "status": "ok",
+      "normalized_mae": 1.5170932207665118,
+      "prediction_std": 12.030207387246175,
+      "prediction_std_by_variable": {
+        "SNOW": 0.7766634585454268,
+        "SNWD": 0.8267842737680267,
+        "PRCP": 13.862357218908205,
+        "TMAX": 3.0494556744829313,
+        "TMIN": 5.512213310744809
+      },
+      "target_std": 12.98875575257307,
+      "training_diagnostics": null,
+      "reload_label_independence": "passed"
+    },
+    {
+      "task": "ushcn_forecast",
+      "model": "tPatchGNN",
+      "status": "ok",
+      "normalized_mae": 1.4541247291702144,
+      "prediction_std": 10.10265827178955,
+      "prediction_std_by_variable": {
+        "SNOW": 0.0007734659593552351,
+        "SNWD": 0.00038590014446526766,
+        "PRCP": 0.0007901131175458431,
+        "TMAX": 0.0019343378953635693,
+        "TMIN": 0.005337835755199194
+      },
+      "target_std": 12.98875575257307,
+      "training_diagnostics": {
+        "epoch_loss": [
+          0.7383443117141724
+        ],
+        "last_grad_norm": 2.0942842960357666,
+        "weight_delta_l2": 15.337417602539062
+      },
+      "reload_label_independence": "passed"
+    },
+    {
+      "task": "ushcn_forecast",
+      "policy": "random",
+      "status": "ok",
+      "used": {
+        "trials": 4,
+        "llm_calls": 0,
+        "gpu_hours": 0.0
+      }
+    },
+    {
+      "task": "ushcn_forecast",
+      "policy": "greedy",
+      "status": "ok",
+      "used": {
+        "trials": 4,
+        "llm_calls": 0,
+        "gpu_hours": 0.0
+      }
+    },
+    {
+      "task": "pamap2_forecast",
+      "model": "APN",
+      "status": "ok",
+      "normalized_mae": 1.391919737675782,
+      "prediction_std": 30.535812377929688,
+      "prediction_std_by_variable": {
+        "heart_rate": 0.0034960745833814144,
+        "hand_temperature": 0.00035908035351894796,
+        "hand_acc16_x": 0.003559923032298684,
+        "chest_acc16_x": 0.00047753530088812113,
+        "ankle_acc16_x": 0.005291890352964401
+      },
+      "target_std": 31.269604998185542,
+      "training_diagnostics": {
+        "epoch_loss": [
+          1.0844245354334514
+        ],
+        "last_grad_norm": 1.8747972249984741,
+        "weight_delta_l2": 0.8011271953582764
+      },
+      "reload_label_independence": "passed"
+    },
+    {
+      "task": "pamap2_forecast",
+      "model": "ASTGI",
+      "status": "ok",
+      "normalized_mae": 1.0326088705735943,
+      "prediction_std": 30.48771095275879,
+      "prediction_std_by_variable": {
+        "heart_rate": 0.0017074220813810825,
+        "hand_temperature": 0.0,
+        "hand_acc16_x": 6.031565931152727e-07,
+        "chest_acc16_x": 0.0006702494574710727,
+        "ankle_acc16_x": 3.967330849263817e-05
+      },
+      "target_std": 31.269604998185542,
+      "training_diagnostics": {
+        "epoch_loss": [
+          0.9437651733557383
+        ],
+        "last_grad_norm": 6.624782562255859,
+        "weight_delta_l2": 8.856008529663086
+      },
+      "reload_label_independence": "passed"
+    },
+    {
+      "task": "pamap2_forecast",
+      "model": "DLinear",
+      "status": "ok",
+      "normalized_mae": 0.12510879362875726,
+      "prediction_std": 31.712179773822477,
+      "prediction_std_by_variable": {
+        "heart_rate": 0.23942434110870192,
+        "hand_temperature": 0.04490455921946368,
+        "hand_acc16_x": 0.35216160096674887,
+        "chest_acc16_x": 0.0753631452082408,
+        "ankle_acc16_x": 0.1460759914449257
+      },
+      "target_std": 31.269604998185542,
+      "training_diagnostics": null,
+      "reload_label_independence": "passed"
+    },
+    {
+      "task": "pamap2_forecast",
+      "model": "HyperIMTS",
+      "status": "ok",
+      "normalized_mae": 1.7843592955669563,
+      "prediction_std": 31.504703521728516,
+      "prediction_std_by_variable": {
+        "heart_rate": 0.017464205622673035,
+        "hand_temperature": 0.0015137136215344071,
+        "hand_acc16_x": 0.01352497935295105,
+        "chest_acc16_x": 0.001944941934198141,
+        "ankle_acc16_x": 0.011802383698523045
+      },
+      "target_std": 31.269604998185542,
+      "training_diagnostics": {
+        "epoch_loss": [
+          5.759615143140157
+        ],
+        "last_grad_norm": 12.388320922851562,
+        "weight_delta_l2": 4.162516117095947
+      },
+      "reload_label_independence": "passed"
+    },
+    {
+      "task": "pamap2_forecast",
+      "model": "KAFNet",
+      "status": "ok",
+      "normalized_mae": 1.6293543361703413,
+      "prediction_std": 30.15145492553711,
+      "prediction_std_by_variable": {
+        "heart_rate": 0.009501616470515728,
+        "hand_temperature": 0.0008728799293749034,
+        "hand_acc16_x": 0.010348011739552021,
+        "chest_acc16_x": 0.0013984492979943752,
+        "ankle_acc16_x": 0.008270161226391792
+      },
+      "target_std": 31.269604998185542,
+      "training_diagnostics": {
+        "epoch_loss": [
+          1.4701049327850342
+        ],
+        "last_grad_norm": 4.47299337387085,
+        "weight_delta_l2": 5.4401092529296875
+      },
+      "reload_label_independence": "passed"
+    },
+    {
+      "task": "pamap2_forecast",
+      "model": "LastValue",
+      "status": "ok",
+      "normalized_mae": 0.02408560077288795,
+      "prediction_std": 31.21975065605291,
+      "prediction_std_by_variable": {
+        "heart_rate": 0.0,
+        "hand_temperature": 0.0,
+        "hand_acc16_x": 1.7763568394002505e-15,
+        "chest_acc16_x": 0.0,
+        "ankle_acc16_x": 0.0
+      },
+      "target_std": 31.269604998185542,
+      "training_diagnostics": null,
+      "reload_label_independence": "passed"
+    },
+    {
+      "task": "pamap2_forecast",
+      "model": "MeanValue",
+      "status": "ok",
+      "normalized_mae": 1.5121330264601083,
+      "prediction_std": 30.829691049001067,
+      "prediction_std_by_variable": {
+        "heart_rate": 0.0,
+        "hand_temperature": 3.552713678800501e-15,
+        "hand_acc16_x": 4.440892098500626e-16,
+        "chest_acc16_x": 0.0,
+        "ankle_acc16_x": 8.881784197001252e-16
+      },
+      "target_std": 31.269604998185542,
+      "training_diagnostics": null,
+      "reload_label_independence": "passed"
+    },
+    {
+      "task": "pamap2_forecast",
+      "model": "PatchTST",
+      "status": "ok",
+      "normalized_mae": 0.7879783420485782,
+      "prediction_std": 31.589191976151046,
+      "prediction_std_by_variable": {
+        "heart_rate": 0.5526485651844983,
+        "hand_temperature": 0.04325856214463714,
+        "hand_acc16_x": 0.4911311067937334,
+        "chest_acc16_x": 0.06684802913790562,
+        "ankle_acc16_x": 0.2877518912287387
+      },
+      "target_std": 31.269604998185542,
+      "training_diagnostics": null,
+      "reload_label_independence": "passed"
+    },
+    {
+      "task": "pamap2_forecast",
+      "model": "TFMixer",
+      "status": "ok",
+      "normalized_mae": 0.04970660612757487,
+      "prediction_std": 31.348186492919922,
+      "prediction_std_by_variable": {
+        "heart_rate": 0.018794819712638855,
+        "hand_temperature": 0.0033465109299868345,
+        "hand_acc16_x": 0.006564193870872259,
+        "chest_acc16_x": 0.008430351503193378,
+        "ankle_acc16_x": 0.004799684509634972
+      },
+      "target_std": 31.269604998185542,
+      "training_diagnostics": {
+        "epoch_loss": [
+          0.14495723304571584
+        ],
+        "last_grad_norm": 0.005363165866583586,
+        "weight_delta_l2": 3.636336326599121
+      },
+      "reload_label_independence": "passed"
+    },
+    {
+      "task": "pamap2_forecast",
+      "model": "TiWeaver",
+      "status": "ok",
+      "normalized_mae": 0.04442931332955889,
+      "prediction_std": 31.326879501342773,
+      "prediction_std_by_variable": {
+        "heart_rate": 0.0004722034209407866,
+        "hand_temperature": 9.551228140480816e-05,
+        "hand_acc16_x": 0.00015950982924550772,
+        "chest_acc16_x": 0.0002158463466912508,
+        "ankle_acc16_x": 0.00011050530156353489
+      },
+      "target_std": 31.269604998185542,
+      "training_diagnostics": {
+        "epoch_loss": [
+          0.24096483495668508
+        ],
+        "last_grad_norm": 0.0019372942624613643,
+        "weight_delta_l2": 7.179697036743164
+      },
+      "reload_label_independence": "passed"
+    },
+    {
+      "task": "pamap2_forecast",
+      "model": "iTransformer",
+      "status": "ok",
+      "normalized_mae": 0.9599114923107313,
+      "prediction_std": 31.15400258317711,
+      "prediction_std_by_variable": {
+        "heart_rate": 1.0436531106089493,
+        "hand_temperature": 0.05271402133740995,
+        "hand_acc16_x": 1.0091467608459865,
+        "chest_acc16_x": 0.17245723048694114,
+        "ankle_acc16_x": 0.283693311750142
+      },
+      "target_std": 31.269604998185542,
+      "training_diagnostics": null,
+      "reload_label_independence": "passed"
+    },
+    {
+      "task": "pamap2_forecast",
+      "model": "tPatchGNN",
+      "status": "ok",
+      "normalized_mae": 1.48914054329381,
+      "prediction_std": 29.901748657226562,
+      "prediction_std_by_variable": {
+        "heart_rate": 0.006921541877090931,
+        "hand_temperature": 0.0004666904278565198,
+        "hand_acc16_x": 0.0007922654622234404,
+        "chest_acc16_x": 0.0007836404256522655,
+        "ankle_acc16_x": 0.005589757114648819
+      },
+      "target_std": 31.269604998185542,
+      "training_diagnostics": {
+        "epoch_loss": [
+          1.2146723071734111
+        ],
+        "last_grad_norm": 1.0385708808898926,
+        "weight_delta_l2": 15.137537956237793
+      },
+      "reload_label_independence": "passed"
+    },
+    {
+      "task": "pamap2_forecast",
+      "policy": "random",
+      "status": "ok",
+      "used": {
+        "trials": 4,
+        "llm_calls": 0,
+        "gpu_hours": 0.0
+      }
+    },
+    {
+      "task": "pamap2_forecast",
+      "policy": "greedy",
+      "status": "ok",
+      "used": {
+        "trials": 4,
+        "llm_calls": 0,
+        "gpu_hours": 0.0
+      }
+    }
+  ]
+}

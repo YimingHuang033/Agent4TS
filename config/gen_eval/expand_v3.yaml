@@ -1,0 +1,58 @@
+# Raw-source custom forecasting protocols, frozen before test evaluation.
+expansion:
+  root: results/gen_eval/v3_expand_20261109
+  audit_root: results/smoke/expand_1109
+  protocol_version: raw_forecast_1109_v1
+  raw_root: /mnt/data/ats_resources/data
+  ushcn_metadata_sha256: 437ee87f0343bcad408a492cf7a02163fb69255364c541b4006d5d76055d0dc3
+  pamap_archive_sha256: 6c2282b5b52775cd0588d450d10a315260c94fa3228b9fe453f48c47fda106f4
+  pamap_subset: /mnt/data/ats_resources/data/pamap2/raw/pamap2_raw_windows_1109.zip
+  pamap_subset_sha256: 5fcfd341b81913705e8adcc1b19ad31e3e6c96059b49876ccf7dc7a677a580dc
+  pamap_zip: /mnt/data/ats_resources/data/pamap2/raw/PAMAP2_Dataset.zip
+  ushcn_years: [1990, 1999]
+  ushcn_window_days: 100
+  pamap_window_seconds: 10
+  pamap_windows_per_subject: 20
+  history_fraction: 0.8
+  query_buckets: 10
+  split_seed: 0
+  new_tasks: [ushcn_forecast, pamap2_forecast]
+  phases: [new_data, matched_space, budget, data_ablation, robustness, initialization]
+  greedy_k: 3
+  sources:
+    ushcn_metadata: https://www.ncei.noaa.gov/pub/data/ghcn/daily/ghcnd-stations.txt
+    ushcn_readme: https://www.ncei.noaa.gov/pub/data/ghcn/daily/readme.txt
+    ushcn_station_base: https://www.ncei.noaa.gov/pub/data/ghcn/daily/all/
+    pamap2_zip: https://archive.ics.uci.edu/ml/machine-learning-databases/00231/PAMAP2_Dataset.zip
+    pamap2_metadata: https://archive.ics.uci.edu/dataset/231/pamap2+physical+activity+monitoring
+  snapshots:
+    ushcn:
+      url: https://huggingface.co/datasets/ykj111/BITS-data/resolve/47579a87a8d95306a5ef1d0200334c45ba42be8c/ushcn/processed/ushcn.pt
+      relative_path: ushcn/processed/ushcn.pt
+      size: 16283608
+      sha256: 824af1ca63c31eb25994d3fcf7dcd8af1d2fc9040c3e262e0cd5b579af6e0a03
+    pamap2:
+      url: https://huggingface.co/datasets/ykj111/BITS-data/resolve/47579a87a8d95306a5ef1d0200334c45ba42be8c/Pamap2/processed/Pamap2.pt
+      relative_path: pamap2/processed/Pamap2.pt
+      size: 2925630
+      sha256: e6bf195c79519f118fd7dba690c6732d3699ac579674de591040b7a55bdb3710
+paths:
+  ushcn_root: /mnt/data/ats_resources/data/ushcn/raw
+  pamap2_root: /mnt/data/ats_resources/data/pamap2/raw
+budget:
+  trials: 12
+  llm_calls: 24
+  gpu_hours: 2.0
+  patience: 100000
+  trial_timeout_seconds: 600
+seeds: [0, 1, 2]
+llm:
+  transport: openai
+  provider: ark
+  model: deepseek-v4.1-flash-economy
+
+tasks:
+  ushcn_forecast:
+    backend: ushcn
+  pamap2_forecast:
+    backend: pamap2

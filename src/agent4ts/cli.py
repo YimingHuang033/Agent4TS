@@ -169,14 +169,12 @@ def _load_search_incumbent(path: Path, key: str, seed: int):
     if not path.exists():
         return None
     data = json.loads(path.read_text(encoding="utf-8"))
-    if key in data:
-        return data[key]
-    for k, v in data.items():
-        if isinstance(v, dict) and "incumbent" in v and key in k:
-            return v
-    for k, v in data.items():
-        if isinstance(v, dict) and "incumbent" in v:
-            return v
+    entry = data.get(f"{key}_s{seed}")
+    if entry is not None:
+        return entry
+    entry = data.get(key)
+    if isinstance(entry, dict) and entry.get("incumbent", {}).get("seed") == seed:
+        return entry
     return None
 
 
@@ -210,17 +208,22 @@ def cmd_predict(args: argparse.Namespace) -> int:
     key = args.tasks if args.tasks else _task_keys(cfg)[0]
     bundle = _load_bundle(cfg, key)
     norm = Normalizer.from_dict(payload["normalizer"])
-    from .models.registry import make as make_model
-    win_norm = norm.with_mode(spec.data_view.normalize)
-    train = build_labeled_windows(bundle, spec.data_view, "train", win_norm)
-    test = build_labeled_windows(bundle, spec.data_view, "test", win_norm)
+    import pickle
+    import hashlib
     import numpy as np
-    grid = np.unique(np.concatenate([lw.query_times for lw in test]))
-    model = make_model(spec.model_id, {**spec.model_config, "seed": spec.seed}, cfg.get("resources"))
-    model._view = spec.data_view
-    model._norm = win_norm
-    model.in_grid = None
-    model.fit(train, bundle, grid, np.arange(len(bundle.variable_names)))
+    artifact_name = payload.get("model_artifact")
+    if not artifact_name:
+        raise ValueError("Legacy config-only export: regenerate a fitted pipeline before prediction")
+    artifact = (pipeline_file.parent / artifact_name).resolve()
+    if artifact.parent != pipeline_file.parent.resolve():
+        raise ValueError("Model artifact must be adjacent to the pipeline JSON")
+    raw = artifact.read_bytes()
+    if hashlib.sha256(raw).hexdigest() != payload.get("model_sha256"):
+        raise ValueError("Model artifact checksum mismatch")
+    # Only load locally generated, trusted experiment artifacts.
+    model = pickle.loads(raw)
+    win_norm = norm.with_mode(spec.data_view.normalize)
+    test = build_labeled_windows(bundle, spec.data_view, "test", win_norm)
     preds = [model.predict(lw) for lw in test]
     out_dir = Path(args.run_dir) if args.run_dir else cfgmod.experiment_dir(cfg, args.kind) / "predict"
     out_dir.mkdir(parents=True, exist_ok=True)

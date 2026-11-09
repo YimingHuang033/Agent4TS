@@ -1,0 +1,2 @@
+== [2026-11-10 00:27:43] conda run -n tim python scripts/gen_eval/summarize_expand.py
+Summary: results/gen_eval/v3_expand_20261109/summary execution_finished= False

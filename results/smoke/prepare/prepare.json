@@ -1,10 +1,17 @@
 {
   "runnable_models": [
+    "APN",
+    "ASTGI",
     "DLinear",
+    "HyperIMTS",
+    "KAFNet",
     "LastValue",
     "MeanValue",
     "PatchTST",
-    "iTransformer"
+    "TFMixer",
+    "TiWeaver",
+    "iTransformer",
+    "tPatchGNN"
   ],
   "availability": {
     "runnable": {
@@ -32,11 +39,6 @@
           "epochs": [
             100,
             200
-          ],
-          "kernel": [
-            3,
-            5,
-            7
           ]
         },
         "cost": "low",
@@ -82,81 +84,93 @@
         },
         "cost": "medium",
         "role": "iTransformer-style re-implementation"
-      }
-    },
-    "blocked": {
+      },
       "TFMixer": {
-        "model_id": "TFMixer",
-        "status": "not_vendored",
-        "blocked_reason": "author code not present in this environment",
-        "kind": "irregular",
-        "paper": "ICML 2026",
+        "input_type": "event_mask",
+        "accepts_mask": true,
+        "accepts_dt": true,
+        "options": {},
+        "cost": "high",
+        "role": "Locked upstream model with project training adapter",
         "paper_url": "https://github.com/decisionintelligence/TFMixer",
-        "needs_mask_dt": true,
-        "note": "external-model adapter only; not vendored"
+        "available": true,
+        "blocked_reason": null,
+        "supports_age_features": true
       },
       "KAFNet": {
-        "model_id": "KAFNet",
-        "status": "not_vendored",
-        "blocked_reason": "author code not present in this environment",
-        "kind": "irregular",
-        "paper": "AAAI 2026",
+        "input_type": "event_mask",
+        "accepts_mask": true,
+        "accepts_dt": true,
+        "options": {},
+        "cost": "high",
+        "role": "Locked upstream model with project training adapter",
         "paper_url": "https://github.com/zhouziyu02/KAFNet",
-        "needs_mask_dt": true,
-        "note": "not vendored; needs author repo"
+        "available": true,
+        "blocked_reason": null,
+        "supports_age_features": true
       },
       "APN": {
-        "model_id": "APN",
-        "status": "not_vendored",
-        "blocked_reason": "author code not present in this environment",
-        "kind": "irregular",
-        "paper": "AAAI 2026",
+        "input_type": "event_mask",
+        "accepts_mask": true,
+        "accepts_dt": true,
+        "options": {},
+        "cost": "high",
+        "role": "BITS snapshot APN model with project training adapter",
         "paper_url": "https://github.com/decisionintelligence/APN",
-        "needs_mask_dt": true,
-        "note": "design's default f0; not vendored, DLinear stands in until then"
+        "available": true,
+        "blocked_reason": null,
+        "supports_age_features": true
       },
       "ASTGI": {
-        "model_id": "ASTGI",
-        "status": "not_vendored",
-        "blocked_reason": "author code not present in this environment",
-        "kind": "irregular",
-        "paper": "ICLR 2026",
+        "input_type": "event_mask",
+        "accepts_mask": true,
+        "accepts_dt": true,
+        "options": {},
+        "cost": "high",
+        "role": "BITS snapshot ASTGI model with project adapter",
         "paper_url": "https://github.com/decisionintelligence/ASTGI",
-        "needs_mask_dt": true,
-        "note": "not vendored"
+        "available": true,
+        "blocked_reason": null,
+        "supports_age_features": true
       },
       "TiWeaver": {
-        "model_id": "TiWeaver",
-        "status": "not_vendored",
-        "blocked_reason": "author code not present in this environment",
-        "kind": "irregular_async",
-        "paper": "KDD 2026",
+        "input_type": "event_mask",
+        "accepts_mask": true,
+        "accepts_dt": true,
+        "options": {},
+        "cost": "high",
+        "role": "Locked upstream model with project training adapter",
         "paper_url": "https://arxiv.org/abs/2606.03121",
-        "archive": "https://doi.org/10.5281/zenodo.20424563",
-        "needs_mask_dt": true,
-        "note": "code archive via Zenodo; not vendored"
+        "available": true,
+        "blocked_reason": null,
+        "supports_age_features": true
       },
       "HyperIMTS": {
-        "model_id": "HyperIMTS",
-        "status": "not_vendored",
-        "blocked_reason": "author code not present in this environment",
-        "kind": "irregular",
-        "paper": "ICML 2025",
+        "input_type": "event_mask",
+        "accepts_mask": true,
+        "accepts_dt": true,
+        "options": {},
+        "cost": "high",
+        "role": "Locked upstream model with project training adapter",
         "paper_url": "https://github.com/Ladbaby/PyOmniTS",
-        "needs_mask_dt": true,
-        "note": "author implementation in PyOmniTS; not vendored"
+        "available": true,
+        "blocked_reason": null,
+        "supports_age_features": true
       },
       "tPatchGNN": {
-        "model_id": "tPatchGNN",
-        "status": "not_vendored",
-        "blocked_reason": "author code not present in this environment",
-        "kind": "irregular",
-        "paper": "ICML 2024",
+        "input_type": "event_mask",
+        "accepts_mask": true,
+        "accepts_dt": true,
+        "options": {},
+        "cost": "high",
+        "role": "Locked upstream model with project training adapter",
         "paper_url": "https://github.com/usail-hkust/t-PatchGNN",
-        "needs_mask_dt": true,
-        "note": "not vendored"
+        "available": true,
+        "blocked_reason": null,
+        "supports_age_features": true
       }
-    }
+    },
+    "blocked": {}
   },
   "tasks": {
     "p12_native": {

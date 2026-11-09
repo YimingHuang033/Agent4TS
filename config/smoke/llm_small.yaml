@@ -1,6 +1,3 @@
-# Live-LLM smoke against a text-only small model (Qwen2.5-0.5B) served while the
-# GPUs are busy with other work. Runs in the documented no_vision mode because
-# the model cannot read images; the 4B vision path is config/smoke/llm.yaml.
 tasks:
   physiome_dupont:
     backend: physiome
@@ -11,13 +8,16 @@ tasks:
     horizon_hours: 6.0
     target_var: x
     seed: 0
-budget: {trials: 4, llm_calls: 8, gpu_hours: 0.5, patience: 2}
-seeds: [0]
+budget:
+  trials: 4
+  llm_calls: 8
+  gpu_hours: 0.5
+  patience: 2
+seeds:
+- 0
 llm:
   transport: openai
-  supports_vision: false
-  base_url: http://127.0.0.1:8848/v1
-  model: Qwen2.5-0.5B
-  temperature: 0.2
-  max_tokens: 512
+  provider: ark
+  model: deepseek-v4.1-flash-economy
+  max_tokens: 4096
   timeout: 180

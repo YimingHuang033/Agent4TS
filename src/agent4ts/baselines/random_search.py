@@ -10,7 +10,9 @@ from ..harness import Harness
 from ..logging_utils import get_logger
 from ..models.registry import runnable_ids
 from ..schemas import DataView, PipelineSpec, TaskBundle
-from ..search import initial_spec
+from ..search import initial_spec, apply_action, TRANSFORM_SPACE
+from ..schemas import Action
+from ..models.registry import CATALOG
 
 log = get_logger("baselines.random")
 
@@ -49,27 +51,20 @@ def run_random_search(
     rounds = 0
     while not h.exhausted() and no_improve < patience:
         rounds += 1
-        if rng.random() < 0.5:
-            spec = PipelineSpec(
-                pipeline_id=f"r{rounds}_{rng.choice(runnable_ids()).lower()}",
-                data_view=DataView(),
-                model_id=rng.choice(runnable_ids()),
-                model_config={},
-                seed=seed,
-                parent_id=incumbent.pipeline_id,
-            )
-        else:
-            view = DataView(**incumbent.data_view.to_dict())
-            field = rng.choice(list(DATA_CHOICES))
-            setattr(view, field, rng.choice(DATA_CHOICES[field]))
-            spec = PipelineSpec(
-                pipeline_id=f"r{rounds}_transform",
-                data_view=view,
-                model_id=incumbent.model_id,
-                model_config=dict(incumbent.model_config),
-                seed=seed,
-                parent_id=incumbent.pipeline_id,
-            )
+        if rounds > cfg['budget']['trials'] * 100:
+            break
+        choices = [Action(op='SELECT_MODEL', value=m) for m in runnable_ids()]
+        choices += [Action(op='SET_TRANSFORM', target_field=field, value=value)
+                    for field, values in TRANSFORM_SPACE.items() for value in values]
+        choices += [Action(op='SET_MODEL_OPTION', target_field=field, value=value)
+                    for field, values in CATALOG[incumbent.model_id]['options'].items() for value in values]
+        action = rng.choice(choices)
+        if not h.checks_ok(h.validate(action, incumbent)):
+            continue
+        spec = apply_action(action, incumbent, rounds)
+        spec.seed = seed
+        if h.prior_trial(spec) is not None:
+            continue
         fb = h.run_trial(spec, split="search")
         accepted, _ = h.update_incumbent(spec, fb)
         h.write_trace({"event": "random", "round": rounds, "pipeline": spec.to_dict(),

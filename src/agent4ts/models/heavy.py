@@ -79,6 +79,10 @@ def status(model_id: str, resources_cfg: dict[str, Any] | None = None) -> dict[s
     meta = HEAVY_MODELS.get(model_id)
     if meta is None:
         return {"model_id": model_id, "status": "unknown"}
+    source = (resources_cfg or {}).get(model_id.lower() + "_source")
+    if source and Path(source).is_file():
+        return {**meta, "model_id": model_id, "status": "adapted_available", "source": source,
+                "note": "Locked upstream model with project adapter; not official training reproduction"}
     local = (resources_cfg or {}).get("heavy_model_dirs", {}).get(model_id)
     if local and Path(local).exists():
         return {"model_id": model_id, "status": "vendored", "local_dir": local, **meta}

@@ -1,0 +1,8 @@
+== [2026-11-10 00:16:05] conda run -n tim python scripts/smoke/check_expand_api.py
+{"task": "ushcn_forecast", "policy": "agent", "status": "ok", "used": {"trials": 2, "llm_calls": 1, "gpu_hours": 0.0}, "finalize": "ok", "llm_model": "deepseek-v4.1-flash-economy"}
+Failed to test model iTransformer: No successful TSci candidate
+Failed to test model DLinear: No successful TSci candidate
+{"task": "ushcn_forecast", "policy": "tsci", "status": "ok", "used": {"trials": 4, "llm_calls": 2, "gpu_hours": 0.0}, "finalize": "ok", "llm_model": "deepseek-v4.1-flash-economy"}
+{"task": "pamap2_forecast", "policy": "agent", "status": "ok", "used": {"trials": 2, "llm_calls": 1, "gpu_hours": 0.0}, "finalize": "ok", "llm_model": "deepseek-v4.1-flash-economy"}
+Failed to test model PatchTST: No successful TSci candidate
+{"task": "pamap2_forecast", "policy": "tsci", "status": "ok", "used": {"trials": 4, "llm_calls": 2, "gpu_hours": 0.0}, "finalize": "ok", "llm_model": "deepseek-v4.1-flash-economy"}

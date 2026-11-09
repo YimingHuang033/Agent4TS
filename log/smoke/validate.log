@@ -13,3 +13,8 @@
 2026-10-13 22:22:32 | INFO    | agent4ts.data.p12 | P12 loaded: 300 entities, 68113 history events, 3955 target buckets, targets=p12_native_irr
 2026-10-13 22:23:55 | INFO    | agent4ts.data.p12 | P12 loaded: 300 entities, 68113 history events, 3955 target buckets, targets=p12_native_irr
 2026-10-13 22:27:08 | INFO    | agent4ts.data.p12 | P12 loaded: 300 entities, 68113 history events, 3955 target buckets, targets=p12_native_irr
+2026-11-07 19:24:48 | INFO    | agent4ts.data.p12 | P12 loaded: 300 entities, 68113 history events, 3955 target buckets, targets=p12_native_irr
+2026-11-07 19:40:02 | INFO    | agent4ts.data.p12 | P12 loaded: 300 entities, 68113 history events, 3955 target buckets, targets=p12_native_irr
+2026-11-10 00:06:45 | INFO    | agent4ts.data.p12 | P12 loaded: 300 entities, 68113 history events, 3955 target buckets, targets=p12_native_irr
+2026-11-10 00:09:27 | INFO    | agent4ts.data.p12 | P12 loaded: 300 entities, 68113 history events, 3955 target buckets, targets=p12_native_irr
+2026-11-10 00:12:31 | INFO    | agent4ts.data.p12 | P12 loaded: 300 entities, 68113 history events, 3955 target buckets, targets=p12_native_irr

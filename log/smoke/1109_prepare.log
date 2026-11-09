@@ -1,0 +1,5 @@
+== [2026-11-10 00:08:59] conda run -n tim python scripts/gen_eval/download_expand.py
+Pinned snapshots and raw forecast resources verified
+== [2026-11-10 00:09:00] conda run -n tim python scripts/gen_eval/prepare_expand.py
+ushcn_forecast entities 720 mothers 20 train coverage 0.9340740740740741 ok
+pamap2_forecast entities 168 mothers 9 train coverage 1.0 ok

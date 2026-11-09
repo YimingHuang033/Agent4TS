@@ -14,7 +14,7 @@ dist/
 # --- resources & data: NEVER commit bulky or licensed assets.
 # All raw data, model weights and vendor code live under /mnt/data/ats_resources
 # (outside the repo). Anything heavy that lands inside the repo stays out of git.
-data/
+/data/
 weights/
 *.safetensors
 *.ckpt
@@ -39,3 +39,6 @@ runs/
 .env
 *.key
 *_secret*
+
+# Locally generated fitted models are runtime artifacts.
+*.pkl

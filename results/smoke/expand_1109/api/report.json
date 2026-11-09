@@ -1,0 +1,50 @@
+[
+  {
+    "task": "ushcn_forecast",
+    "policy": "agent",
+    "status": "ok",
+    "used": {
+      "trials": 2,
+      "llm_calls": 1,
+      "gpu_hours": 0.0
+    },
+    "finalize": "ok",
+    "llm_model": "deepseek-v4.1-flash-economy"
+  },
+  {
+    "task": "ushcn_forecast",
+    "policy": "tsci",
+    "status": "ok",
+    "used": {
+      "trials": 4,
+      "llm_calls": 2,
+      "gpu_hours": 0.0
+    },
+    "finalize": "ok",
+    "llm_model": "deepseek-v4.1-flash-economy"
+  },
+  {
+    "task": "pamap2_forecast",
+    "policy": "agent",
+    "status": "ok",
+    "used": {
+      "trials": 2,
+      "llm_calls": 1,
+      "gpu_hours": 0.0
+    },
+    "finalize": "ok",
+    "llm_model": "deepseek-v4.1-flash-economy"
+  },
+  {
+    "task": "pamap2_forecast",
+    "policy": "tsci",
+    "status": "ok",
+    "used": {
+      "trials": 4,
+      "llm_calls": 2,
+      "gpu_hours": 0.0
+    },
+    "finalize": "ok",
+    "llm_model": "deepseek-v4.1-flash-economy"
+  }
+]

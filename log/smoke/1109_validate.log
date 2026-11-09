@@ -1,0 +1,77 @@
+== [2026-11-10 00:16:57] conda run -n tim python -m agent4ts.cli --config gen_eval/expand_v3 --kind smoke validate --tasks ushcn_forecast,pamap2_forecast
+{
+  "ushcn_forecast": {
+    "status": "ok",
+    "checks": {
+      "no_future_leakage": {
+        "ok": true,
+        "future_events": 0,
+        "future_available": 0
+      },
+      "split_isolation": {
+        "ok": true,
+        "duplicates": [],
+        "n_entities": 720
+      },
+      "padding_invariance": {
+        "ok": true,
+        "masked_entries": 163836,
+        "unique_cells": 163836,
+        "raw_entries": 163836
+      },
+      "unknown_targets_unscored": {
+        "ok": true,
+        "beyond_horizon": 0,
+        "before_cutoff": 0
+      },
+      "grid_maps_to_target": {
+        "ok": true,
+        "n_grid": 10,
+        "min": 2.0,
+        "max": 20.0
+      },
+      "no_label_over_split": {
+        "ok": true,
+        "orphan_target_entities": []
+      }
+    },
+    "failed": []
+  },
+  "pamap2_forecast": {
+    "status": "ok",
+    "checks": {
+      "no_future_leakage": {
+        "ok": true,
+        "future_events": 0,
+        "future_available": 0
+      },
+      "split_isolation": {
+        "ok": true,
+        "duplicates": [],
+        "n_entities": 168
+      },
+      "padding_invariance": {
+        "ok": true,
+        "masked_entries": 326769,
+        "unique_cells": 326769,
+        "raw_entries": 326769
+      },
+      "unknown_targets_unscored": {
+        "ok": true,
+        "beyond_horizon": 0,
+        "before_cutoff": 0
+      },
+      "grid_maps_to_target": {
+        "ok": true,
+        "n_grid": 10,
+        "min": 0.1999999999999993,
+        "max": 2.0
+      },
+      "no_label_over_split": {
+        "ok": true,
+        "orphan_target_entities": []
+      }
+    },
+    "failed": []
+  }
+}

@@ -5,6 +5,9 @@ set -euo pipefail
 
 PROJECT_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 export PROJECT_ROOT
+if [ -f "${HOME}/.config/agent4ts/ark.env" ]; then
+    source "${HOME}/.config/agent4ts/ark.env"
+fi
 export ATS_ENV="${ATS_ENV:-tim}"
 export ATS_KIND="${ATS_KIND:-gen_eval}"
 # default config: this kind's main.yaml when it exists (gen_eval/main carries the
@@ -38,7 +41,7 @@ LOG_FILE="${LOG_DIR}/${ATS_LOG_NAME:-$(basename "${BASH_SOURCE[1]:-run}" .sh)}.l
 # run a command inside the conda env, echoing it for the log
 ats_run() {
     echo "== [$(date '+%F %T')] conda run -n ${ATS_ENV} python $*" | tee -a "${LOG_FILE}"
-    conda run -n "${ATS_ENV}" --no-capture-output python "$@" 2>&1 | tee -a "${LOG_FILE}"
+    "${ATS_CONDA_EXE:-${HOME}/miniconda3/bin/conda}" run -n "${ATS_ENV}" --no-capture-output python "$@" 2>&1 | tee -a "${LOG_FILE}"
 }
 
 ats_run_cli() {

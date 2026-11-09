@@ -38,6 +38,10 @@ UPSTREAM_PY_REQUIRES = "==3.10"
 def status(resources_cfg: dict[str, Any] | None = None) -> dict[str, Any]:
     local = (resources_cfg or {}).get("tsrouter_dir")
     present = bool(local and Path(local).exists())
+    if present:
+        return {"status": "blocked_protocol", "local_dir": local, "source_present": True,
+                "adapted_from": UPSTREAM_URL,
+                "blocked_reason": "TSRBench correctness labels and embedding graph have no validated mapping to this numeric forecasting protocol"}
     importable = importlib.util.find_spec("ts_router") is not None
     if present and importable:
         return {"status": "active", "local_dir": local, "importable": True,

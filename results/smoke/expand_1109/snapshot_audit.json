@@ -1,0 +1,50 @@
+{
+  "ushcn": {
+    "url": "https://huggingface.co/datasets/ykj111/BITS-data/resolve/47579a87a8d95306a5ef1d0200334c45ba42be8c/ushcn/processed/ushcn.pt",
+    "relative_path": "ushcn/processed/ushcn.pt",
+    "size": 16283608,
+    "sha256": "824af1ca63c31eb25994d3fcf7dcd8af1d2fc9040c3e262e0cd5b579af6e0a03",
+    "verified": true,
+    "record_count": 1114,
+    "length_range": [
+      18,
+      370
+    ],
+    "shapes": [
+      [
+        285,
+        5
+      ],
+      [
+        324,
+        5
+      ]
+    ],
+    "status": "rejected_for_formal_forecast",
+    "reason": "Global normalization before splitting in GRU-ODE-Bayes process.py; absent scale and station mapping. Cannot recover raw-unit forecasts."
+  },
+  "pamap2": {
+    "url": "https://huggingface.co/datasets/ykj111/BITS-data/resolve/47579a87a8d95306a5ef1d0200334c45ba42be8c/Pamap2/processed/Pamap2.pt",
+    "relative_path": "pamap2/processed/Pamap2.pt",
+    "size": 2925630,
+    "sha256": "e6bf195c79519f118fd7dba690c6732d3699ac579674de591040b7a55bdb3710",
+    "verified": true,
+    "record_count": 2,
+    "length_range": [
+      27114,
+      54089
+    ],
+    "shapes": [
+      [
+        54089,
+        4
+      ],
+      [
+        27114,
+        4
+      ]
+    ],
+    "status": "rejected_for_formal_forecast",
+    "reason": "Only two anonymous records / four channels; exact column lineage and subject/session provenance not recoverable from snapshot. Use official raw data."
+  }
+}

@@ -200,15 +200,17 @@ def _events_to_window(
         T = len(times)
         x = np.full((len(keep_var_ids), T), np.nan)
         mask = np.zeros((len(keep_var_ids), T), dtype=np.int64)
+        counts = np.zeros_like(mask)
         vid_pos = {int(v): i for i, v in enumerate(keep_var_ids)}
         # nearest bucket by floor((t - t0)/w)
         for t, v, val in zip(sub.event_time, sub.variable_id, sub.value):
             vi = vid_pos.get(int(v))
             if vi is None:
                 continue
-            b = int((t - times[0]) // view.grid_width)
+            b = min(T - 1, int((t - times[0]) // view.grid_width))
             if 0 <= b < T:
-                x[vi, b] = val if np.isnan(x[vi, b]) else 0.5 * (x[vi, b] + val)
+                counts[vi, b] += 1
+                x[vi, b] = val if counts[vi, b] == 1 else x[vi, b] + (val - x[vi, b]) / counts[vi, b]
                 mask[vi, b] = 1
     else:
         # event direct read: union of observation times, per-var NaN elsewhere
@@ -290,15 +292,20 @@ def _fill(x: np.ndarray, mask: np.ndarray, times: np.ndarray, view: DataView) ->
 TRANSFORM_SPACE: dict[str, Any] = {
     "history_fraction": [0.5, 1.0],
     "grid_mode": ["events", "grid"],
-    "grid_width": "positive number",
+    "grid_width": [0.5, 1.0, 2.0, 4.0],
     "fill": ["mean", "ffill"],
     "normalize": ["zscore", "minmax", "none"],
-    "forward_limit": "number >= 0",
+    "forward_limit": [0.0, 3.0, 6.0],
+    "variable_subset": ["all", "targets_only"],
+    "age_feature": [False, True],
 }
 
 
 def compatible(bundle: TaskBundle, view: DataView) -> tuple[bool, str]:
     """Compatibility matrix: reject combinations that make no sense."""
+    for field, values in TRANSFORM_SPACE.items():
+        if getattr(view, field) not in values:
+            return False, f"{field} must be one of {values}"
     if view.history_fraction not in (0.5, 1.0):
         return False, f"history_fraction must be in {{0.5, 1.0}}, got {view.history_fraction}"
     if view.grid_mode not in ("events", "grid"):

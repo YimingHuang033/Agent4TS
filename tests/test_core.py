@@ -99,12 +99,10 @@ def test_bits_blocked(cfg):
     assert ei.value.as_status()["status"] == "blocked_resource"
 
 
-def test_heavy_models_not_faked():
-    from agent4ts.models.registry import CATALOG, make
-    for mid in ("APN", "TFMixer", "tPatchGNN"):
-        assert CATALOG[mid]["factory"] is None
-        with pytest.raises(NotImplementedError):
-            make(mid, {})
+def test_upstream_models_require_real_source():
+    from agent4ts.models.registry import make
+    for mid in ('APN','ASTGI','TFMixer','KAFNet','HyperIMTS','TiWeaver','tPatchGNN'):
+        with pytest.raises(NotImplementedError): make(mid,{},{})
 
 
 def test_tsrouter_is_honest_not_faked():
@@ -188,3 +186,109 @@ def test_closed_loop_smoke(tmp_path, bundle, cfg):
     events = [json.loads(l) for l in trace]
     kinds = {e["event"] for e in events}
     assert {"f0", "propose"} <= kinds
+
+
+def test_macro_scoring_equal_entity_variable_weight(bundle, cfg):
+    import copy
+    norm = Normalizer.fit(bundle.history, bundle.entities_for('train'))
+    ws = copy.deepcopy(build_labeled_windows(bundle, DataView(), 'search', norm)[:2])
+    preds = []
+    for index, lw in enumerate(ws):
+        lw.y_scored[:] = False
+        count = 1 if index == 0 else 3
+        lw.y_scored[:count] = True
+        lw.query_var_ids[:] = lw.query_var_ids[0]
+        lw.y_true[:] = 0
+        preds.append(np.full(len(lw.y_true), (1 if index == 0 else 3) * norm.std[int(lw.query_var_ids[0])]))
+    score = evaluator.score_windows(ws, preds, bundle, norm, cfg['evaluation'])
+    assert score['metrics']['normalized_mae'] == pytest.approx(2)
+    assert score['metrics']['n_valid_targets'] == 4
+
+
+def test_private_splits_and_cache_are_isolated(tmp_path, bundle, cfg):
+    from agent4ts.harness import Harness
+    spec = _spec(bundle, DataView())
+    public = Harness(bundle, cfg, tmp_path / 'public')
+    public.run_trial(spec)
+    with pytest.raises(PermissionError):
+        public.run_trial(spec, 'test')
+    private = Harness(bundle, cfg, tmp_path / 'private', allow_test=True)
+    a = private.run_trial(spec, 'confirm')
+    b = private.run_trial(spec, 'test')
+    assert a.status == b.status == 'ok'
+    assert a is not b
+    assert len(private.cache) == 2
+    assert private.used["trials"] == 1
+    assert [x['split'] for x in map(json.loads, private.trace_path.read_text().splitlines())] == ['confirm', 'test']
+
+
+def test_frozen_export_predicts_without_fit(tmp_path, bundle, cfg, monkeypatch):
+    import pickle
+    from agent4ts.harness import Harness
+    from agent4ts.models.runners import DLinear
+    h = Harness(bundle, cfg, tmp_path / 'run')
+    spec = _spec(bundle, DataView())
+    assert h.run_trial(spec).status == 'ok'
+    payload = h.export(spec, tmp_path / 'export')
+    model = pickle.loads((tmp_path / 'export' / payload['model_artifact']).read_bytes())
+    def forbidden(*args, **kwargs):
+        raise AssertionError('Inference must not train')
+    monkeypatch.setattr(type(model), 'fit', forbidden)
+    predictions = model.predict(h.windows('search', spec.data_view)[0])
+    assert np.isfinite(predictions).all()
+
+
+def test_training_timeout_preserves_failure(tmp_path, bundle, cfg, monkeypatch):
+    import copy, time
+    from agent4ts.harness import Harness
+    import agent4ts.harness as module
+    class SlowModel:
+        def fit(self, *args): time.sleep(.1)
+    monkeypatch.setattr(module, 'make_model', lambda *args: SlowModel())
+    small = copy.deepcopy(cfg);small['budget']['trial_timeout_seconds'] = .01
+    h=Harness(bundle,small,tmp_path)
+    result=h.run_trial(_spec(bundle,DataView()))
+    assert result.status == 'error'
+    assert 'TimeoutError' in result.error
+    assert not result.metrics
+    assert h.used['trials'] == 1
+
+
+def test_robustness_thresholds_ignore_test_history(bundle):
+    import copy
+    _,before = evaluator.robustness_diagnostics(bundle)
+    changed=copy.deepcopy(bundle)
+    mask=np.isin(changed.history.entity_id,changed.entities_for('test'))
+    changed.history.event_time[mask]=0
+    _,after=evaluator.robustness_diagnostics(changed)
+    assert before == after
+
+
+def test_controller_resolves_secret_environment(cfg, monkeypatch, tmp_path):
+    from agent4ts.controller import Controller
+    monkeypatch.setenv('ATS_LLM_API_KEY','test-only-key')
+    monkeypatch.setenv('ATS_LLM_BASE_URL','https://example.invalid/v1')
+    controller=Controller(cfg,tmp_path)
+    assert controller.llm['api_key']=='test-only-key'
+    assert controller.llm['base_url']=='https://example.invalid/v1'
+    assert cfg['llm']['api_key']!='test-only-key'
+
+
+def test_transform_space_is_finite_and_rejects_invalid_values(bundle):
+    from agent4ts.transforms import TRANSFORM_SPACE, compatible
+    assert all(isinstance(values,list) for values in TRANSFORM_SPACE.values())
+    assert not compatible(bundle,DataView(grid_width='invalid'))[0]
+
+
+def test_age_covariates_change_upstream_input(bundle,cfg,tmp_path):
+    from agent4ts.harness import Harness
+    from agent4ts.models.apn import APN
+    h=Harness(bundle,cfg,tmp_path)
+    lw=h.windows('search',DataView())[0]
+    m=APN(cfg['resources']['apn_source'],epochs=1)
+    m._view=DataView(age_feature=True);m.n_original=len(bundle.variable_names)
+    m.params={'enc_in':2*m.n_original,'history':bundle.spec.history_duration}
+    inputs,_=m._inputs(lw)
+    assert inputs['x'].shape[-1] == 2*m.n_original
+    assert inputs['x_mask'][...,m.n_original:].all()
+    assert inputs['x'][...,m.n_original:].max() > 0

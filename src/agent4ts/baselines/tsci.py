@@ -31,7 +31,7 @@ UPSTREAM_PAPER = "https://arxiv.org/abs/2510.01538"
 def status(resources_cfg: dict[str, Any] | None = None) -> dict[str, Any]:
     local = (resources_cfg or {}).get("tsci_dir")
     present = bool(local and Path(local).exists())
-    importable = importlib.util.find_spec("timeseriesscientist") is not None
+    importable = bool(present and (Path(local) / "time_series_agent/agents/validation_agent.py").exists())
     if present and importable:
         return {"status": "active", "local_dir": local, "importable": True,
                 "adapted_from": UPSTREAM_URL, "label": "TSci-adapted"}
@@ -62,12 +62,9 @@ def status(resources_cfg: dict[str, Any] | None = None) -> dict[str, Any]:
     }
 
 
-def run(*_args: Any, **_kwargs: Any) -> dict[str, Any]:
-    st = status()
-    raise RuntimeError(
-        f"TSci-adapted baseline is {st['status']}: {st['blocked_reason']}. "
-        f"Upstream: {UPSTREAM_URL}. A hand-written loop would not be TSci."
-    )
+def run(*, bundle, cfg, run_dir, seed=0):
+    from .tsci_adapted import run_tsci_adapted
+    return run_tsci_adapted(bundle,cfg,run_dir,seed=seed)
 
 
 def bridge_note() -> str:

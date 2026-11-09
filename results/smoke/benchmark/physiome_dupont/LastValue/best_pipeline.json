@@ -1,4 +1,7 @@
 {
+  "artifact_version": 1,
+  "model_artifact": "fitted_model.pkl",
+  "model_sha256": "7333072f9b35997b504903dca8b9a26d1c9bc05fad247ac5a3ec3cb51766cf2f",
   "best_pipeline": {
     "pipeline_id": "bench_LastValue",
     "data_view": {
@@ -35,6 +38,6 @@
       "1": 590.829493768034
     }
   },
-  "metric_version": "v1",
-  "upstream_hash": "e2066ca27f0a98be"
+  "metric_version": "v2_entity_variable_macro",
+  "upstream_hash": "dfa2f4be2aba45e8"
 }

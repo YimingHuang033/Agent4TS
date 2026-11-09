@@ -1,0 +1,27 @@
+== [2026-11-10 00:19:00] conda run -n tim python scripts/gen_eval/status_expand.py
+{
+  "new_data": {
+    "planned": 108,
+    "pending": 108
+  },
+  "matched_space": {
+    "planned": 180,
+    "pending": 180
+  },
+  "budget": {
+    "planned": 270,
+    "pending": 270
+  },
+  "data_ablation": {
+    "planned": 90,
+    "pending": 90
+  },
+  "robustness": {
+    "planned": 360,
+    "pending": 360
+  },
+  "initialization": {
+    "planned": 135,
+    "pending": 135
+  }
+}

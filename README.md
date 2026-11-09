@@ -1,127 +1,128 @@
 # Agent4TS
 
-Minimal implementation of the DESIGN.md spec: a single-agent system that reads
-data semantics and time-series plots, picks data-processing and forecasting
-modules from a restricted action space, iterates on execution feedback, and
-exports a frozen pipeline that predicts offline (no LLM at inference).
+A single-agent search system for irregular time-series forecasting pipelines.
+The controller reads statistics, semantic cards and actual PNGs, proposes bounded
+pipeline changes, and learns from search-split feedback. Frozen prediction uses
+saved numerical models and never invokes an LLM or refits weights.
 
-## Layout
+## Execution environment
 
-```
-config/      all keys, paths, budgets, task definitions (never hard-coded)
-  default.yaml           base: paths, LLM endpoint, budgets, eval settings
-  smoke/quick.yaml       tiny offline smoke config (mock LLM)
-  gen_eval/main.yaml     full task set, real budgets, live LLM
-scripts/     every runnable command lives here, nothing runs outside scripts/
-  smoke/     run_smoke.sh, run_llm_smoke.sh, run_vis.sh
-  gen_eval/  00_download_resources.sh … 12_tsrouter.sh (numbered pipeline)
-  perf/      01_benchmark_perf.sh        (performance/cost experiments)
-  interp/    01_trace_analysis.sh        (interpretability experiments)
-log/         all logs, per experiment kind (smoke/ gen_eval/ perf/ interp/)
-results/     all artifacts: traces, metrics json, csv tables, exported pipelines
-vis/         visualization tooling; generated figures land in vis/generated/
-src/agent4ts/  the package (schemas, data, models, transforms, observe,
-               controller, harness, search, evaluator, baselines, faults, cli)
-tests/       pytest suite over information boundaries, masks, splits, scoring
-resources.lock.json  upstream versions, download sources, checksums
-```
-
-Bulky resources (raw data, model weights, vendor code) live outside the repo in
-`/mnt/data/ats_resources` (override with `ATS_DATA_ROOT`). They never enter git;
-only the small `results/smoke` + `log/smoke` artifacts are committed as living
-proof the loop runs.
-
-## Quick start
+Work through SSH on `BBQCard2`, project `/home/tim/Proj/ats`, existing `tim` conda
+environment. Tests and smoke are CPU-only. Formal numerical-model training may
+use GPU 0. **LLM inference is remote only**, using the Ark coding API and
+`deepseek-v4.1-flash-economy`; text and image input have been verified. The old
+local-vLLM launcher is disabled. Credentials are sourced from
+`~/.config/agent4ts/ark.env` (mode 600), outside this repository.
 
 ```bash
-# 0) resources (P12 ~6.6MB; bits = source snapshot only; timeimm = EPA CSVs)
-scripts/gen_eval/00_download_resources.sh p12
-
-# 1) offline smoke test: mock LLM, full loop, ~1 min on CPU
-scripts/smoke/run_smoke.sh
-
-# 2) serve Qwen3.5-4B locally (background) and smoke the real controller
-scripts/gen_eval/01_serve_llm.sh &          # vLLM on 127.0.0.1:8848
-scripts/smoke/run_llm_smoke.sh
-
-# 3) full pipeline
-scripts/gen_eval/02_prepare.sh
-scripts/gen_eval/03_validate.sh
-scripts/gen_eval/04_benchmark.sh
-scripts/gen_eval/05_search.sh --tasks p12_native --seeds 0,1,2
-scripts/gen_eval/06_evaluate.sh --tasks p12_native --seed 0
-scripts/gen_eval/07_predict.sh --pipeline results/gen_eval/search/p12_native/seed0/best_pipeline.json --tasks p12_native
-
-# baselines / ablations / robustness
-scripts/gen_eval/08_random_search.sh
-scripts/gen_eval/09_degradation.sh
-scripts/gen_eval/10_ablation.sh
-scripts/gen_eval/11_tsci.sh
-scripts/gen_eval/12_tsrouter.sh
-
-# other experiment kinds
-scripts/perf/01_benchmark_perf.sh
-scripts/interp/01_trace_analysis.sh
-
-# visualization (figures + static HTML index)
-scripts/smoke/run_vis.sh smoke        # or gen_eval
+# CPU engineering smoke
+bash scripts/smoke/run_smoke.sh
+# CPU real-API controller smoke
+bash scripts/smoke/run_llm_smoke.sh
+# Resumable formal matrix
+bash scripts/gen_eval/13_complete.sh
+# Read-only current progress
+/home/tim/miniconda3/envs/tim/bin/python scripts/gen_eval/status_complete.py
 ```
 
-Everything runs in the `tim` conda env (Python 3.11, torch 2.13). The CLI is
-`python -m agent4ts.cli {prepare,benchmark,search,evaluate,predict,validate}`
-with `--config <stem>` / `--run-dir` / `--kind`.
+## Current implementation
 
-Working rules for contributors/agents (env, GPU discipline, honesty rules,
-definition of done) live in [AGENTS.md](AGENTS.md). In short: debugging, tests,
-smoke and visualization are CPU-only (`CUDA_VISIBLE_DEVICES=""`); GPUs are
-reserved for the explicitly launched vLLM server and real `gen_eval` training.
+- Metric v2: entity-variable macro normalized MAE/MSE, raw per-variable errors,
+  coverage and train-fitted long-gap/stale/density/asynchrony groups.
+- Search, confirm and test caches are separate; private splits belong to the
+  deterministic finalizer. Candidates retain fitted models across confirmation
+  and testing. Export includes a fitted model, normalizer and checksum.
+- Frozen prediction rejects old config-only artifacts. Pickle artifacts are
+  trusted local files and never committed.
+- Random and agent search share a finite action space. Invalid/duplicate actions,
+  actual API retries/token usage, timeouts and failures are recorded.
+- Seven upstream adapters are runnable: APN, ASTGI, TFMixer, KAFNet, HyperIMTS,
+  TiWeaver and tPatchGNN. Their source revisions and compatibility patches are in
+  `resources.lock.json`; these are project training adapters, not official-paper
+  training reproductions. Existing DLinear, PatchTST-style, iTransformer-style,
+  LastValue and MeanValue bring the registry to 12 runnable entries.
+- Upstream irregular adapters optionally consume explicit historical age
+  covariates, scaled by known history duration; unsupported models reject that
+  action. The feature never uses post-cutoff observations.
+- TSci-adapted reuses upstream analysis/selection prompts and actual validation
+  run/test/select methods. Transport and execution are bridged to the shared
+  harness; synthetic fallback scores are prohibited. Report generation is omitted
+  and preprocessing uses the audited task views.
 
-## Honest implementation status
+## Data and validation
 
-Working end to end (verified by `scripts/smoke/run_smoke.sh`):
+P12 native/custom forecasting tasks, all three named Physiome mechanisms, and
+EPA-Air Los Angeles/Dallas/Denver pass data checks. EPA uses verified source
+column mapping, calendar alignment and disjoint chronological windows. Unknown
+physical units remain explicitly unknown, with no guessed conversion.
 
-* Event-based data contract (`Event = (entity, event_time, available_time,
-  variable, value)`), real-time masks, entity-level 60/20/10/10 splits,
-  no-leakage / padding-invariance / split-isolation checks (`cli validate`).
-* Backends: **P12 Set A** (native irregular, our 24h->6h bucketed protocol, not
-  the official challenge task), **Physiome-ODE** (3 named models, local RK4
-  re-implementation, mother-trajectory isolation), **Time-IMM EPA-Air** loader
-  (needs the CSVs downloaded first), **controlled degradations**
-  (drop random/span, variable subsampling, noise — one at a time).
-* Models runnable in `tim`: LastValue, MeanValue (sanity), DLinear, PatchTST-style,
-  iTransformer-style (faithful re-implementations, not author code).
-* Agent loop: statistics + semantic card + real PNGs attached to the multimodal
-  LLM; one JSON action per round; validation, caching, budgets, accept/fallback,
-  `trace.jsonl`, export of `best_pipeline.json`; deterministic confirm->test
-  finalizer isolated from the agent.
-* Baselines: random search (same action space/budget), no_vision / no_semantics /
-  one_shot ablations, degradation sweep, perf + interpretability runners.
+**24 core tests pass.** All 12 models pass CPU training, fitted export/reload and
+future-label-independence checks. All seven upstream adapters also pass those
+checks with age features enabled. Reports are in
+`results/smoke/upstream_adapter_checks/report.json` and
+`results/smoke/upstream_age_checks/report.json`. The real API controller and
+TSci-adapted have completed smoke runs.
 
-Explicitly **not** implemented (reported as such at runtime, never faked):
+## Formal experiments — running, not complete
 
-* **BITS runtime**: upstream pins Python 3.8-3.10 + torch 2.4-2.5, which
-  conflicts with the `tim` env. The vendored source snapshot is inspected and
-  `load_bits_task` returns `blocked_resource`. Track A runs on the native P12
-  loader instead (per 2026-10-06 decision).
-* **Heavy 2026 models** (TFMixer, KAFNet, APN, ASTGI, TiWeaver, HyperIMTS,
-  tPatchGNN): author code not vendored; the registry lists them with
-  `status: not_vendored` and `SELECT_MODEL` on them fails the model_runnable
-  check with the reason + source URL. APN was the intended `f0`; DLinear is the
-  recorded engineering stand-in.
-* **TSci-adapted**: upstream TimeSeriesScientist is not vendored; the runner
-  writes `status: unavailable` with setup steps instead of imitating TSci.
-* **TSRouter** (COLM 2026, dynamic modality-model routing): a second external
-  framework, added on request. Its package is not vendored and it consumes
-  TSRBench reasoning problems over LLM/VLM candidates, not this project's event
-  tables; the runner (`12_tsrouter.sh`) writes `status: unavailable` with the
-  real setup steps and refuses to run rather than imitating it.
-* **MIMIC-IV**: `blocked_access` until credentialed access exists.
-* **RepoHealth**: not audited, hence not registered.
-* **Fault injection/detection**: disabled placeholder (`faults.py`), per design.
+Current artifacts: `results/gen_eval/v2_ark_20261107/`.
+Log: `log/gen_eval/v2_ark_20261107.log`.
 
-## Keys & endpoints
+The 720-cell matrix covers eight accessible tasks and three seeds: 12 fixed
+models, random search, agent, no_vision/no_semantics/one_shot and TSci-adapted;
+plus APN/DLinear/random/agent across eight degradations of each Physiome task.
+APN is the frozen initial predictor for this matrix. Old smoke fixtures retain
+DLinear for regression continuity. Each cell has an explicit result/status;
+code hashes, configuration and LLM identity are recorded. A DONE marker only
+means execution ended: inspect failures and summary support counts before
+interpreting results. Preflight directories and old v1 scores are separate.
 
-`config/default.yaml -> llm` points at a local vLLM instance
-(`http://127.0.0.1:8848/v1`, model `Qwen3.5-4B` from `/mnt/data/Qwen3.5-4B`).
-Override with env vars `ATS_LLM_BASE_URL` / `ATS_LLM_API_KEY`, or per-experiment
-config in `config/<kind>/*.yaml`. No secret is ever committed.
+## Remaining limitations
+
+- MIMIC-IV: explicitly deferred by the user; no credentialed data available.
+- RepoHealth: source fetched and audited; React has 1 negative open_prs row and
+  137 negative open_issues rows. Initial-stock semantics and future interval
+  availability remain unresolved. Status: `blocked_semantics`; no clipping or
+  fabricated stock reconstruction.
+- TSRouter: source downloaded, but its TSRBench correctness labels and
+  task/query/modality/model embeddings have no validated numerical-forecasting
+  bridge. Status: `blocked_protocol`; not represented as a completed baseline.
+- BITS runtime and its full official suite remain unavailable under the retained
+  environment constraint. Reusing its model sources does not reproduce its
+  official evaluation protocol.
+- Fault injection and unrestricted function-structure search remain outside the
+  agreed first-version scope.
+
+The full research request is not complete while the matrix and protocol/semantic
+blockers remain outstanding. See `DESIGN.md` for the specification and dated
+implementation record, and `AGENTS.md` for operational constraints.
+MD'
+### 2026-11-09 expansion preparation (CPU validation continued on Nov 10)
+
+`config/gen_eval/expand_v3.yaml` defines two **custom forecasting subsets**, not
+BITS benchmark scores. The pinned BITS USHCN/PAMAP2 tensors are downloaded and
+retained for audit, but not used for formal experiments: USHCN upstream applies
+whole-data normalization, while the PAMAP2 tensor's channel/subject lineage is
+not recoverable. The replacements are 20 NOAA HCN-flag stations (1990–1999,
+720 disjoint 100-day windows) and all nine official PAMAP2 Protocol subjects
+(168 prespecified 10-second windows, five raw sensor channels). Splits keep each
+mother station/subject together. No interpolation or loader normalization occurs.
+
+Run `bash scripts/gen_eval/14_prepare_expand.sh` to verify/recover resources and
+write audits in `results/smoke/expand_1109/`. `check_expand.py` and
+`check_expand_api.py` under `scripts/smoke` validate CPU model adapters, frozen
+reload, label independence and live Ark calls. See `agent_notes/1109_expand.md`
+for the validated administrator handoff and remaining formal experiments.
+
+V3 uses canonical model defaults and one finite action-space implementation for
+agent/random/greedy/TSci model comparisons. B includes f0; failed training counts;
+patience is disabled. `15_run_expand.sh manifest` freezes identities and source
+snapshots, then `15_run_expand.sh <phase>` runs an explicit phase. Failures require
+an explicit JSON retry list and retain previous attempts. Status/summary scripts
+read the manifest, including pending cells and first-attempt success rates.
+
+V3 cannot be pooled with v2: grid aggregation now uses an actual arithmetic mean
+and retains cutoff observations; history gap statistics are computed within each
+entity and carry explicit time units. Ark `enable_thinking: false` is now sent as
+`thinking.type=disabled`; all policies share the same one-retry transport. LLMs
+use remote API only. GPU is reserved for administrator-launched numerical jobs.

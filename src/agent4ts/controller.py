@@ -61,7 +61,8 @@ history_fraction, ffill with a forward_limit, or a model that accepts dt."""
 
 class Controller:
     def __init__(self, cfg: dict[str, Any], run_dir):
-        self.llm = cfg["llm"]
+        from .config import llm_settings
+        self.llm = llm_settings(cfg)
         self.cfg = cfg
         self.run_dir = run_dir
 
@@ -71,9 +72,9 @@ class Controller:
         from .schemas import DataView
         system = SYSTEM_PROMPT % (
             json.dumps(obs.allowed_ops),
-            json.dumps(sorted(DataView().__dict__.keys())),
-            json.dumps(runnable_ids()),
-            json.dumps(TRANSFORM_SPACE),
+            json.dumps(sorted(obs.action_space.get("transforms", TRANSFORM_SPACE))),
+            json.dumps(obs.action_space.get("models", runnable_ids())),
+            json.dumps(obs.action_space.get("transforms", TRANSFORM_SPACE)),
         )
         text = json.dumps({
             "task_id": obs.task_id,
@@ -105,29 +106,48 @@ class Controller:
 
     # ------------------------------------------------------------- call
     def propose(self, obs: Observation) -> Action:
-        messages = self.build_messages(obs)
-        raw = self._call(messages)
-        action = self._parse(raw)
-        if action is None:
-            # honest diagnosis: show how the reply ended so truncation vs
-            # garbage is visible in the trace of the run
-            log.warning("malformed action (tail=%r), retrying once", (raw or "")[-120:])
-            retry = messages + [{"role": "user", "content": "Reply with ONLY the JSON action object."}]
-            raw = self._call(retry)
-            action = self._parse(raw)
-        if action is None:
-            return Action(op="STOP", expected_effect="unparseable reply after retry")
-        return action
+        try:
+            return self.request(self.build_messages(obs), self._parse)
+        except RuntimeError as exc:
+            return Action(op="STOP", expected_effect="unparseable reply after retry: " + str(exc))
+
+    def request(self, messages, parser=None):
+        """Common recovery: at most two actual requests, all budgeted."""
+        budget=getattr(self,"call_budget",None)
+        for attempt in range(2):
+            raw=self._call(messages)
+            category=getattr(self,"last_call_error",None)
+            if not raw:
+                category=category or "empty_content"
+            else:
+                try:
+                    result=parser(raw) if parser else raw
+                    if result is None: raise ValueError("parser returned no result")
+                    return result
+                except (ValueError,TypeError,KeyError) as exc:
+                    category="invalid_json"
+            if budget is not None:
+                budget.write_trace({"event":"llm_recovery","attempt":attempt+1,"category":category,
+                                    "transport_version":"common_retry_1109_v1"})
+        raise RuntimeError("LLM response failed after at most one retry: "+str(category))
 
     def _call(self, messages: list[dict[str, Any]]) -> str:
+        self.last_call_error = None
+        budget = getattr(self, "call_budget", None)
+        if budget is not None:
+            if budget.remaining()["llm_calls"] <= 0:
+                return ""
+            budget.spend_llm_call()
         transport = self.llm.get("transport", "openai")
         if transport == "mock":
             return self._mock(messages)
         from openai import OpenAI
         client = OpenAI(base_url=self.llm["base_url"], api_key=self.llm.get("api_key", "EMPTY"),
-                        timeout=self.llm.get("timeout", 180))
+                        timeout=self.llm.get("timeout", 180), max_retries=0)
         extra: dict[str, Any] = {}
-        if "enable_thinking" in self.llm:
+        if self.llm.get("provider") == "ark" and "enable_thinking" in self.llm:
+            extra["thinking"] = {"type": "enabled" if self.llm["enable_thinking"] else "disabled"}
+        if self.llm.get("provider") == "vllm" and "enable_thinking" in self.llm:
             # Qwen3-style chat templates accept this toggle via vLLM; keeps the
             # action JSON out of a reasoning block and inside the token budget
             extra["chat_template_kwargs"] = {"enable_thinking": bool(self.llm["enable_thinking"])}
@@ -141,8 +161,13 @@ class Controller:
             # endpoint down / context overflow / timeout: a failed call must not
             # kill the run; the empty reply goes down the malformed-action path
             # (one retry, then an honest STOP) and is visible in the log
+            self.last_call_error = "api_exception"
             log.warning("LLM call failed: %s: %s", type(exc).__name__, exc)
             return ""
+        if budget is not None:
+            budget.write_trace({"event": "llm_usage", "model": self.llm["model"],
+                                "usage": resp.usage.model_dump() if resp.usage else None,
+                                "finish_reason": resp.choices[0].finish_reason})
         return resp.choices[0].message.content or ""
 
     def _parse(self, raw: str) -> Action | None:

@@ -43,3 +43,8 @@ AttributeError: 'dict' object has no attribute 'to_dict'
 2026-10-13 22:27:17 | INFO    | agent4ts.cli | evaluate physiome_dupont: ok
 2026-10-14 09:03:09 | INFO    | agent4ts.harness | cache hit p2_dlinear (4f0ea44e42fcef18)
 2026-10-14 09:03:09 | INFO    | agent4ts.cli | evaluate physiome_dupont: ok
+2026-11-07 19:24:57 | INFO    | agent4ts.cli | evaluate physiome_dupont: ok
+2026-11-07 19:40:12 | INFO    | agent4ts.cli | evaluate physiome_dupont: ok
+2026-11-10 00:06:54 | INFO    | agent4ts.cli | evaluate physiome_dupont: ok
+2026-11-10 00:09:36 | INFO    | agent4ts.cli | evaluate physiome_dupont: ok
+2026-11-10 00:12:40 | INFO    | agent4ts.cli | evaluate physiome_dupont: ok

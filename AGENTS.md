@@ -20,7 +20,7 @@ documents consistent when behavior changes.
   scripts export `CUDA_VISIBLE_DEVICES=""`; keep it that way, and do the same
   for any ad-hoc debug command that imports torch.
 - GPU use is limited to explicitly launched long jobs: the vLLM server
-  (`scripts/gen_eval/01_serve_llm.sh`) and real `gen_eval` training runs.
+  is prohibited for this task; only real numerical `gen_eval` training runs may use GPUs.
   Never start the vLLM server just to debug parsing/loop logic — use
   `llm.transport: mock` (config/smoke/quick.yaml) instead.
 
@@ -35,16 +35,16 @@ documents consistent when behavior changes.
 - Experiment kinds: `smoke` | `gen_eval` | `perf` | `interp`. Logs go to
   `log/<kind>/`, artifacts to `results/<kind>/`, figures to `vis/generated/`.
   Only small `results/smoke` + `log/smoke` artifacts are committed.
-- LLM endpoint: local vLLM `http://127.0.0.1:8848/v1` (Qwen3.5-4B), overridable
+- LLM endpoint: remote Ark coding API, model `deepseek-v4.1-flash-economy`, overridable
   via `ATS_LLM_BASE_URL` / `ATS_LLM_API_KEY`. No secret is ever committed.
 
 ## Honesty rules (from DESIGN.md — do not weaken)
 
-- Unavailable things report structured, truthful status: heavy 2026 models are
-  `not_vendored` (selection fails with reason + source URL), BITS is
-  `blocked_resource`, MIMIC-IV is `blocked_access`, TSci is `unavailable`,
-  fault injection raises `NotImplementedError`. Never fake, stub-score, or
-  silently substitute.
+- Unavailable things report structured, truthful status. Seven upstream models now
+  have validated adapters; TSci-adapted preserves upstream validation orchestration.
+  BITS runtime stays `blocked_resource`; MIMIC-IV is deferred, RepoHealth is
+  `blocked_semantics`, and TSRouter is `blocked_protocol`. Fault injection remains
+  disabled. Never fake, stub-score, or silently substitute.
 - Failures never score as zero error; empty groups return `null` with `n=0`.
 - Information boundaries are load-bearing: the controller only ever sees the
   `search` split; `confirm`/`test` stay behind the deterministic finalizer;
@@ -63,3 +63,12 @@ documents consistent when behavior changes.
 3. Committed smoke artifacts under `results/smoke` are regenerated when
    behavior changes them.
 4. README.md / DESIGN.md appendix updated if implementation status changed.
+
+## 2026-11-07 active execution
+
+Work through SSH on BBQCard2, /home/tim/Proj/ats, using existing tim environment.
+LLM uses remote API only; never launch local vLLM. Credentials are sourced from
+~/.config/agent4ts/ark.env (mode 600), outside git. MIMIC-IV is explicitly deferred.
+APN and ASTGI adapters use locked BITS model source only, without BITS runtime.
+Current metric is v2_entity_variable_macro; old scores are not comparable.
+Search/confirm/test caches must be separate and finalizer must own private splits.

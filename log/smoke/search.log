@@ -31,3 +31,13 @@
 2026-10-13 22:24:50 | INFO    | agent4ts.cli | search physiome_dupont seed=0: rounds=3 incumbent=p0_f0 nmae=0.039943117767299224
 2026-10-13 22:27:15 | INFO    | agent4ts.cli | search physiome_dupont seed=0: rounds=3 incumbent=p2_dlinear nmae=0.028936487207972556
 2026-10-14 09:03:06 | INFO    | agent4ts.cli | search physiome_dupont seed=0: rounds=3 incumbent=p2_dlinear nmae=0.028936487207972556
+2026-11-07 19:24:54 | INFO    | agent4ts.cli | search physiome_dupont seed=0: rounds=3 incumbent=p2_dlinear nmae=0.028936487207972556
+2026-11-07 19:40:09 | INFO    | agent4ts.cli | search physiome_dupont seed=0: rounds=3 incumbent=p2_dlinear nmae=0.028936487207972556
+2026-11-07 19:40:32 | WARNING | agent4ts.controller | LLM call failed: AuthenticationError: Error code: 401 - {'error': {'code': 'AuthenticationError', 'message': 'The API key format is incorrect. Request id: 021794051632301efa62bfca375794f3a9b85f4d703cfec10e02e', 'param': '', 'type': 'Unauthorized'}}
+2026-11-07 19:40:32 | WARNING | agent4ts.controller | malformed action (tail=''), retrying once
+2026-11-07 19:40:32 | WARNING | agent4ts.controller | LLM call failed: AuthenticationError: Error code: 401 - {'error': {'code': 'AuthenticationError', 'message': 'The API key format is incorrect. Request id: 0217940516324464de2cf568a9a04a3957d59acb492788bd75931', 'param': '', 'type': 'Unauthorized'}}
+2026-11-07 19:40:32 | INFO    | agent4ts.cli | search physiome_dupont seed=0: rounds=1 incumbent=p0_f0 nmae=0.03994311776729923
+2026-11-07 19:42:52 | INFO    | agent4ts.cli | search physiome_dupont seed=0: rounds=2 incumbent=p0_f0 nmae=0.03994311776729923
+2026-11-10 00:06:52 | INFO    | agent4ts.cli | search physiome_dupont seed=0: rounds=3 incumbent=p2_dlinear nmae=0.028936487207972556
+2026-11-10 00:09:34 | INFO    | agent4ts.cli | search physiome_dupont seed=0: rounds=3 incumbent=p2_dlinear nmae=0.02706067390820674
+2026-11-10 00:12:38 | INFO    | agent4ts.cli | search physiome_dupont seed=0: rounds=3 incumbent=p2_dlinear nmae=0.02706067390820674

@@ -47,3 +47,11 @@ ERROR conda.cli.main_run:execute(127): `conda run python -m agent4ts.cli --confi
   ]
 }
 == llm smoke done
+== [2026-11-07 19:41:46] conda run -n tim python -m agent4ts.cli --config smoke/ark --kind smoke --run-dir /home/tim/Proj/ats/results/smoke/ark_v2 search --tasks physiome_dupont --seeds 0
+2026-11-07 19:42:52 | INFO    | agent4ts.cli | search physiome_dupont seed=0: rounds=2 incumbent=p0_f0 nmae=0.03994311776729923
+{
+  "run_dir": "/home/tim/Proj/ats/results/smoke/ark_v2",
+  "tasks": [
+    "physiome_dupont_s0"
+  ]
+}

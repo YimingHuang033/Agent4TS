@@ -7,6 +7,10 @@ never sees confirm or test results.
 from __future__ import annotations
 
 import json
+import pickle
+import hashlib
+import shutil
+import signal
 import time
 import traceback
 from dataclasses import asdict
@@ -94,7 +98,7 @@ class Harness:
                 allowed = meta["options"][action.target_field]
                 add("option_value_allowed", (not allowed) or action.value in allowed,
                     f"value={action.value} allowed={allowed}")
-        elif action.op == "SET_TRANSFORM":
+        elif action.op in ("SET_TRANSFORM", "SELECT_DATA"):
             ok_field = action.target_field in DataView().__dict__
             add("transform_field", ok_field, f"field={action.target_field}")
             if ok_field:
@@ -117,6 +121,10 @@ class Harness:
             changed = ok_key and parent.model_config.get(action.target_field) != action.value
         else:
             changed = True
+        target_model = action.value if action.op == 'SELECT_MODEL' else parent.model_id
+        target_age = action.value if action.target_field == 'age_feature' else parent.data_view.age_feature
+        add('age_feature_supported', not target_age or CATALOG.get(target_model, {}).get('supports_age_features', False),
+            'Age covariates are supported only by the seven upstream irregular adapters')
         add("action_changes_state", changed,
             f"proposal is identical to incumbent {parent.pipeline_id}; "
             "change exactly one field/model to a NEW value or STOP")
@@ -137,14 +145,19 @@ class Harness:
         """
         fp = spec.fingerprint(self._upstream_hash(), self.bundle.spec.dataset_version,
                               self._splits_hash())
-        return self.cache.get(fp)
+        return self.cache.get("search:" + fp)
 
     def run_trial(self, spec: PipelineSpec, split: str = "search") -> Feedback:
         fp = spec.fingerprint(self._upstream_hash(), self.bundle.spec.dataset_version,
                               self._splits_hash())
-        if fp in self.cache:
+        cache_key = split + ":" + fp
+        if split not in ("search", "confirm", "test"):
+            raise ValueError("Unknown evaluation split")
+        if split != "search" and not self.allow_test:
+            raise PermissionError("Confirm/test are private to the deterministic finalizer")
+        if cache_key in self.cache:
             log.info("cache hit %s (%s)", spec.pipeline_id, fp)
-            fb = self.cache[fp]
+            fb = self.cache[cache_key]
             fb.checks = fb.checks + [{"check": "cache", "ok": True, "msg": fp}]
             spec.pipeline_id = spec.pipeline_id  # keep id
             return fb
@@ -157,28 +170,54 @@ class Harness:
         t0 = time.time()
         view = spec.data_view
         ok, msg = compatible(self.bundle, view)
+        if view.age_feature and not CATALOG[spec.model_id].get("supports_age_features", False):
+            ok, msg = False, "Model does not consume age covariates"
         if not ok:
             return Feedback(status="rejected",
                             checks=[{"check": "compat", "ok": False, "msg": msg}],
                             remaining_budget=self.remaining())
 
-        self.used["trials"] += 1
+        artifact = self.run_dir / "_models" / (fp + ".pkl")
+        reuse_fitted = split != "search" and artifact.exists()
+        if not reuse_fitted:
+            self.used["trials"] += 1
         try:
             train = self.windows("train", view)
             evalset = self.windows(split, view)
             if not train or not evalset:
                 raise RuntimeError(f"empty windows (train={len(train)} eval={len(evalset)})")
-            model = make_model(spec.model_id, {**spec.model_config, "seed": spec.seed},
-                               self.cfg.get("resources"))
-            grid = np.unique(np.concatenate([lw.query_times for lw in evalset]))
-            var_ids = np.arange(len(self.bundle.variable_names))
-            # give the model the view so its lookback grid matches this data_view,
-            # and the window normalizer so value-copy models can return original units
-            model._view = view
-            model._norm = self.norm.with_mode(view.normalize)
-            model.in_grid = None
-            model.fit(train, self.bundle, grid, var_ids)
+            if reuse_fitted:
+                with artifact.open('rb') as stream:
+                    model = pickle.load(stream)
+                grid = np.unique(np.concatenate([lw.query_times for lw in evalset]))
+            else:
+                model = make_model(spec.model_id, {**spec.model_config, "seed": spec.seed},
+                                   self.cfg.get("resources"))
+                grid = np.unique(np.concatenate([lw.query_times for lw in evalset]))
+                var_ids = np.arange(len(self.bundle.variable_names))
+                # give the model the view so its lookback grid matches this data_view,
+                # and the window normalizer so value-copy models can return original units
+                model._view = view
+                model._norm = self.norm.with_mode(view.normalize)
+                model.in_grid = None
+                import torch
+                train_started = time.monotonic()
+                def timeout_handler(signum, frame):
+                    raise TimeoutError("candidate training exceeded trial_timeout_seconds")
+                previous_handler = signal.signal(signal.SIGALRM, timeout_handler)
+                signal.setitimer(signal.ITIMER_REAL, self.budget.get("trial_timeout_seconds", 600))
+                try:
+                    model.fit(train, self.bundle, grid, var_ids)
+                finally:
+                    signal.setitimer(signal.ITIMER_REAL, 0)
+                    signal.signal(signal.SIGALRM, previous_handler)
+                    if any(p.is_cuda for p in getattr(model, "net", torch.nn.Module()).parameters()):
+                        self.add_gpu_time((time.monotonic() - train_started) / 3600)
             preds = [model.predict(lw) for lw in evalset]
+            artifact = self.run_dir / "_models" / (fp + ".pkl")
+            artifact.parent.mkdir(parents=True, exist_ok=True)
+            with artifact.open("wb") as stream:
+                pickle.dump(model, stream, protocol=pickle.HIGHEST_PROTOCOL)
             res = evaluator.score_windows(evalset, preds, self.bundle, self.norm, self.eval_cfg)
             fb = Feedback(status="ok", checks=[{"check": "executed", "ok": True, "msg": ""}],
                           metrics=res["metrics"], groups=res["groups"],
@@ -198,10 +237,11 @@ class Harness:
                           cost={"wall_s": round(time.time() - t0, 3)},
                           remaining_budget=self.remaining())
 
-        self.cache[fp] = fb
+        self.cache[cache_key] = fb
         spec_fp = fp
         entry = {"pipeline": spec.to_dict(), "fingerprint": spec_fp,
                  "status": fb.status, "metrics": fb.metrics,
+                 "groups": fb.groups, "per_variable": getattr(fb, "_per_variable", {}),
                  "error": fb.error, "wall_s": fb.cost.get("wall_s")}
         self.archive.append(entry)
         self._write_trace({"event": "trial", "split": split, **entry})
@@ -265,7 +305,17 @@ class Harness:
     # ------------------------------------------------------------- export
     def export(self, spec: PipelineSpec, out: Path) -> dict[str, Any]:
         out.mkdir(parents=True, exist_ok=True)
+        fp = spec.fingerprint(self._upstream_hash(), self.bundle.spec.dataset_version,
+                              self._splits_hash())
+        artifact = self.run_dir / "_models" / (fp + ".pkl")
+        if not artifact.exists():
+            raise RuntimeError("Cannot export an untrained pipeline; fitted model artifact is missing")
+        target = out / "fitted_model.pkl"
+        shutil.copyfile(artifact, target)
         best = {
+            "artifact_version": 1,
+            "model_artifact": target.name,
+            "model_sha256": hashlib.sha256(target.read_bytes()).hexdigest(),
             "best_pipeline": spec.to_dict(),
             "normalizer": self.norm.to_dict(),
             "metric_version": self.eval_cfg["metric_version"],
@@ -279,11 +329,14 @@ class Harness:
         import hashlib
         lock = Path(self.cfg["paths"]["resource_lock"])
         payload = lock.read_bytes() if lock.exists() else b"no-lock"
+        payload += self.eval_cfg["metric_version"].encode()
+        for source in sorted(Path(__file__).parent.rglob("*.py")):
+            payload += hashlib.sha256(source.read_bytes()).digest()
         return hashlib.sha256(payload).hexdigest()[:16]
 
     def _splits_hash(self) -> str:
         import hashlib
-        payload = json.dumps({k: v for k, v in self.bundle.spec.split_ids.items()}, sort_keys=True)
+        payload = json.dumps({k: [int(x) for x in v] for k, v in self.bundle.spec.split_ids.items()}, sort_keys=True)
         return hashlib.sha256(payload.encode()).hexdigest()[:16]
 
     def _write_trace(self, record: dict[str, Any]) -> None:

@@ -105,7 +105,7 @@ class PatchTST(_GridModel):
         net = _PatchNet(self.patch, self.stride, self.d_model, self.n_heads,
                         self.n_layers, n_patch, H)
         self.net = net
-        self._forward = lambda x: net(x.reshape(-1, T)).reshape(x.shape[0], self.n_vars, H)
+        self.input_steps, self.output_steps = T, H
         opt = torch.optim.Adam(net.parameters(), lr=self.lr)
         lossf = torch.nn.MSELoss(reduction="none")
         xt = torch.tensor(Xn.reshape(-1, T), dtype=torch.float32)   # (E*V, T)
@@ -116,7 +116,11 @@ class PatchTST(_GridModel):
             loss = (lossf(net(xt), yt) * vm).sum() / vm.sum().clamp(min=1.0)
             loss.backward()
             opt.step()
+        self.net.eval()
         self.trained = True
+
+    def _forward(self, x):
+        return self.net(x.reshape(-1, self.input_steps)).reshape(x.shape[0], self.n_vars, self.output_steps)
 
     def predict(self, lw):
         return self._predict_grid(lw)
@@ -139,7 +143,6 @@ class ITransformer(_GridModel):
         T, H = Xn.shape[-1], Yn.shape[-1]
         net = _InvNet(T, self.d_model, self.n_heads, self.n_layers, H)
         self.net = net
-        self._forward = lambda x: net(x)
         opt = torch.optim.Adam(net.parameters(), lr=self.lr)
         lossf = torch.nn.MSELoss(reduction="none")
         xt = torch.tensor(Xn, dtype=torch.float32)     # (E, V, T)
@@ -150,7 +153,11 @@ class ITransformer(_GridModel):
             loss = (lossf(net(xt), yt) * vm).sum() / vm.sum().clamp(min=1.0)
             loss.backward()
             opt.step()
+        self.net.eval()
         self.trained = True
+
+    def _forward(self, x):
+        return self.net(x)
 
     def predict(self, lw):
         return self._predict_grid(lw)

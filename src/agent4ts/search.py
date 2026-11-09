@@ -80,6 +80,7 @@ def run_search(
     (run_dir / "figures").mkdir(parents=True, exist_ok=True)
     h = harness or Harness(bundle, cfg, run_dir, seed=seed)
     ctrl = controller or Controller(cfg, run_dir)
+    ctrl.call_budget = h
 
     # f0 must run first so every delta_vs_f0 is defined
     f0 = initial_spec(bundle)
@@ -125,7 +126,6 @@ def run_search(
                           "transform_values": TRANSFORM_SPACE},
         )
 
-        h.spend_llm_call()
         t_llm = time.time()
         action = ctrl.propose(obs)
         h.write_trace({"event": "propose", "round": rounds, "action": action.to_dict(),
@@ -234,7 +234,7 @@ def finalize(
 ) -> dict[str, Any]:
     """Deterministic selection: confirm picks one, then test is scored once."""
     run_dir = Path(run_dir)
-    h = harness or Harness(bundle, cfg, run_dir, seed=seed)
+    h = Harness(bundle, cfg, run_dir, seed=seed, allow_test=True)
     h.f0_id = h.f0_id or "p0_f0"
 
     locked = candidates[:3]
@@ -252,11 +252,11 @@ def finalize(
 
     test_fb = h.evaluate_test(winner)
     out = {
-        "status": "ok",
+        "status": "ok" if test_fb.status == "ok" else "test_failed",
         "confirm": confirm_scores,
         "selected": winner.to_dict(),
         "test": {"status": test_fb.status, "metrics": test_fb.metrics,
-                 "groups": test_fb.groups, "error": test_fb.error},
+                 "groups": test_fb.groups, "per_variable": getattr(test_fb, "_per_variable", {}), "error": test_fb.error},
     }
     h.export(winner, run_dir)
     (run_dir / "finalize.json").write_text(json.dumps(out, indent=2, default=str), encoding="utf-8")
