@@ -28,7 +28,15 @@ bash /home/tim/Proj/ats/auto_notes/p12_t1200/21_rerun_p12_t1200.sh plan
 
 # 2) 确认后真正训练（GPU0，串行，需卡空闲）
 bash /home/tim/Proj/ats/auto_notes/p12_t1200/21_rerun_p12_t1200.sh run
+
+# 3) 无人值守：等 1111 队列退出且 GPU 空闲后自动执行 2)
+bash /home/tim/Proj/ats/auto_notes/p12_t1200/22_wait_and_run.sh   # 后台常驻
+kill "$(cat /home/tim/Proj/ats/log/gen_eval/p12_t1200_waiter.pid)"  # 取消
 ```
+
+`plan` 期间队列若仍存活，默认拒绝；只有显式 `ALLOW_PLAN_WHILE_QUEUED=1` 才放行（离线、`CUDA_VISIBLE_DEVICES=''`、只写新目录与新结果根）。`run` 无论什么参数都会重新校验队列进程与 GPU compute 进程，任一项不满足即拒绝。
+
+**不要**为了提前跑而并行占卡：600s 超时对负载敏感，第二个训练进程会制造 CPU 争用，反而让队列里本来能过的 cell 超时失败。
 
 守卫行为：
 - 队列 PID 还活着，或 `20_launch_1111.sh` 仍在进程表 → 直接拒绝退出（已验证）。
@@ -47,7 +55,17 @@ bash /home/tim/Proj/ats/auto_notes/p12_t1200/21_rerun_p12_t1200.sh run
 
 ## 验证记录（plan 阶段离线可查的部分）
 
-- `bash -n` 通过；篡改逻辑在 scratch 副本上演练过，diff 仅 3 行（root、timeout、import os + 2 行过滤）。
+- `bash -n` 通过；篡改逻辑在 scratch 副本上演练过。
 - `py_compile` 通过；补丁后 YAML 可解析（root/timeout 已改）。
 - `ATS_TASK_FILTER` 的任务名与 `config/gen_eval/main.yaml` 的 key 精确匹配（`p12_native`、`p12_robust`）。
-- 队列运行期间执行 plan 被守卫拒绝（pid 2671533）。
+- 队列运行期间执行 plan 被守卫拒绝（pid 2671533）；加 `ALLOW_PLAN_WHILE_QUEUED=1` 放行后流程跑通。
+- **plan 实跑结果（2026-11-11 21:01）**：新 manifest 冻结成功，`manifest cells: 96`（p12 子集），选中 6 个待跑 cell：
+  `cb7c49a8…`(p12_native s0)、`cc5c50d8…`(s1)、`55ed73a2…`(s2)、`bfb1fb08…`(p12_robust s0)、`fbb6dc04…`(s1)、`2be6dd31…`(s2)。
+- 冻结原件 sha256 在 plan 前后一致（`expand_v3.yaml` 4f0f5eea…、`run_expand.py` f32f88e7…），主仓 src/config/scripts_gen_eval 未被写入。
+- 期间修正两处脚本缺陷：任务过滤需同时裁剪 `expansion.new_tasks`（否则 `new_data` 阶段 KeyError），以及 `add()` 对未加载任务需跳过（`initialization` 阶段有硬编码任务名）。
+
+## 当前状态
+
+- waiter（`22_wait_and_run.sh`）已后台常驻，pid 记于 `log/gen_eval/p12_t1200_waiter.pid`；
+  它在 1111 队列退出且 GPU 无 compute 进程后自动执行 `run`，日志 `log/gen_eval/p12_t1200_waiter.log`。
+- 结果根 `results/gen_eval/v3_p12t1200_20261111` 目前只有 manifest/lock，无训练 attempt。

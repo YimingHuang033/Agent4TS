@@ -33,11 +33,16 @@ die() { printf 'ERROR: %s\n' "$*" >&2; exit 1; }
 
 # ---------- 1. guard: the 1111 queue must be finished ----------
 pidfile="$PROJECT_ROOT/log/gen_eval/queue_1111.pid"
-if [[ -f "$pidfile" ]] && kill -0 "$(cat "$pidfile" 2>/dev/null)" 2>/dev/null; then
-  die "queue 1111 still running (pid $(cat "$pidfile")). Wait for SWEEPS_FINISHED_REVIEW_FAILURES, then re-run."
-fi
-if pgrep -f 'scripts/gen_eval/20_launch_1111.sh' >/dev/null 2>&1; then
-  die "20_launch_1111.sh is still in the process table; refusing to start a second consumer of GPU0."
+queue_alive=0
+if [[ -f "$pidfile" ]] && kill -0 "$(cat "$pidfile" 2>/dev/null)" 2>/dev/null; then queue_alive=1; fi
+if pgrep -f 'scripts/gen_eval/20_launch_1111.sh' >/dev/null 2>&1; then queue_alive=1; fi
+if [[ "$queue_alive" -eq 1 ]]; then
+  if [[ "$MODE" == 'plan' && "${ALLOW_PLAN_WHILE_QUEUED:-0}" == '1' ]]; then
+    log "WARNING: queue 1111 is alive. plan continues only because ALLOW_PLAN_WHILE_QUEUED=1;"
+    log "         this path is offline (CUDA_VISIBLE_DEVICES='') and writes only into $NEWDST and $NEW_ROOT_REL."
+  else
+    die "queue 1111 still running (pid $(cat "$pidfile" 2>/dev/null)). Wait for SWEEPS_FINISHED_REVIEW_FAILURES, then re-run."
+  fi
 fi
 
 # ---------- 2. isolate: copy from the same commit + frozen snapshot ----------
@@ -68,17 +73,27 @@ cfg.write_text(text)
 
 runner = dst / 'scripts/gen_eval/run_expand.py'
 src = runner.read_text()
-if 'ATS_TASK_FILTER' not in src:
+if "keep=os.environ.get('ATS_TASK_FILTER')" not in src:
     anchor = ("    for name in cfg['expansion']['new_tasks']:"
               "cfg['tasks'][name]={'backend':name.removesuffix('_forecast')}\n")
     assert anchor in src, 'anchor for task filter not found; run_expand.py changed upstream'
     inject = (anchor +
               "    keep=os.environ.get('ATS_TASK_FILTER')\n"
-              "    if keep:cfg['tasks']={k:v for k,v in cfg['tasks'].items() if k in keep.split(',')}\n")
+              "    if keep:\n"
+              "        keep=set(keep.split(','))\n"
+              "        cfg['tasks']={k:v for k,v in cfg['tasks'].items() if k in keep}\n"
+              "        cfg['expansion']['new_tasks']=[t for t in cfg['expansion']['new_tasks'] if t in keep]\n")
     src = src.replace(anchor, inject, 1)
     src = src.replace('import argparse,copy,', 'import argparse,copy,os,', 1)
     assert 'import argparse,copy,os,' in src, 'import patch failed'
-    runner.write_text(src)
+if 'if task not in bundles:return' not in src:
+    # generate() references hard-coded task names (new_data / initialization); with a task
+    # filter those tasks are not loaded, so unknown tasks must be skipped instead of KeyError.
+    # Insert the guard as add()'s first statement: version-agnostic, matches any body layout.
+    add_def = "    def add(phase,task,method,budget=12,f0='APN',degradation=None):\n"
+    assert src.count(add_def) == 1, 'add() definition not unique; run_expand.py changed upstream'
+    src = src.replace(add_def, add_def + "        if task not in bundles:return\n", 1)
+runner.write_text(src)
 print('patched config + runner in copy')
 PY
 
@@ -123,6 +138,13 @@ if [[ "$MODE" != 'run' ]]; then
 fi
 
 # ---------- 6. run, serially, GPU0 only, after checking it is idle ----------
+# re-check: train never starts while the 1111 queue is alive, whatever the mode flag said
+if [[ -f "$pidfile" ]] && kill -0 "$(cat "$pidfile" 2>/dev/null)" 2>/dev/null; then
+  die "queue 1111 became active again; refusing to train in parallel."
+fi
+if pgrep -f 'scripts/gen_eval/20_launch_1111.sh' >/dev/null 2>&1; then
+  die "20_launch_1111.sh is in the process table; refusing to train in parallel."
+fi
 busy=$(nvidia-smi --query-compute-apps=pid --format=csv,noheader 2>/dev/null | wc -l)
 [[ "$busy" -eq 0 ]] || die "GPU still has $busy compute process(es); refusing to share the card."
 export CUDA_VISIBLE_DEVICES=0
