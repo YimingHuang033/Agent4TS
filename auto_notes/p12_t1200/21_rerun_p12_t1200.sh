@@ -27,6 +27,9 @@ ORIG_ROOT_REL="results/gen_eval/v3_expand_20261109"
 BASE_COMMIT=a8f19bd648d2d95cdd9c928e0b55d1939327667e
 FILTER=p12_native,p12_robust
 PY=/home/tim/miniconda3/envs/tim/bin/python
+# Parallel override: only for an explicitly idle, different GPU. Default is strict serial.
+PARALLEL="${ALLOW_PARALLEL_ON_IDLE_GPU:-0}"
+P12_GPU="${P12_GPU:-1}"
 
 log() { printf '[%s] %s\n' "$(date '+%F %T')" "$*"; }
 die() { printf 'ERROR: %s\n' "$*" >&2; exit 1; }
@@ -40,6 +43,9 @@ if [[ "$queue_alive" -eq 1 ]]; then
   if [[ "$MODE" == 'plan' && "${ALLOW_PLAN_WHILE_QUEUED:-0}" == '1' ]]; then
     log "WARNING: queue 1111 is alive. plan continues only because ALLOW_PLAN_WHILE_QUEUED=1;"
     log "         this path is offline (CUDA_VISIBLE_DEVICES='') and writes only into $NEWDST and $NEW_ROOT_REL."
+  elif [[ "$MODE" != 'plan' && "$PARALLEL" == '1' ]]; then
+    log "WARNING: queue 1111 is alive; ALLOW_PARALLEL_ON_IDLE_GPU=1 so training may run on GPU$P12_GPU only."
+    log "         GPU$P12_GPU must be idle, threads are capped, and the queue keeps GPU0 exclusively."
   else
     die "queue 1111 still running (pid $(cat "$pidfile" 2>/dev/null)). Wait for SWEEPS_FINISHED_REVIEW_FAILURES, then re-run."
   fi
@@ -138,16 +144,21 @@ if [[ "$MODE" != 'run' ]]; then
 fi
 
 # ---------- 6. run, serially, GPU0 only, after checking it is idle ----------
-# re-check: train never starts while the 1111 queue is alive, whatever the mode flag said
-if [[ -f "$pidfile" ]] && kill -0 "$(cat "$pidfile" 2>/dev/null)" 2>/dev/null; then
-  die "queue 1111 became active again; refusing to train in parallel."
+# re-check: train never starts while the 1111 queue is alive, unless ALLOW_PARALLEL_ON_IDLE_GPU=1
+if [[ "$PARALLEL" != '1' ]]; then
+  if [[ -f "$pidfile" ]] && kill -0 "$(cat "$pidfile" 2>/dev/null)" 2>/dev/null; then
+    die "queue 1111 became active again; refusing to train in parallel."
+  fi
+  if pgrep -f 'scripts/gen_eval/20_launch_1111.sh' >/dev/null 2>&1; then
+    die "20_launch_1111.sh is in the process table; refusing to train in parallel."
+  fi
 fi
-if pgrep -f 'scripts/gen_eval/20_launch_1111.sh' >/dev/null 2>&1; then
-  die "20_launch_1111.sh is in the process table; refusing to train in parallel."
-fi
-busy=$(nvidia-smi --query-compute-apps=pid --format=csv,noheader 2>/dev/null | wc -l)
-[[ "$busy" -eq 0 ]] || die "GPU still has $busy compute process(es); refusing to share the card."
-export CUDA_VISIBLE_DEVICES=0
-export OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1
-log "launching p12 tsci rerun (timeout 1200s) -> $NEW_ROOT_REL"
-exec bash scripts/gen_eval/15_run_expand.sh matched_space --retry "$RETRY_JSON"
+# the target card must be idle no matter what mode we are in
+# note: grep -c exits 1 on zero matches, which would abort this script under set -e
+busy=$(nvidia-smi --id="$P12_GPU" --query-compute-apps=pid --format=csv,noheader 2>/dev/null | grep -c . || true)
+busy=${busy:-0}
+[[ "$busy" -eq 0 ]] || die "GPU$P12_GPU already has $busy compute process(es); refusing to share the card."
+export CUDA_VISIBLE_DEVICES="$P12_GPU"
+export OMP_NUM_THREADS=2 OPENBLAS_NUM_THREADS=2 MKL_NUM_THREADS=2
+log "launching p12 tsci rerun (timeout 1200s, GPU$P12_GPU, threads=2, nice 10) -> $NEW_ROOT_REL"
+exec nice -n 10 bash scripts/gen_eval/15_run_expand.sh matched_space --retry "$RETRY_JSON"

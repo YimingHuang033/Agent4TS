@@ -66,6 +66,22 @@ kill "$(cat /home/tim/Proj/ats/log/gen_eval/p12_t1200_waiter.pid)"  # 取消
 
 ## 当前状态
 
-- waiter（`22_wait_and_run.sh`）已后台常驻，pid 记于 `log/gen_eval/p12_t1200_waiter.pid`；
-  它在 1111 队列退出且 GPU 无 compute 进程后自动执行 `run`，日志 `log/gen_eval/p12_t1200_waiter.log`。
-- 结果根 `results/gen_eval/v3_p12t1200_20261111` 目前只有 manifest/lock，无训练 attempt。
+- **以 systemd 单元运行（必须）**：`p12-t1200-1111.service`，独立 cgroup、`MemoryMax=infinity`。
+  从 Hermes 的 terminal 后台会话（`hermes-worker-*.scope`，内存受限）启动会被 OOM killer 杀掉
+  （journal 原文：`hermes-worker-proc_….scope: A process of this unit has been killed by the OOM killer`，rc=137，约 40 秒即死）。
+  正确启动方式：
+
+  ```bash
+  systemd-run --user --unit=p12-t1200-1111 --collect --property=MemoryMax=infinity --property=Nice=10 \
+    --working-directory=/home/tim/Proj/ats/auto_notes/p12_t1200 \
+    --setenv=ALLOW_PARALLEL_ON_IDLE_GPU=1 --setenv=P12_GPU=1 \
+    --setenv=OMP_NUM_THREADS=2 --setenv=MKL_NUM_THREADS=2 \
+    /bin/bash -lc 'bash 21_rerun_p12_t1200.sh run >> /home/tim/Proj/ats/log/gen_eval/p12_t1200_run.log 2>&1'
+  systemctl --user status p12-t1200-1111     # 查看；journalctl --user -u p12-t1200-1111 看日志
+  systemctl --user stop p12-t1200-1111       # 停止
+  ```
+
+- 被杀掉的那次运行已在 `cells/cb7c49a8…/attempt001/` 记为 `interrupted` 并附 `killed_reason.txt`，
+  正式运行是 `attempt002`；同一 manifest identity，不引入指标偏差。
+- waiter（`22_wait_and_run.sh`）已停用：改为并行占 GPU1 后不再需要；若要恢复严格串行再起它。
+- 结果根 `results/gen_eval/v3_p12t1200_20261111` 目前 1 个 cell 在跑，其余 5 个待跑。
