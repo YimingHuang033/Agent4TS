@@ -287,3 +287,29 @@ versions are retained. Source drift aborts resume. Explicit retries create new
 attempt directories. A finished matrix is distinct from accepted scientific
 results. Prior v2 traces are legacy diagnostics only following grid, statistics
 and API-transport fixes; old outputs are never modified or mixed into v3 means.
+
+
+## 2026-11-11 MetaCaster-adapted implementation
+
+`src/agent4ts/baselines/metacaster.py` integrates the official EMNLP 2026
+MetaCaster MGAgent tool loop and released trained harness at commit
+`6c82243249485c61dea4fa80e5cc83f87b5e434a`. Ark supplies the LLM; generated
+Python runs CPU-only inside a networkless bwrap workspace containing train
+support only. Independent upstream validation gates reject invalid artifacts.
+The generation view interpolates history and training labels separately,
+scales each channel by its train-fitted standard deviation without centering,
+and reverses this scaling before training. Template observation/label masks
+remain intact; synthetic values are not presented as real observations.
+
+FTAgent is adapted to the shared ATS 12-model pool and normalized-MAE
+search/confirm/test protocol, with frozen model reuse at finalization. This is
+not an unmodified LT-Lib/paper reproduction. The paired real-support-pool
+control shares support IDs, pool, budget and evaluation. Default full-support
+runs permit comparison with full-training ATS; `--shots 30` is a separately
+reported few-shot supplement with common train-fitted normalization.
+
+Entry: `bash scripts/gen_eval/17_run_metacaster.sh --plan`; CPU/API smoke:
+`bash scripts/smoke/metacaster_1111.sh`. Formal jobs are launched only through the owner-authorized `20_launch_1111.sh` queue.
+See `auto_notes/2026_1111_meta.md` for the remaining v3 inventory and commands.
+Resume legacy v3 only via `18_resume_legacy_1111.sh`, which uses its original
+frozen source in an isolated directory; do not resume with new source hashes.

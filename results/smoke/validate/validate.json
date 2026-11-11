@@ -1,5 +1,5 @@
 {
-  "ushcn_forecast": {
+  "p12_native": {
     "status": "ok",
     "checks": {
       "no_future_leakage": {
@@ -10,13 +10,13 @@
       "split_isolation": {
         "ok": true,
         "duplicates": [],
-        "n_entities": 720
+        "n_entities": 300
       },
       "padding_invariance": {
         "ok": true,
-        "masked_entries": 163836,
-        "unique_cells": 163836,
-        "raw_entries": 163836
+        "masked_entries": 40398,
+        "unique_cells": 40398,
+        "raw_entries": 40512
       },
       "unknown_targets_unscored": {
         "ok": true,
@@ -25,9 +25,9 @@
       },
       "grid_maps_to_target": {
         "ok": true,
-        "n_grid": 10,
-        "min": 2.0,
-        "max": 20.0
+        "n_grid": 6,
+        "min": 0.5,
+        "max": 5.5
       },
       "no_label_over_split": {
         "ok": true,
@@ -36,7 +36,7 @@
     },
     "failed": []
   },
-  "pamap2_forecast": {
+  "physiome_dupont": {
     "status": "ok",
     "checks": {
       "no_future_leakage": {
@@ -47,13 +47,13 @@
       "split_isolation": {
         "ok": true,
         "duplicates": [],
-        "n_entities": 168
+        "n_entities": 40
       },
       "padding_invariance": {
         "ok": true,
-        "masked_entries": 326769,
-        "unique_cells": 326769,
-        "raw_entries": 326769
+        "masked_entries": 2142,
+        "unique_cells": 2142,
+        "raw_entries": 2142
       },
       "unknown_targets_unscored": {
         "ok": true,
@@ -62,9 +62,9 @@
       },
       "grid_maps_to_target": {
         "ok": true,
-        "n_grid": 10,
-        "min": 0.1999999999999993,
-        "max": 2.0
+        "n_grid": 24,
+        "min": 0.25,
+        "max": 6.0
       },
       "no_label_over_split": {
         "ok": true,

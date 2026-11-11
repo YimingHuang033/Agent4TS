@@ -48,3 +48,5 @@ AttributeError: 'dict' object has no attribute 'to_dict'
 2026-11-10 00:06:54 | INFO    | agent4ts.cli | evaluate physiome_dupont: ok
 2026-11-10 00:09:36 | INFO    | agent4ts.cli | evaluate physiome_dupont: ok
 2026-11-10 00:12:40 | INFO    | agent4ts.cli | evaluate physiome_dupont: ok
+2026-11-11 17:51:04 | INFO    | agent4ts.cli | evaluate physiome_dupont: ok
+2026-11-11 18:04:31 | INFO    | agent4ts.cli | evaluate physiome_dupont: ok

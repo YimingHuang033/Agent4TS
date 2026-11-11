@@ -1,0 +1,12 @@
+metacaster:
+  root: results/gen_eval/metacaster_20261111
+  source: /mnt/data/ats_resources/vendor/MetaCaster/source
+  revision: 6c82243249485c61dea4fa80e5cc83f87b5e434a
+  support_size: null
+  n_target: 256
+  history_bins: 64
+  future_bins: 16
+  max_calls: 24
+  max_tokens: 16384
+  models: [APN, ASTGI, TFMixer, KAFNet, HyperIMTS, TiWeaver, tPatchGNN, DLinear, PatchTST, iTransformer, LastValue, MeanValue]
+  tasks: [physiome_dupont, physiome_borghans, physiome_lenbury, p12_native, p12_robust, epa_air_dallas, epa_air_denver, epa_air_la, ushcn_forecast, pamap2_forecast]

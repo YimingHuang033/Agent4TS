@@ -1,0 +1,481 @@
+{
+  "date": "2026-11-11",
+  "tests_passed": 36,
+  "formal_experiments_started": false,
+  "upstream": "https://github.com/D2I-Group/metacaster",
+  "revision": "6c82243249485c61dea4fa80e5cc83f87b5e434a",
+  "label": "MetaCaster-adapted",
+  "api_model": "deepseek-v4.1-flash-economy",
+  "rows": [
+    {
+      "task": "physiome_dupont",
+      "seed": 0,
+      "method": "metacaster",
+      "status": "ok",
+      "label": "MetaCaster-adapted",
+      "used": {
+        "trials": 2,
+        "llm_calls": 7,
+        "gpu_hours": 0.0
+      },
+      "support_count": 30,
+      "upstream_revision": "6c82243249485c61dea4fa80e5cc83f87b5e434a",
+      "identity": "81b62f8afdb015cfa2ee45eebd58f25d9e1b14aa47cd16b1f2b95f1d7bd6fd1f",
+      "path": "results/smoke/metacaster_1111/physiome_dupont/seed0/metacaster/attempt001/result.json",
+      "test": {
+        "status": "ok",
+        "metrics": {
+          "normalized_mae": 0.10745685004668576,
+          "normalized_mse": 0.01657896503468928,
+          "n_valid_targets": 144,
+          "n_entity_variable_pairs": 6,
+          "coverage": 1.0
+        },
+        "groups": {
+          "all": {
+            "nmae": 0.10745685004668576,
+            "nmse": 0.01657896503468928,
+            "n": 144
+          },
+          "long_gap": {
+            "nmae": null,
+            "nmse": null,
+            "n": 0
+          },
+          "stale": {
+            "nmae": 0.07310741624519781,
+            "nmse": 0.007999947801281975,
+            "n": 48
+          },
+          "fresh": {
+            "nmae": 0.12463156694742973,
+            "nmse": 0.020868473651392928,
+            "n": 96
+          },
+          "sparse": {
+            "nmae": 0.07310741624519781,
+            "nmse": 0.007999947801281975,
+            "n": 48
+          },
+          "dense": {
+            "nmae": 0.1782202111891685,
+            "nmse": 0.039126705440389924,
+            "n": 24
+          },
+          "async": {
+            "nmae": 0.07741937656190719,
+            "nmse": 0.008002870539555855,
+            "n": 72
+          },
+          "density_shift": {
+            "nmae": 0.09076803538434762,
+            "nmse": 0.011630609942935308,
+            "n": 24
+          }
+        },
+        "per_variable": {
+          "x": {
+            "nmae": 0.10745685004668576,
+            "nmse": 0.01657896503468928,
+            "n": 144,
+            "mae": 0.01000832071972957,
+            "mse": 0.0001438174659685141
+          }
+        },
+        "error": null
+      },
+      "selected_model": "DLinear",
+      "total_api_tokens": 124314,
+      "independent_generation_validation": {
+        "passed": true,
+        "fail": [],
+        "warn": [],
+        "info": [
+          "shape ok: (64, 80, 2)",
+          "all values finite",
+          "dtype ok: float32",
+          "lag1 acf ok: orig=-0.769, gen=-0.781",
+          "diversity ratio ok: 1.00",
+          "quantile match ok at q=[10,25,50,75,90]",
+          "range coverage ok: 1.38",
+          "channel corr ok: orig=0.143, gen=0.104"
+        ]
+      }
+    },
+    {
+      "task": "physiome_dupont",
+      "seed": 0,
+      "method": "real_support_pool",
+      "status": "ok",
+      "label": "Real-support-pool",
+      "used": {
+        "trials": 2,
+        "llm_calls": 0,
+        "gpu_hours": 0.0
+      },
+      "support_count": 30,
+      "upstream_revision": "6c82243249485c61dea4fa80e5cc83f87b5e434a",
+      "identity": "81b62f8afdb015cfa2ee45eebd58f25d9e1b14aa47cd16b1f2b95f1d7bd6fd1f",
+      "path": "results/smoke/metacaster_1111/physiome_dupont/seed0/real_support_pool/attempt001/result.json",
+      "test": {
+        "status": "ok",
+        "metrics": {
+          "normalized_mae": 0.059519972087013505,
+          "normalized_mse": 0.005439156050484187,
+          "n_valid_targets": 144,
+          "n_entity_variable_pairs": 6,
+          "coverage": 1.0
+        },
+        "groups": {
+          "all": {
+            "nmae": 0.059519972087013505,
+            "nmse": 0.005439156050484187,
+            "n": 144
+          },
+          "long_gap": {
+            "nmae": null,
+            "nmse": null,
+            "n": 0
+          },
+          "stale": {
+            "nmae": 0.049163434281734045,
+            "nmse": 0.003709368769821455,
+            "n": 48
+          },
+          "fresh": {
+            "nmae": 0.06469824098965322,
+            "nmse": 0.006304049690815554,
+            "n": 96
+          },
+          "sparse": {
+            "nmae": 0.049163434281734045,
+            "nmse": 0.003709368769821455,
+            "n": 48
+          },
+          "dense": {
+            "nmae": 0.06732293512597681,
+            "nmse": 0.006676783005997383,
+            "n": 24
+          },
+          "async": {
+            "nmae": 0.05893212639342485,
+            "nmse": 0.005405945690239164,
+            "n": 72
+          },
+          "density_shift": {
+            "nmae": 0.058245556005033505,
+            "nmse": 0.005049790572573733,
+            "n": 24
+          }
+        },
+        "per_variable": {
+          "x": {
+            "nmae": 0.059519972087013505,
+            "nmse": 0.005439156050484187,
+            "n": 144,
+            "mae": 0.005543573719287109,
+            "mse": 4.718302008305116e-05
+          }
+        },
+        "error": null
+      },
+      "selected_model": "DLinear"
+    },
+    {
+      "task": "ushcn_forecast",
+      "seed": 0,
+      "method": "metacaster",
+      "status": "ok",
+      "label": "MetaCaster-adapted",
+      "used": {
+        "trials": 2,
+        "llm_calls": 18,
+        "gpu_hours": 0.0
+      },
+      "support_count": 30,
+      "upstream_revision": "6c82243249485c61dea4fa80e5cc83f87b5e434a",
+      "identity": "81b62f8afdb015cfa2ee45eebd58f25d9e1b14aa47cd16b1f2b95f1d7bd6fd1f",
+      "path": "results/smoke/metacaster_1111/ushcn_forecast/seed0/metacaster/attempt001/result.json",
+      "test": {
+        "status": "ok",
+        "metrics": {
+          "normalized_mae": 0.3510045506052535,
+          "normalized_mse": 0.7419400028859378,
+          "n_valid_targets": 3565,
+          "n_entity_variable_pairs": 360,
+          "coverage": 1.0
+        },
+        "groups": {
+          "all": {
+            "nmae": 0.3510045506052535,
+            "nmse": 0.7419400028859378,
+            "n": 3565
+          },
+          "long_gap": {
+            "nmae": 0.30734666592406146,
+            "nmse": 0.2552326701426112,
+            "n": 939
+          },
+          "stale": {
+            "nmae": 0.3510045506052535,
+            "nmse": 0.7419400028859378,
+            "n": 3565
+          },
+          "fresh": {
+            "nmae": null,
+            "nmse": null,
+            "n": 0
+          },
+          "sparse": {
+            "nmae": 0.360417345726189,
+            "nmse": 0.35801800532724215,
+            "n": 453
+          },
+          "dense": {
+            "nmae": 0.3667976632467795,
+            "nmse": 0.9190498709194949,
+            "n": 2616
+          },
+          "async": {
+            "nmae": 0.29853455679701013,
+            "nmse": 0.29892310407779094,
+            "n": 247
+          },
+          "density_shift": {
+            "nmae": 0.3449910159794343,
+            "nmse": 0.3711390174381676,
+            "n": 384
+          }
+        },
+        "per_variable": {
+          "SNOW": {
+            "nmae": 0.06460127119204549,
+            "nmse": 0.42917859223150473,
+            "n": 714,
+            "mae": 0.6657830347148528,
+            "mse": 45.6235070631431
+          },
+          "SNWD": {
+            "nmae": 0.015257383459968113,
+            "nmse": 0.012661570795629788,
+            "n": 711,
+            "mae": 0.9743119692869505,
+            "mse": 47.235058125874424
+          },
+          "PRCP": {
+            "nmae": 0.8061554624066035,
+            "nmse": 2.6879713709474258,
+            "n": 719,
+            "mae": 6.725252362546897,
+            "mse": 187.02034018210912
+          },
+          "TMAX": {
+            "nmae": 0.4333898429569032,
+            "nmse": 0.29729358388867855,
+            "n": 713,
+            "mae": 4.806670336133356,
+            "mse": 36.5816636364813
+          },
+          "TMIN": {
+            "nmae": 0.435618793010747,
+            "nmse": 0.28259489656645015,
+            "n": 708,
+            "mae": 4.537058988696534,
+            "mse": 30.71301526328463
+          }
+        },
+        "error": null
+      },
+      "selected_model": "DLinear",
+      "total_api_tokens": 497100,
+      "independent_generation_validation": {
+        "passed": true,
+        "fail": [],
+        "warn": [],
+        "info": [
+          "shape ok: (64, 80, 5)",
+          "all values finite",
+          "dtype ok: float32",
+          "lag1 acf ok: orig=0.056, gen=0.097",
+          "diversity ratio ok: 0.88",
+          "quantile match ok at q=[10,25,50,75,90]",
+          "range coverage ok: 1.07",
+          "zero fraction ok: orig=0.500, gen=0.521",
+          "channel corr ok: orig=0.154, gen=0.143"
+        ]
+      }
+    },
+    {
+      "task": "ushcn_forecast",
+      "seed": 0,
+      "method": "real_support_pool",
+      "status": "ok",
+      "label": "Real-support-pool",
+      "used": {
+        "trials": 2,
+        "llm_calls": 0,
+        "gpu_hours": 0.0
+      },
+      "support_count": 30,
+      "upstream_revision": "6c82243249485c61dea4fa80e5cc83f87b5e434a",
+      "identity": "81b62f8afdb015cfa2ee45eebd58f25d9e1b14aa47cd16b1f2b95f1d7bd6fd1f",
+      "path": "results/smoke/metacaster_1111/ushcn_forecast/seed0/real_support_pool/attempt001/result.json",
+      "test": {
+        "status": "ok",
+        "metrics": {
+          "normalized_mae": 0.33315623882770395,
+          "normalized_mse": 0.5940803888259247,
+          "n_valid_targets": 3565,
+          "n_entity_variable_pairs": 360,
+          "coverage": 1.0
+        },
+        "groups": {
+          "all": {
+            "nmae": 0.33315623882770395,
+            "nmse": 0.5940803888259247,
+            "n": 3565
+          },
+          "long_gap": {
+            "nmae": 0.3150756265980273,
+            "nmse": 0.28730287580613706,
+            "n": 939
+          },
+          "stale": {
+            "nmae": 0.33315623882770395,
+            "nmse": 0.5940803888259247,
+            "n": 3565
+          },
+          "fresh": {
+            "nmae": null,
+            "nmse": null,
+            "n": 0
+          },
+          "sparse": {
+            "nmae": 0.3402670151091643,
+            "nmse": 0.3294981881543135,
+            "n": 453
+          },
+          "dense": {
+            "nmae": 0.33958723561647114,
+            "nmse": 0.7058571470685227,
+            "n": 2616
+          },
+          "async": {
+            "nmae": 0.37103202949268954,
+            "nmse": 0.472909624026943,
+            "n": 247
+          },
+          "density_shift": {
+            "nmae": 0.33413530975645483,
+            "nmse": 0.3512690007388167,
+            "n": 384
+          }
+        },
+        "per_variable": {
+          "SNOW": {
+            "nmae": 0.07920193065789945,
+            "nmse": 0.429282181045431,
+            "n": 714,
+            "mae": 0.8158872430834748,
+            "mse": 45.633055647852956
+          },
+          "SNWD": {
+            "nmae": 0.021155935292394356,
+            "nmse": 0.0139876398574513,
+            "n": 711,
+            "mae": 1.3758748728921375,
+            "mse": 53.36642085840287
+          },
+          "PRCP": {
+            "nmae": 0.7200437022693529,
+            "nmse": 1.9603957451869611,
+            "n": 719,
+            "mae": 6.006631582220751,
+            "mse": 136.3943246375807
+          },
+          "TMAX": {
+            "nmae": 0.43686253526097807,
+            "nmse": 0.30829766182628887,
+            "n": 713,
+            "mae": 4.850548989432001,
+            "mse": 38.00694459911489
+          },
+          "TMIN": {
+            "nmae": 0.4085170906578951,
+            "nmse": 0.25843871621349096,
+            "n": 708,
+            "mae": 4.2641312896400505,
+            "mse": 28.189865807265466
+          }
+        },
+        "error": null
+      },
+      "selected_model": "DLinear"
+    }
+  ],
+  "model_interface_checks": {
+    "mode": "CPU, one epoch, cached independently validated real MGAgent dataset",
+    "status": "ok",
+    "models": [
+      {
+        "model": "APN",
+        "status": "ok"
+      },
+      {
+        "model": "ASTGI",
+        "status": "ok"
+      },
+      {
+        "model": "TFMixer",
+        "status": "ok"
+      },
+      {
+        "model": "KAFNet",
+        "status": "ok"
+      },
+      {
+        "model": "HyperIMTS",
+        "status": "ok"
+      },
+      {
+        "model": "TiWeaver",
+        "status": "ok"
+      },
+      {
+        "model": "tPatchGNN",
+        "status": "ok"
+      },
+      {
+        "model": "DLinear",
+        "status": "ok"
+      },
+      {
+        "model": "PatchTST",
+        "status": "ok"
+      },
+      {
+        "model": "iTransformer",
+        "status": "ok"
+      },
+      {
+        "model": "LastValue",
+        "status": "ok"
+      },
+      {
+        "model": "MeanValue",
+        "status": "ok"
+      }
+    ],
+    "gpu_hours": 0.0
+  },
+  "limitations": [
+    "Smoke uses 2 forecasters and 64 generated windows, not the formal 12/256 setting",
+    "Single seed smoke is not performance evidence",
+    "Generation/regularization/training controls are documented in auto_notes/2026_1111_meta.md"
+  ],
+  "debug_history": [
+    "debug01 and debug02 preserved generation budget failures before adapter correction",
+    "debug03 deliberately stopped after discovering integer-mask indexing bug; not a model failure",
+    "debug10epochs model-interface check deliberately replaced by one-epoch CPU check"
+  ]
+}

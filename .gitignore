@@ -42,3 +42,10 @@ runs/
 
 # Locally generated fitted models are runtime artifacts.
 *.pkl
+
+# MetaCaster runtime may contain raw support windows, generated code and model artifacts.
+# Keep only the compact metacaster_1111_report.json as versionable smoke evidence.
+results/smoke/metacaster_1111*/
+results/smoke/metacaster_models_1111*/
+results/smoke/metacaster_plan*/
+log/smoke/metacaster_1111.log

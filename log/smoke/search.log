@@ -41,3 +41,5 @@
 2026-11-10 00:06:52 | INFO    | agent4ts.cli | search physiome_dupont seed=0: rounds=3 incumbent=p2_dlinear nmae=0.028936487207972556
 2026-11-10 00:09:34 | INFO    | agent4ts.cli | search physiome_dupont seed=0: rounds=3 incumbent=p2_dlinear nmae=0.02706067390820674
 2026-11-10 00:12:38 | INFO    | agent4ts.cli | search physiome_dupont seed=0: rounds=3 incumbent=p2_dlinear nmae=0.02706067390820674
+2026-11-11 17:51:02 | INFO    | agent4ts.cli | search physiome_dupont seed=0: rounds=3 incumbent=p2_dlinear nmae=0.02706067390820674
+2026-11-11 18:04:29 | INFO    | agent4ts.cli | search physiome_dupont seed=0: rounds=3 incumbent=p2_dlinear nmae=0.02706067390820674
