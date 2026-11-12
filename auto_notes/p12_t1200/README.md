@@ -84,4 +84,4 @@ kill "$(cat /home/tim/Proj/ats/log/gen_eval/p12_t1200_waiter.pid)"  # 取消
 - 被杀掉的那次运行已在 `cells/cb7c49a8…/attempt001/` 记为 `interrupted` 并附 `killed_reason.txt`，
   正式运行是 `attempt002`；同一 manifest identity，不引入指标偏差。
 - waiter（`22_wait_and_run.sh`）已停用：改为并行占 GPU1 后不再需要；若要恢复严格串行再起它。
-- 结果根 `results/gen_eval/v3_p12t1200_20261111` 目前 1 个 cell 在跑，其余 5 个待跑。
+- 结果根 `results/gen_eval/v3_p12t1200_20261111`：**2026-11-12 13:48 完成，6/6 ok**（表见 auto_notes/2026_1111_meta.md 的「C 方案执行结果」一节）。
